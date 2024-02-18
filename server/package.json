@@ -1,35 +1,27 @@
 {
-  "name": "points",
-  "private": true,
-  "version": "0.1.0",
-  "description": "A Strapi application",
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Backend de logistica",
+  "main": "index.js",
   "scripts": {
-    "develop": "strapi develop",
-    "start": "strapi start",
-    "build": "strapi build",
-    "strapi": "strapi"
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {},
+  "author": "Daniel Diaz",
+  "license": "ISC",
   "dependencies": {
-    "@strapi/strapi": "4.20.0",
-    "@strapi/plugin-users-permissions": "4.20.0",
-    "@strapi/plugin-i18n": "4.20.0",
-    "@strapi/plugin-cloud": "4.20.0",
-    "mysql": "2.18.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "5.3.4",
-    "styled-components": "5.3.3"
-  },
-  "author": {
-    "name": "A Strapi developer"
-  },
-  "strapi": {
-    "uuid": "ba108616-1bad-4086-a89f-378e88eb4ce5"
-  },
-  "engines": {
-    "node": ">=18.0.0 <=20.x.x",
-    "npm": ">=6.0.0"
-  },
-  "license": "MIT"
+    "axios": "^1.5.1",
+    "cloudinary": "^1.41.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.2",
+    "nodemailer": "^6.9.7",
+    "pdfkit": "^0.13.0",
+    "qrcode": "^1.5.3",
+    "uuid": "^9.0.1"
+  }
 }
