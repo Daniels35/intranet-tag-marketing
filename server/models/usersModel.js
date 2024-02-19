@@ -1,14 +1,16 @@
 const db = require('../config/database');
+const { v4: uuidv4 } = require('uuid');
 
 const UsersModel = {};
 
 // Crear la tabla de usuarios si no existe
 db.query(`
   CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id CHAR(36) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    role ENUM('vendedor', 'admin', 'observador') NOT NULL
+    identificationCard VARCHAR(255) NOT NULL,
+    image VARCHAR(255),
+    accumulatedPoints INT DEFAULT 0
   )
 `, (err) => {
   if (err) {
@@ -17,6 +19,7 @@ db.query(`
     console.log('The users table was created successfully.');
   }
 });
+
 
 // Obtener todos los usuarios
 UsersModel.getAll = (callback) => {
@@ -40,11 +43,11 @@ UsersModel.getUserById = (id, callback) => {
 
 // Crear un nuevo usuario
 UsersModel.createUser = (newUser, callback) => {
+  newUser.id = uuidv4(); // Genera un nuevo UUID para el usuario
   db.query('INSERT INTO users SET ?', newUser, (err, result) => {
     if (err) {
       return callback(err, null);
     }
-    newUser.id = result.insertId;
     callback(null, newUser);
   });
 };

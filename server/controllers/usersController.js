@@ -25,8 +25,8 @@ exports.getUserById = (req, res) => {
 exports.createUser = (req, res) => {
   const newUser = req.body;
 
-  if (!newUser.name || !newUser.email || !newUser.role) {
-    return res.status(400).json({ error: 'Nombre, Correo Electronico y rol son requeridos' });
+  if (!newUser.name || !newUser.identificationCard) {
+    return res.status(400).json({ error: 'Nombre y Número de Identificación son requeridos' });
   }
 
   UsersModel.createUser(newUser, (err, user) => {
