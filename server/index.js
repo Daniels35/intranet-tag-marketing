@@ -29,7 +29,8 @@ app.use('/', require('./routes/pointsItems'));
 app.use('/', require('./routes/redeemableItems'));
 
 
-
+////////PENDIENTE///////
+app.use('/', require('./routes/transactionHistory'));
 
 app.listen(port, () => {
   console.log(`El servidor está corriendo en http://localhost:${port}`);
