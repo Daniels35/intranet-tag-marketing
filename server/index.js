@@ -26,6 +26,10 @@ app.get('/', (req, res) => {
 
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/pointsItems'));
+app.use('/', require('./routes/redeemableItems'));
+
+
+
 
 app.listen(port, () => {
   console.log(`El servidor está corriendo en http://localhost:${port}`);
