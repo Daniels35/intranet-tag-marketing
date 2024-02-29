@@ -27,8 +27,14 @@
   
   .navigation ul li a {
     text-decoration: none;
-    color: #333;
+    color: #ED6306;
   }
+
+.navigation ul li.active a {
+  color: #ED6306; 
+  text-decoration: underline;
+}
+
   
   .navigation ul li a:hover {
     text-decoration: underline;

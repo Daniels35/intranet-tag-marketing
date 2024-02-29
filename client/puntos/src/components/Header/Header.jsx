@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 
 import logo from '../../assets/logo.png';
 
 const Header = () => {
+  const location = useLocation();
+
   return (
     <header className="header">
       <div className="logo">
@@ -12,8 +14,12 @@ const Header = () => {
       </div>
       <nav className="navigation">
         <ul>
-          <li><Link to="/">Inicio</Link></li>
-          <li><Link to="/admin">Admin</Link></li>
+          <li className={location.pathname === '/' ? 'active' : ''}>
+            <Link to="/">Inicio</Link>
+          </li>
+          <li className={location.pathname === '/admin' ? 'active' : ''}>
+            <Link to="/admin">Admin</Link>
+          </li>
         </ul>
       </nav>
     </header>
