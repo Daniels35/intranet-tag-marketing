@@ -1,0 +1,36 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+  }
+  
+  .logo img {
+    height: 150px;
+  }
+  
+  .navigation ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    margin-right: 60px;
+
+  }
+  
+  .navigation ul li {
+    font-size: 30px;
+    margin-left: 60px;
+
+  }
+  
+  .navigation ul li a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .navigation ul li a:hover {
+    text-decoration: underline;
+  }
+  
