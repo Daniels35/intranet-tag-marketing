@@ -23,6 +23,15 @@ const EditUserForm = ({ setEditing, currentUser, updateUser }) => {
       <input type="text" name="name" value={user.name} onChange={handleInputChange} />
       <label>Número de Identificación</label>
       <input type="text" name="identificationCard" value={user.identificationCard} onChange={handleInputChange} />
+      <label>Correo Electrónico</label>
+      <input type="email" name="email" value={user.email} onChange={handleInputChange} />
+      <label>Rol</label>
+      <select name="role" value={user.role} onChange={handleInputChange}>
+        <option value="admin">Administrador</option>
+        <option value="active_employee">Empleado Activo</option>
+        <option value="inactive_employee">Empleado Inactivo</option>
+        <option value="guest">Invitado</option>
+      </select>
       <label>Puntos Acumulados</label>
       <input type="number" name="accumulatedPoints" value={user.accumulatedPoints} onChange={handleInputChange} />
       <button>Actualizar usuario</button>
@@ -34,3 +43,4 @@ const EditUserForm = ({ setEditing, currentUser, updateUser }) => {
 };
 
 export default EditUserForm;
+
