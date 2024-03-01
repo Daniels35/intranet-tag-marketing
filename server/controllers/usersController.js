@@ -59,3 +59,24 @@ exports.deleteUser = (req, res) => {
     res.json({ message: 'Usuario eliminado con éxito', result });
   });
 };
+
+// Sumar Puntos
+
+exports.addPointsToUser = (req, res) => {
+  const userId = req.params.id;
+  const pointsToAdd = parseInt(req.body.points, 10);
+
+  UsersModel.addPoints(userId, pointsToAdd, (err, result) => {
+    if (err) {
+      console.error("Error al sumar puntos:", err);
+      return res.status(500).json({ error: err });
+    }
+    if (result > 0) {
+      res.json({ message: "Puntos agregados exitosamente." });
+    } else {
+      res.status(404).json({ error: "Usuario no encontrado." });
+    }
+  });
+};
+
+

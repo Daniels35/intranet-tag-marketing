@@ -76,4 +76,35 @@ UsersModel.deleteUser = (id, callback) => {
   });
 };
 
+// Agregar puntos
+
+// En UsersModel.js
+
+UsersModel.addPoints = (userId, pointsToAdd, callback) => {
+  // Primero, obtén los puntos actuales del usuario
+  db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [userId], (err, results) => {
+    if (err) {
+      return callback(err, null);
+    }
+    if (results.length > 0) {
+      const currentPoints = results[0].accumulatedPoints;
+      const newPoints = currentPoints + pointsToAdd;
+
+      // Luego, actualiza los puntos del usuario
+      db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, userId], (err, result) => {
+        if (err) {
+          return callback(err, null);
+        }
+        // Si todo va bien, devuelve el número de filas afectadas para confirmar la actualización
+        callback(null, result.affectedRows);
+      });
+    } else {
+      // Si no se encuentra el usuario, devuelve un error o un mensaje indicándolo
+      callback('Usuario no encontrado', null);
+    }
+  });
+};
+
+
+
 module.exports = UsersModel;

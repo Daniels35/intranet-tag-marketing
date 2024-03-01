@@ -17,4 +17,7 @@ router.put('/users/:id', usersController.updateUser);
 // Ruta para eliminar un usuario por su ID
 router.delete('/users/:id', usersController.deleteUser);
 
+// Ruta para sumar puntos a un usuario
+router.post('/users/:id/addPoints', usersController.addPointsToUser);
+
 module.exports = router;
