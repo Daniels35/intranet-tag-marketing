@@ -5,13 +5,16 @@ const UsersModel = {};
 
 // Crear la tabla de usuarios si no existe
 db.query(`
-  CREATE TABLE IF NOT EXISTS users (
-    id CHAR(36) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    identificationCard VARCHAR(255) NOT NULL,
-    image VARCHAR(255),
-    accumulatedPoints INT DEFAULT 0
-  )
+CREATE TABLE IF NOT EXISTS users (
+  id CHAR(36) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  identificationCard VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  role ENUM('admin', 'active_employee', 'inactive_employee', 'guest') NOT NULL DEFAULT 'guest',
+  image VARCHAR(255),
+  accumulatedPoints INT DEFAULT 0
+)
+
 `, (err) => {
   if (err) {
     console.error('Error creating the users table: ' + err);
