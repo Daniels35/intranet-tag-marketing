@@ -34,13 +34,10 @@ const [selectedUser, setSelectedUser] = useState(null);
 
 {/* 
       <h2 onClick={(e) => { e.stopPropagation(); setAddPointsToList(true);}}>Agregar Puntos</h2> */}
-      <h2 onClick={(e) => { e.stopPropagation(); setUser(true);}}>Administración de Usuarios</h2>
-      <h2 onClick={(e) => { e.stopPropagation(); setPoints(true);}}>Administración de Items de Puntos</h2>
-      <h2 onClick={(e) => { e.stopPropagation(); setredeemableItem(true);}}>Administración de Items Canjeables</h2>
+      <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setUser(true);}}>Administración de Usuarios</h2>
+      <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setPoints(true);}}>Administración de Items de Puntos</h2>
+      <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setredeemableItem(true);}}>Administración de Items Canjeables</h2>
 
-    </div>
-
-      
       {/* Modales */}
       <Modal isVisible={usersOpen} onClose={() => setUser(false)}>
        <UsersAdmin />
@@ -57,6 +54,9 @@ const [selectedUser, setSelectedUser] = useState(null);
       <Modal isVisible={addPointsToListOpen} onClose={() => setAddPointsToList(false)}>
       <AddPointsToList />
       </Modal>
+    </div>
+
+      
     </>
   );
 };

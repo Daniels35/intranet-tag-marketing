@@ -74,7 +74,7 @@ const PointsItemsAdmin = () => {
     };
 
     return (
-        <div className="points-items-admin-container">
+        <div className="form-container">
             <h2>Administración de Items de Puntos</h2>
             {editing ? (
                 <div>

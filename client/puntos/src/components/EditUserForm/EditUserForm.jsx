@@ -13,6 +13,8 @@ const EditUserForm = ({ setEditing, currentUser, updateUser }) => {
   };
 
   return (
+    <div className="form-container"> 
+
     <form
       onSubmit={event => {
         event.preventDefault();
@@ -34,11 +36,14 @@ const EditUserForm = ({ setEditing, currentUser, updateUser }) => {
       </select>
       <label>Puntos Acumulados</label>
       <input type="number" name="accumulatedPoints" value={user.accumulatedPoints} onChange={handleInputChange} />
-      <button>Actualizar usuario</button>
+      <div className='container-button-user-add'>
+      <button className='button-user-principal'>Actualizar usuario</button>
       <button onClick={() => setEditing(false)} className="button muted-button">
         Cancelar
       </button>
+      </div>
     </form>
+    </div>
   );
 };
 

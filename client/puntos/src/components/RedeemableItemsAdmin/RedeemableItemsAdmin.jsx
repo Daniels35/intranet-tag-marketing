@@ -74,8 +74,7 @@ const RedeemableItemsAdmin = () => {
     };
 
     return (
-        <div className="redeemable-items-admin-container">
-            <h2>Administración de Items Canjeables</h2>
+        <div className="form-container">
             {editing ? (
                 <div>
                     <h2>Editar Item Canjeable</h2>
