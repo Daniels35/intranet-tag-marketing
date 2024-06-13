@@ -1,53 +1,134 @@
 .home-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap; 
-    padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.user-profile {
+  flex: 8;
+  text-align: left;
+  margin: 20px; 
+  min-width: 250px;
+}
+
+.container-information-user {
+  margin-top: 15%;
+  text-align: left;
+}
+
+.container-information-user h2 {
+  color: black;
+  font-size: 3rem;
+  margin-bottom: -2.9rem;
+}
+
+.container-information-user h1 {
+  font-size: 5rem;
+  color: #f60;
+}
+
+.container-information-user p {
+  font-size: 3rem;
+}
+
+.profile-image {
+  width: 500px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.points-tag {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+.triangle-icon {
+  width: 100px;
+  height: 100px;
+  margin-left: 20px;
+}
+
+.section {
+  flex: 1;
+  margin: 0 5px 0 20px; 
+  min-width: 250px; 
+  text-align: left;
+}
+
+.section span {
+  font-size: 17px;
+}
+
+.section h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.items-section {
+  flex: 3; 
+}
+
+.points-section {
+  flex: 3;
+  width: 100%;
+}
+
+.section h2 {
+  text-align: left;
+}
+
+.items-list {
+  list-style-type: none;
+  padding: 0;
+  max-height: 160px; /* Ajusta esta altura según tus necesidades */
+  overflow-y: auto;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: left;
+  justify-content: left;
+}
+
+.item-icon {
+  width: 50%;
+  height: auto;
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.list-item span {
+  width: 50%;
+  text-align: left;
+  margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    flex-direction: column; 
+    align-items: center; 
   }
-  
+
   .section {
-    flex: 1;
-    margin: 20px; 
-    min-width: 250px; 
+    width: 100%;
   }
-  
-  .section h2, .users-section h1 {
-    text-align: center;
+
+  .items-section, .points-section {
+    order: 2;
+    width: 100%;
   }
-  
-  .users-section {
-    flex: 6; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+  .points-section {
+    order: 3;
   }
-  
-  .users-list, .items-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .list-item {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center; 
-  }
-  
-  /* Media queries */
-  @media (max-width: 768px) {
-    .home-container {
-      flex-direction: column; 
-      align-items: center; 
-    }
-  
-    .section {
-      width: 100%;
-    }
-  
-    .users-section, .items-section, .points-section {
-      order: 1;
-    }
-  }
-  
+}

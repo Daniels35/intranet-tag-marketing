@@ -6,10 +6,8 @@
     text-align: center;
 }
 
-h1, h2, h3 {
-    text-align: center;
+.admin-container h1, h2, h3 {
     margin-bottom: 50px;
-    color: #ED6306;
 }
 
 .admin-container h2 {

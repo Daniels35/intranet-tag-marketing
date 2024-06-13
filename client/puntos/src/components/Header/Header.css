@@ -1,42 +1,117 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #f5f5f5;
-  }
-  
-  .logo img {
-    height: 150px;
-  }
-  
-  .navigation ul {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-    margin-right: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
 
-  }
-  
-  .navigation ul li {
-    font-size: 30px;
-    margin-left: 60px;
+.logo img {
+  height: 100px;
+}
 
-  }
-  
-  .navigation ul li a {
-    text-decoration: none;
-    color: #ED6306;
-  }
+.navigation {
+  display: flex;
+  align-items: center;
+}
+
+.navigation ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation ul li {
+  font-size: 2rem;
+  margin-left: 40px; 
+}
+
+.navigation ul li a {
+  text-decoration: none;
+  color: black;
+}
 
 .navigation ul li.active a {
-  color: #ED6306; 
+  color: black; 
   text-decoration: underline;
 }
 
-  
-  .navigation ul li a:hover {
-    text-decoration: underline;
+.navigation ul li a:hover {
+  text-decoration: underline;
+}
+
+.profile img {
+  height: 60px;
+  border-radius: 50%;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.header-line {
+  width: 95%;
+  margin: 0 auto;
+  border-bottom: 3px solid black;
+}
+
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  z-index: 1001;
+  margin-right: 30px;
+}
+
+.hamburger-menu .bar {
+  width: 25px;
+  height: 3px;
+  background-color: black;
+  margin: 4px 0;
+  transition: 0.4s;
+}
+
+.hamburger-menu.open .bar:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger-menu.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.open .bar:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+@media (max-width: 768px) {
+  .navigation {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #f5f5f5;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    z-index: 1000;
   }
-  
+
+  .navigation.open {
+    display: flex;
+  }
+
+  .navigation ul {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navigation ul li {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+
+  .profile img {
+    height: 50px;
+  }
+}

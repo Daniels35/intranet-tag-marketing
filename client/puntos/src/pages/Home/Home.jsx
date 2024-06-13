@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
+import profilePlaceholder from '../../assets/profilePlaceholder.png'; // Ruta a la imagen de perfil placeholder
+import triangleIcon from '../../assets/triangleIcon.png'; // Ruta a la imagen del triángulo
+import itemIcon from '../../assets/itemIcon.png'; // Ruta a la imagen del icono de items
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -44,31 +47,46 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <div className="section items-section">
-        <h2>Items Canjeables</h2>
-        <ul className="items-list">
-          {redeemableItems.map(item => (
-            <li key={item.id} className="list-item">{item.name} - {item.costInPoints} Puntos</li>
-          ))}
-        </ul>
+      <div className="user-profile">
+        <div className='container-information-user'>
+          <h2>Bienvenido Colaborador</h2>
+          <h1>Daniel Stiven Diaz</h1>
+          <p>Haz acumulado un total de</p>
+          <div className="points-tag">
+            <span>2.500 PUNTOS TAG</span>
+            <img src={triangleIcon} alt="Puntos TAG" className="triangle-icon" />
+          </div>
+        </div>
       </div>
-      
-      <div className="section users-section">
-        <h1>Colaboradores</h1>
-        <ul className="users-list">
-          {users.map(user => (
-            <li key={user.id} className="list-item">{user.name} - Puntos acumulados: {user.accumulatedPoints}</li>
-          ))}
-        </ul>
-      </div>
+      <img src={profilePlaceholder} alt="Perfil" className="profile-image" />
+      <div className='section'>
+        <div className="items-section">
+          <h2>Items Canjeables</h2>
+          <ul className="items-list">
+            {redeemableItems.map(item => (
+              <li key={item.id} className="list-item">
+                <img src={itemIcon} alt="Item Icon" className="item-icon" />
+                <span>{item.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      <div className="section points-section">
-        <h2>Items de Puntos</h2>
-        <ul className="items-list">
-          {pointsItems.map(item => (
-            <li key={item.id} className="list-item">{item.name} - {item.points} Puntos</li>
-          ))}
-        </ul>
+        <div className="section points-section">
+          <h2>¿Qué da puntos?</h2>
+          <ul className="items-list">
+            {pointsItems.map(item => (
+              <li key={item.id} className="list-item">
+                <img src={itemIcon} alt="Item Icon" className="item-icon" />
+                <div>
+                  <span>{item.name}</span>
+                  <br />
+                  <span>{item.points} Puntos</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

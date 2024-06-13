@@ -36,7 +36,7 @@
     text-align: center;
 }
 
-h2 {
+.login-container h2 {
     color: #f60; 
     width: 100%;
     text-align: left;
