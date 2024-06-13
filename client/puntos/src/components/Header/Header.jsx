@@ -2,10 +2,15 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logoOrange.png';
 
 const Header = () => {
   const location = useLocation();
+
+  // No renderizar el Header en la ruta '/'
+  if (location.pathname === '/') {
+    return null;
+  }
 
   return (
     <header className="header">
