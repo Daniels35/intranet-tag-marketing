@@ -12,7 +12,7 @@ db.query(`
     identificationCard VARCHAR(255) DEFAULT '',
     email VARCHAR(255) UNIQUE NOT NULL,
     role ENUM('admin', 'active_employee', 'inactive_employee') NOT NULL DEFAULT 'active_employee',
-    image VARCHAR(255) DEFAULT '',
+    image TEXT, 
     accumulatedPoints INT DEFAULT 0,
     position VARCHAR(255) DEFAULT '',
     dateOfBirth DATE DEFAULT '1970-01-01',

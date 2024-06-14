@@ -1,7 +1,7 @@
 const admin = require('../config/firebase');
 const jwt = require('jsonwebtoken');
 const db = require('../config/database');
-const { v4: uuidv4 } = require('uuid');  // Asegúrate de importar uuidv4
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
 const googleAuth = async (req, res) => {
@@ -14,7 +14,10 @@ const googleAuth = async (req, res) => {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     console.log('Token decodificado:', decodedToken);
     
-    const { email, uid, name } = decodedToken;
+    const { email, uid, name, picture } = decodedToken;
+
+    // Valor predeterminado para la imagen si no se proporciona
+    const image = picture || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
 
     // Verifica si el correo pertenece a la organización
     if (email.endsWith('@tagdigital.com.co')) {
@@ -23,13 +26,15 @@ const googleAuth = async (req, res) => {
       const [rows] = await db.execute('SELECT * FROM users WHERE googleId = ?', [uid]);
       console.log('Resultado de la consulta SELECT:', rows);
 
+      let user;
       if (rows.length === 0) {
         console.log('Iniciando consulta INSERT...');
-        const [result] = await db.execute('INSERT INTO users (id, googleId, email, name) VALUES (?, ?, ?, ?)', [
+        const [result] = await db.execute('INSERT INTO users (id, googleId, email, name, image) VALUES (?, ?, ?, ?, ?)', [
           uuidv4(),
           uid,
           email,
-          name
+          name,
+          image
         ]);
         console.log('Resultado de la consulta INSERT:', result);
 
@@ -37,7 +42,8 @@ const googleAuth = async (req, res) => {
           id: uuidv4(),  // Asegúrate de usar uuidv4 para id
           googleId: uid,
           email,
-          name
+          name,
+          image
         };
       } else {
         user = rows[0];
