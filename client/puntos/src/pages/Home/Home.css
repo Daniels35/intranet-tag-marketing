@@ -13,7 +13,7 @@
 }
 
 .container-information-user {
-  margin-top: 15%;
+  margin-top: 5%;
   text-align: left;
 }
 
@@ -32,8 +32,22 @@
   font-size: 3rem;
 }
 
+.container-imagen-position {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-imagen-position span {
+  font-weight: bold;
+  margin-top: -20px;
+  font-size: 18px;
+  color: #f60;
+}
+
 .profile-image {
-  width: 500px;
+  width: 470px;
   height: auto;
   object-fit: contain;
   border-radius: 50%;
@@ -43,7 +57,7 @@
 .points-tag {
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: -10px;
   font-size: 3.5rem;
   font-weight: bold;
 }
@@ -56,7 +70,7 @@
 
 .section {
   flex: 1;
-  margin: 0 5px 0 20px; 
+  margin: -20px 5px 0 20px; 
   min-width: 250px; 
   text-align: left;
 }
@@ -74,9 +88,17 @@
   flex: 3; 
 }
 
+.items-section h2 {
+  margin-bottom: -6px;
+}
+
 .points-section {
   flex: 3;
   width: 100%;
+}
+
+.points-section h2 {
+  margin-bottom: -6px;
 }
 
 .section h2 {
@@ -93,8 +115,7 @@
 .list-item {
   display: flex;
   align-items: center;
-  margin: 10px 0;
-  padding: 5px;
+  margin: 0 0 10px 0;
   border-radius: 5px;
   text-align: left;
   justify-content: left;
@@ -121,6 +142,7 @@
 
   .section {
     width: 100%;
+    margin: 0;
   }
 
   .items-section, .points-section {

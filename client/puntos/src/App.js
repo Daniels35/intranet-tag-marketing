@@ -5,18 +5,43 @@ import Admin from './pages/Admin/Admin';
 import Header from '../src/components/Header/Header';
 import Login from '../src/pages/Login/Login';
 import Tools from '../src/pages/Tools/Tools';
-
-
+import ProtectedRoute from '../src/components/ProtectedRoute/ProtectedRoute'; // Asegúrate de importar el componente
 
 function App() {
   return (
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/tools" element={<Tools />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/" 
+        element={
+          <ProtectedRoute>
+          <Login />
+          </ProtectedRoute>
+          } />
+        <Route 
+          path="/home" 
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/tools" 
+          element={
+            <ProtectedRoute>
+              <Tools />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </Router>
   );

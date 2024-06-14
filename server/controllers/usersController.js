@@ -1,82 +1,75 @@
 const UsersModel = require('../models/usersModel');
 
 // Obtener todos los usuarios
-exports.getAllUsers = (req, res) => {
-  UsersModel.getAll((err, users) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener los usuarios' });
-    }
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await UsersModel.getAll();
     res.json(users);
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener los usuarios' });
+  }
 };
 
-// Obtener usuarios por ID
-exports.getUserById = (req, res) => {
+// Obtener usuario por ID
+exports.getUserById = async (req, res) => {
   const id = req.params.id;
-  UsersModel.getUserById(id, (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener el usuario' });
-    }
+  try {
+    const user = await UsersModel.getUserById(id);
     res.json(user);
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
 };
 
 // Crear nuevo usuario
-exports.createUser = (req, res) => {
+exports.createUser = async (req, res) => {
   const newUser = req.body;
-
   if (!newUser.name || !newUser.identificationCard) {
     return res.status(400).json({ error: 'Nombre y Número de Identificación son requeridos' });
   }
-
-  UsersModel.createUser(newUser, (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al crear el usuario' });
-    }
+  try {
+    const user = await UsersModel.createUser(newUser);
     res.json({ message: 'Usuario agregado con éxito', user });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al crear el usuario' });
+  }
 };
 
 // Actualizar usuario por ID
-exports.updateUser = (req, res) => {
+exports.updateUser = async (req, res) => {
   const id = req.params.id;
   const updatedUser = req.body;
-  UsersModel.updateUser(id, updatedUser, (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al actualizar el usuario' });
-    }
+  try {
+    const user = await UsersModel.updateUser(id, updatedUser);
     res.json({ message: 'Usuario actualizado con éxito', user });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar el usuario' });
+  }
 };
 
 // Eliminar usuario por ID
-exports.deleteUser = (req, res) => {
+exports.deleteUser = async (req, res) => {
   const id = req.params.id;
-  UsersModel.deleteUser(id, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al eliminar el usuario' });
-    }
+  try {
+    const result = await UsersModel.deleteUser(id);
     res.json({ message: 'Usuario eliminado con éxito', result });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al eliminar el usuario' });
+  }
 };
 
-// Sumar Puntos
-
-exports.addPointsToUser = (req, res) => {
+// Sumar puntos a un usuario
+exports.addPointsToUser = async (req, res) => {
   const userId = req.params.id;
   const pointsToAdd = parseInt(req.body.points, 10);
-
-  UsersModel.addPoints(userId, pointsToAdd, (err, result) => {
-    if (err) {
-      console.error("Error al sumar puntos:", err);
-      return res.status(500).json({ error: err });
-    }
+  try {
+    const result = await UsersModel.addPoints(userId, pointsToAdd);
     if (result > 0) {
-      res.json({ message: "Puntos agregados exitosamente." });
+      res.json({ message: 'Puntos agregados exitosamente.' });
     } else {
-      res.status(404).json({ error: "Usuario no encontrado." });
+      res.status(404).json({ error: 'Usuario no encontrado.' });
     }
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al sumar puntos', details: err.message });
+  }
 };
-
-

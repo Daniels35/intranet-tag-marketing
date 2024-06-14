@@ -24,10 +24,6 @@ db.query(`
   console.error('Error creating the users table: ' + err);
 });
 
-
-// Otros métodos del modelo permanecen igual
-
-
 // Obtener todos los usuarios
 UsersModel.getAll = async () => {
   try {
@@ -83,18 +79,13 @@ UsersModel.deleteUser = async (id) => {
 // Agregar puntos a un usuario
 UsersModel.addPoints = async (userId, pointsToAdd) => {
   try {
-    // Primero, obtén los puntos actuales del usuario
     const [results] = await db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [userId]);
     if (results.length > 0) {
       const currentPoints = results[0].accumulatedPoints;
       const newPoints = currentPoints + pointsToAdd;
-
-      // Luego, actualiza los puntos del usuario
       const [result] = await db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, userId]);
-      // Si todo va bien, devuelve el número de filas afectadas para confirmar la actualización
       return result.affectedRows;
     } else {
-      // Si no se encuentra el usuario, devuelve un error o un mensaje indicándolo
       throw new Error('Usuario no encontrado');
     }
   } catch (err) {

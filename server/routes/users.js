@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const usersController = require('../controllers/usersController');
+const authController = require('../controllers/authController');
 
 // Ruta para obtener todos los usuarios
 router.get('/users', usersController.getAllUsers);
@@ -19,5 +20,8 @@ router.delete('/users/:id', usersController.deleteUser);
 
 // Ruta para sumar puntos a un usuario
 router.post('/users/:id/addPoints', usersController.addPointsToUser);
+
+// Ruta para obtener la información del usuario autenticado
+router.get('/user', authController.getUserInfo);
 
 module.exports = router;

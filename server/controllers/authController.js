@@ -10,18 +10,12 @@ const googleAuth = async (req, res) => {
   try {
     console.log('ID Token recibido:', idToken);
 
-    // Verifica el token de ID proporcionado por el cliente
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     console.log('Token decodificado:', decodedToken);
     
     const { email, uid, name, picture } = decodedToken;
 
-    // Valor predeterminado para la imagen si no se proporciona
-    const image = picture || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
-
-    // Verifica si el correo pertenece a la organización
     if (email.endsWith('@tagdigital.com.co')) {
-      // Lógica para encontrar o crear un usuario en la base de datos
       console.log('Iniciando consulta SELECT...');
       const [rows] = await db.execute('SELECT * FROM users WHERE googleId = ?', [uid]);
       console.log('Resultado de la consulta SELECT:', rows);
@@ -34,22 +28,21 @@ const googleAuth = async (req, res) => {
           uid,
           email,
           name,
-          image
+          picture
         ]);
         console.log('Resultado de la consulta INSERT:', result);
 
         user = {
-          id: uuidv4(),  // Asegúrate de usar uuidv4 para id
+          id: uuidv4(),
           googleId: uid,
           email,
           name,
-          image
+          image: picture
         };
       } else {
         user = rows[0];
       }
 
-      // Genera un token JWT para la sesión
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
       res.json({ token });
       console.log({ message: 'Correct email domain' });
@@ -64,6 +57,21 @@ const googleAuth = async (req, res) => {
   }
 };
 
+const getUserInfo = async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const [rows] = await db.execute('SELECT * FROM users WHERE id = ?', [decoded.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    res.status(401).json({ message: 'Token inválido' });
+  }
+};
+
 module.exports = {
   googleAuth,
+  getUserInfo,
 };
