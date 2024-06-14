@@ -5,106 +5,101 @@ const UsersModel = {};
 
 // Crear la tabla de usuarios si no existe
 db.query(`
-CREATE TABLE IF NOT EXISTS users (
-  id CHAR(36) PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  identificationCard VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  role ENUM('admin', 'active_employee', 'inactive_employee', 'guest') NOT NULL DEFAULT 'guest',
-  image VARCHAR(255),
-  accumulatedPoints INT DEFAULT 0
-)
-
-`, (err) => {
-  if (err) {
-    console.error('Error creating the users table: ' + err);
-  } else {
-    console.log('The users table was created successfully.');
-  }
+  CREATE TABLE IF NOT EXISTS users (
+    id CHAR(36) PRIMARY KEY,
+    googleId VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    identificationCard VARCHAR(255) DEFAULT '',
+    email VARCHAR(255) UNIQUE NOT NULL,
+    role ENUM('admin', 'active_employee', 'inactive_employee') NOT NULL DEFAULT 'active_employee',
+    image VARCHAR(255) DEFAULT '',
+    accumulatedPoints INT DEFAULT 0,
+    position VARCHAR(255) DEFAULT '',
+    dateOfBirth DATE DEFAULT '1970-01-01',
+    entryDate DATE DEFAULT '1970-01-01'
+  )
+`).then(() => {
+  console.log('The users table was created successfully.');
+}).catch(err => {
+  console.error('Error creating the users table: ' + err);
 });
 
 
+// Otros métodos del modelo permanecen igual
+
+
 // Obtener todos los usuarios
-UsersModel.getAll = (callback) => {
-  db.query('SELECT * FROM users', (err, users) => {
-    if (err) {
-      return callback(err, null);
-    }
-    callback(null, users);
-  });
+UsersModel.getAll = async () => {
+  try {
+    const [users] = await db.query('SELECT * FROM users');
+    return users;
+  } catch (err) {
+    throw err;
+  }
 };
 
 // Obtener un usuario por su ID
-UsersModel.getUserById = (id, callback) => {
-  db.query('SELECT * FROM users WHERE id = ?', [id], (err, user) => {
-    if (err) {
-      return callback(err, null);
-    }
-    callback(null, user[0]);
-  });
+UsersModel.getUserById = async (id) => {
+  try {
+    const [user] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+    return user[0];
+  } catch (err) {
+    throw err;
+  }
 };
 
 // Crear un nuevo usuario
-UsersModel.createUser = (newUser, callback) => {
+UsersModel.createUser = async (newUser) => {
   newUser.id = uuidv4(); // Genera un nuevo UUID para el usuario
-  db.query('INSERT INTO users SET ?', newUser, (err, result) => {
-    if (err) {
-      return callback(err, null);
-    }
-    callback(null, newUser);
-  });
+  try {
+    await db.query('INSERT INTO users SET ?', newUser);
+    return newUser;
+  } catch (err) {
+    throw err;
+  }
 };
 
 // Actualizar un usuario por su ID
-UsersModel.updateUser = (id, updatedUser, callback) => {
-  db.query('UPDATE users SET ? WHERE id = ?', [updatedUser, id], (err, result) => {
-    if (err) {
-      return callback(err, null);
-    }
+UsersModel.updateUser = async (id, updatedUser) => {
+  try {
+    await db.query('UPDATE users SET ? WHERE id = ?', [updatedUser, id]);
     updatedUser.id = id;
-    callback(null, updatedUser);
-  });
+    return updatedUser;
+  } catch (err) {
+    throw err;
+  }
 };
 
 // Eliminar un usuario por su ID
-UsersModel.deleteUser = (id, callback) => {
-  db.query('DELETE FROM users WHERE id = ?', [id], (err, result) => {
-    if (err) {
-      return callback(err, null);
-    }
-    callback(null, result.affectedRows);
-  });
+UsersModel.deleteUser = async (id) => {
+  try {
+    const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
+    return result.affectedRows;
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Agregar puntos
-
-// En UsersModel.js
-
-UsersModel.addPoints = (userId, pointsToAdd, callback) => {
-  // Primero, obtén los puntos actuales del usuario
-  db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [userId], (err, results) => {
-    if (err) {
-      return callback(err, null);
-    }
+// Agregar puntos a un usuario
+UsersModel.addPoints = async (userId, pointsToAdd) => {
+  try {
+    // Primero, obtén los puntos actuales del usuario
+    const [results] = await db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [userId]);
     if (results.length > 0) {
       const currentPoints = results[0].accumulatedPoints;
       const newPoints = currentPoints + pointsToAdd;
 
       // Luego, actualiza los puntos del usuario
-      db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, userId], (err, result) => {
-        if (err) {
-          return callback(err, null);
-        }
-        // Si todo va bien, devuelve el número de filas afectadas para confirmar la actualización
-        callback(null, result.affectedRows);
-      });
+      const [result] = await db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, userId]);
+      // Si todo va bien, devuelve el número de filas afectadas para confirmar la actualización
+      return result.affectedRows;
     } else {
       // Si no se encuentra el usuario, devuelve un error o un mensaje indicándolo
-      callback('Usuario no encontrado', null);
+      throw new Error('Usuario no encontrado');
     }
-  });
+  } catch (err) {
+    throw err;
+  }
 };
-
-
 
 module.exports = UsersModel;

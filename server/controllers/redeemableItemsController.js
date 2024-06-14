@@ -1,49 +1,64 @@
 const RedeemableItemsModel = require('../models/redeemableItemsModel');
 
-exports.getAllItems = (req, res) => {
-  RedeemableItemsModel.getAll((err, items) => {
-    if (err) return res.status(500).json({ error: 'Error al obtener los items' });
+exports.getAllItems = async (req, res) => {
+  try {
+    const items = await RedeemableItemsModel.getAll();
     res.json(items);
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener los items' });
+  }
 };
 
-exports.getItemById = (req, res) => {
+exports.getItemById = async (req, res) => {
   const id = req.params.id;
-  RedeemableItemsModel.getById(id, (err, item) => {
-    if (err) return res.status(500).json({ error: 'Error al obtener el item' });
-    if (!item) return res.status(404).json({ error: 'Item no encontrado' });
+  try {
+    const item = await RedeemableItemsModel.getById(id);
+    if (!item) {
+      return res.status(404).json({ error: 'Item no encontrado' });
+    }
     res.json(item);
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener el item' });
+  }
 };
 
-exports.createItem = (req, res) => {
+exports.createItem = async (req, res) => {
   const newItem = req.body;
-  if (!newItem.name || !newItem.costInPoints || !newItem.description) {
-    return res.status(400).json({ error: 'Nombre, costo en puntos y descripción son requeridos' });
+
+  if (!newItem.name || !newItem.costInPoints) {
+    return res.status(400).json({ error: 'Nombre y puntos son requeridos' });
   }
 
-  RedeemableItemsModel.create(newItem, (err, item) => {
-    if (err) return res.status(500).json({ error: 'Error al crear el item' });
+  try {
+    const item = await RedeemableItemsModel.create(newItem);
     res.status(201).json({ message: 'Item creado con éxito', item });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al crear el item' });
+  }
 };
 
-exports.updateItem = (req, res) => {
+exports.updateItem = async (req, res) => {
   const id = req.params.id;
   const updatedItem = req.body;
 
-  RedeemableItemsModel.update(id, updatedItem, (err, item) => {
-    if (err) return res.status(500).json({ error: 'Error al actualizar el item' });
-    res.json({ message: 'Item actualizado con éxito', item: { ...updatedItem, id } });
-  });
+  try {
+    const item = await RedeemableItemsModel.update(id, updatedItem);
+    res.json({ message: 'Item actualizado con éxito', item });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar el item' });
+  }
 };
 
-exports.deleteItem = (req, res) => {
+exports.deleteItem = async (req, res) => {
   const id = req.params.id;
 
-  RedeemableItemsModel.delete(id, (err, result) => {
-    if (err) return res.status(500).json({ error: 'Error al eliminar el item' });
-    if (result === 0) return res.status(404).json({ error: 'Item no encontrado' });
+  try {
+    const result = await RedeemableItemsModel.delete(id);
+    if (result === 0) {
+      return res.status(404).json({ error: 'Item no encontrado' });
+    }
     res.json({ message: 'Item eliminado con éxito' });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al eliminar el item' });
+  }
 };
