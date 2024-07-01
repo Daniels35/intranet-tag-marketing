@@ -12,17 +12,24 @@ db.query(`
     identificationCard VARCHAR(255) DEFAULT '',
     email VARCHAR(255) UNIQUE NOT NULL,
     role ENUM('admin', 'active_employee', 'inactive_employee') NOT NULL DEFAULT 'active_employee',
-    image TEXT, 
+    image TEXT,
+    imageProfile TEXT,
+    uploadedProfileImage TEXT, 
     accumulatedPoints INT DEFAULT 0,
     position VARCHAR(255) DEFAULT '',
-    dateOfBirth DATE DEFAULT '1970-01-01',
-    entryDate DATE DEFAULT '1970-01-01'
+    dateOfBirth DATE DEFAULT '1990-01-01',
+    entryDate DATE DEFAULT '2024-01-01',
+    identificationCardModified BOOLEAN DEFAULT FALSE,
+    dateOfBirthModified BOOLEAN DEFAULT FALSE,
+    updateImageAcrossSite BOOLEAN DEFAULT FALSE
   )
 `).then(() => {
   console.log('The users table was created successfully.');
 }).catch(err => {
   console.error('Error creating the users table: ' + err);
 });
+
+
 
 // Obtener todos los usuarios
 UsersModel.getAll = async () => {

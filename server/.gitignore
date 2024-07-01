@@ -9,5 +9,7 @@ Thumbs.db
 /node_modules
 /build
 
+/uploads/*
+!/uploads/.gitignore
 # Ignorar archivos de entorno (.env)
 .env

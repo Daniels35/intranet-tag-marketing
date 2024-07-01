@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 const port = 3027;
 require('dotenv').config();
 
@@ -21,6 +22,9 @@ app.use(cors({
 
 app.use(express.json());
 
+// Servir archivos estáticos de la carpeta 'uploads'
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.get('/', (req, res) => {
   res.send('¡Hola, mundo!');
 });
@@ -28,10 +32,10 @@ app.get('/', (req, res) => {
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/pointsItems'));
 app.use('/', require('./routes/redeemableItems'));
+
 // Importar y usar la nueva ruta de autenticación
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
-
 
 // ////////PENDIENTE///////
 // app.use('/', require('./routes/transactionHistory'));
