@@ -7,6 +7,8 @@ import Login from '../src/pages/Login/Login';
 import Tools from '../src/pages/Tools/Tools';
 import ProtectedRoute from '../src/components/ProtectedRoute/ProtectedRoute'; // Asegúrate de importar el componente
 
+import QRGenerator from '../src/components/QRGenerator/QRGenerator';
+
 function App() {
   return (
     <Router>
@@ -30,7 +32,7 @@ function App() {
           path="/tools" 
           element={
             <ProtectedRoute>
-              <Tools />
+              <QRGenerator />
             </ProtectedRoute>
           } 
         />
