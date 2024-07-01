@@ -16,12 +16,27 @@ export const loginUser = createAsyncThunk('user/loginUser', async (_, thunkAPI) 
         },
       });
 
-      localStorage.setItem('userInfo', JSON.stringify(userResponse.data)); // Almacena userInfo en localStorage
+      localStorage.setItem('userInfo', JSON.stringify(userResponse.data));
 
       return { token, userInfo: userResponse.data };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
+  }
+});
+
+export const fetchUserInfo = createAsyncThunk('user/fetchUserInfo', async (_, thunkAPI) => {
+  const state = thunkAPI.getState();
+  const token = state.user.token;
+  try {
+    const response = await axios.get('http://localhost:3027/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
   }
 });
 
@@ -89,6 +104,9 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchUserInfo.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
       })
       .addCase(fetchRedeemableItems.fulfilled, (state, action) => {
         state.redeemableItems = action.payload;

@@ -29,8 +29,6 @@ db.query(`
   console.error('Error creating the users table: ' + err);
 });
 
-
-
 // Obtener todos los usuarios
 UsersModel.getAll = async () => {
   try {

@@ -15,6 +15,12 @@ router.post('/users', usersController.createUser);
 // Ruta para actualizar un usuario por su ID
 router.put('/users/:id', usersController.updateUser);
 
+// Ruta para actualizar la cédula de un usuario por su ID
+router.put('/users/:id/identificationCard', usersController.updateIdentificationCard);
+
+// Ruta para actualizar la fecha de nacimiento de un usuario por su ID
+router.put('/users/:id/dateOfBirth', usersController.updateDateOfBirth);
+
 // Ruta para eliminar un usuario por su ID
 router.delete('/users/:id', usersController.deleteUser);
 

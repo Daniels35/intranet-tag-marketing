@@ -73,3 +73,27 @@ exports.addPointsToUser = async (req, res) => {
     res.status(500).json({ error: 'Error al sumar puntos', details: err.message });
   }
 };
+
+// Actualizar cédula por ID
+exports.updateIdentificationCard = async (req, res) => {
+  const id = req.params.id;
+  const { identificationCard } = req.body;
+  try {
+    const updatedUser = await UsersModel.updateUser(id, { identificationCard, identificationCardModified: true });
+    res.json({ message: 'Cédula actualizada con éxito', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar la cédula' });
+  }
+};
+
+// Actualizar fecha de nacimiento por ID
+exports.updateDateOfBirth = async (req, res) => {
+  const id = req.params.id;
+  const { dateOfBirth } = req.body;
+  try {
+    const updatedUser = await UsersModel.updateUser(id, { dateOfBirth, dateOfBirthModified: true });
+    res.json({ message: 'Fecha de nacimiento actualizada con éxito', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar la fecha de nacimiento' });
+  }
+};

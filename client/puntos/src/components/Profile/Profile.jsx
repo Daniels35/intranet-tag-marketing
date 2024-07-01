@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FaEdit } from 'react-icons/fa';
-import profilePlaceholder from '../../assets/profilePlaceholder.png'; // Ruta a la imagen de perfil placeholder
+import profilePlaceholder from '../../assets/profilePlaceholder.png';
+import axios from 'axios';
+import { fetchUserInfo } from '../../redux/userSlice';
 import './Profile.css';
 
 const Profile = () => {
@@ -13,6 +15,7 @@ const Profile = () => {
   const [previewImage, setPreviewImage] = useState('');
   const [editingField, setEditingField] = useState(null);
   const [showImagePopup, setShowImagePopup] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("link imagen", userInfo.image );
@@ -44,10 +47,29 @@ const Profile = () => {
     setEditingField(field);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async (e) => {
+    e.preventDefault();
     setEditingField(null);
     setImage(previewImage);
     setShowImagePopup(false);
+
+    try {
+      if (editingField === 'identificationCard') {
+        await axios.put(`http://localhost:3027/users/${userInfo.id}/identificationCard`, {
+          identificationCard,
+        });
+      } else if (editingField === 'dateOfBirth') {
+        await axios.put(`http://localhost:3027/users/${userInfo.id}/dateOfBirth`, {
+          dateOfBirth,
+        });
+      }
+
+      // Actualiza el estado global después de guardar
+      dispatch(fetchUserInfo());
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error);
+    }
+
     // Aquí puedes añadir la lógica para enviar los datos actualizados al backend
     console.log({
       dateOfBirth,
@@ -104,7 +126,7 @@ const Profile = () => {
                     value={identificationCard}
                     onChange={(e) => handleFieldChange('identificationCard', e.target.value)}
                   />
-                  <button type="button" onClick={handleSaveClick}>Guardar</button>
+                  <button type="submit">Guardar</button>
                   <button type="button" onClick={handleCancelClick}>Cancelar</button>
                 </>
               ) : (
@@ -126,7 +148,7 @@ const Profile = () => {
                     value={dateOfBirth}
                     onChange={(e) => handleFieldChange('dateOfBirth', e.target.value)}
                   />
-                  <button type="button" onClick={handleSaveClick}>Guardar</button>
+                  <button type="submit">Guardar</button>
                   <button type="button" onClick={handleCancelClick}>Cancelar</button>
                 </>
               ) : (
