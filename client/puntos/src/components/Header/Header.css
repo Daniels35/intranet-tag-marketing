@@ -145,7 +145,7 @@
   text-decoration: none!Important; /* Evitar subrayado */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 948px) {
   .custom-navigation {
     display: none;
     flex-direction: column;

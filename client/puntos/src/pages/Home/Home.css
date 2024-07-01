@@ -33,6 +33,7 @@
 }
 
 .container-imagen-position {
+  flex: 8 1;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -70,7 +71,6 @@
 
 .section {
   flex: 1;
-  margin: -20px 5px 0 20px; 
   min-width: 250px; 
   text-align: left;
 }
@@ -80,7 +80,7 @@
 }
 
 .section h2 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
@@ -134,7 +134,34 @@
   margin-left: 20px;
 }
 
+@media (max-width: 1473px) {
+  .container-information-user h2 {
+    font-size: 2.5rem;
+  }
+
+  .container-information-user h1 {
+    font-size: 3rem;
+    margin-top: 50px;
+  }
+  .container-information-user p{
+    font-size: 2rem;
+  }
+
+  .profile-image-home {
+    width: 400px;
+  }
+  .points-tag {
+    font-size: 2rem;
+  }
+  .triangle-icon {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+
 @media (max-width: 768px) {
+
   .home-container {
     flex-direction: column; 
     align-items: center; 
