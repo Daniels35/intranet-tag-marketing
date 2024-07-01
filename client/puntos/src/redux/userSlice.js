@@ -25,11 +25,43 @@ export const loginUser = createAsyncThunk('user/loginUser', async (_, thunkAPI) 
   }
 });
 
+export const fetchRedeemableItems = createAsyncThunk('user/fetchRedeemableItems', async (_, thunkAPI) => {
+  const state = thunkAPI.getState();
+  const token = state.user.token;
+  try {
+    const response = await axios.get('http://localhost:3027/redeemableItems', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+});
+
+export const fetchPointsItems = createAsyncThunk('user/fetchPointsItems', async (_, thunkAPI) => {
+  const state = thunkAPI.getState();
+  const token = state.user.token;
+  try {
+    const response = await axios.get('http://localhost:3027/pointsItems', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     userInfo: null,
     token: localStorage.getItem('token') || null,
+    redeemableItems: [],
+    pointsItems: [],
     loading: false,
     error: null,
   },
@@ -37,8 +69,10 @@ const userSlice = createSlice({
     logout: (state) => {
       state.userInfo = null;
       state.token = null;
+      state.redeemableItems = [];
+      state.pointsItems = [];
       localStorage.removeItem('token');
-      localStorage.removeItem('userInfo'); // Elimina userInfo de localStorage
+      localStorage.removeItem('userInfo');
     },
   },
   extraReducers: (builder) => {
@@ -55,6 +89,12 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchRedeemableItems.fulfilled, (state, action) => {
+        state.redeemableItems = action.payload;
+      })
+      .addCase(fetchPointsItems.fulfilled, (state, action) => {
+        state.pointsItems = action.payload;
       });
   },
 });

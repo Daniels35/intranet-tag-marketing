@@ -1,49 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRedeemableItems, fetchPointsItems } from '../../redux/userSlice';
 import './Home.css';
 import profilePlaceholder from '../../assets/profilePlaceholder.png'; // Ruta a la imagen de perfil placeholder
 import triangleIcon from '../../assets/triangleIcon.png'; // Ruta a la imagen del triángulo
 import itemIcon from '../../assets/itemIcon.png'; // Ruta a la imagen del icono de items
-import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const { userInfo, token } = useSelector((state) => state.user);
-  const [redeemableItems, setRedeemableItems] = useState([]);
-  const [pointsItems, setPointsItems] = useState([]);
-console.log("Datos user: ", userInfo);
+  const dispatch = useDispatch();
+  const { userInfo, redeemableItems, pointsItems, token } = useSelector((state) => state.user);
+
   useEffect(() => {
-    const fetchRedeemableItems = async () => {
-      try {
-        const response = await fetch('http://localhost:3027/redeemableItems', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setRedeemableItems(data);
-      } catch (error) {
-        console.error('Error al obtener los items canjeables:', error);
-      }
-    };
-
-    const fetchPointsItems = async () => {
-      try {
-        const response = await fetch('http://localhost:3027/pointsItems', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setPointsItems(data);
-      } catch (error) {
-        console.error('Error al obtener los puntos de items:', error);
-      }
-    };
-
     if (token) {
-      fetchRedeemableItems();
-      fetchPointsItems();
+      dispatch(fetchRedeemableItems());
+      dispatch(fetchPointsItems());
+      console.log("User ", userInfo);
     }
-  }, [token]);
+  }, [dispatch, token]);
 
   if (!userInfo) {
     return <div>Loading...</div>;
