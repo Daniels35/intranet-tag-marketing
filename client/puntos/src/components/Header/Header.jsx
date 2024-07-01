@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import tools from '../../pages/Tools/toolsList';
 import './Header.css';
 import logo from '../../assets/logoOrange.png';
 import profilePlaceholder from '../../assets/profilePlaceholder.png';
@@ -33,38 +34,45 @@ const Header = () => {
 
   return (
     <>
-      <header className="header">
-        <div className="logo">
+      <header className="custom-header">
+        <div className="custom-logo">
           <Link to="/home"><img src={logo} alt="Logo" /></Link>
         </div>
-        <nav className={`navigation ${menuOpen ? 'open' : ''}`}>
+        <nav className={`custom-navigation ${menuOpen ? 'open' : ''}`}>
           <ul>
-            <li className={location.pathname === '/' ? 'active' : ''}>
+            <li className={location.pathname === '/home' ? 'active' : ''}>
               <Link to="/home">Inicio</Link>
             </li>
-            <li className={location.pathname === '/tools' ? 'active' : ''}>
+            <li className={`custom-tools-dropdown ${location.pathname.startsWith('/tools') ? 'active' : ''}`}>
               <Link to="/tools">Herramientas</Link>
+              <div className="custom-tools-dropdown-content">
+                {tools.map((tool, index) => (
+                  <Link to={`/tools/${tool.component}`} key={index}>
+                    {tool.name}
+                  </Link>
+                ))}
+              </div>
             </li>
             <li className={location.pathname === '/mi' ? 'active' : ''}>
-              <Link to="/home#">Mi Cuenta</Link>
+              <Link to="/mi">Mi Cuenta</Link>
             </li>
           </ul>
-          <div className="profile" onClick={toggleProfileMenu}>
+          <div className="custom-profile" onClick={toggleProfileMenu}>
             <img src={userInfo?.image || profilePlaceholder} alt="Perfil" />
             {profileMenuOpen && (
-              <div className="profile-menu">
+              <div className="custom-profile-menu">
                 <button onClick={handleLogout}>Salir</button>
               </div>
             )}
           </div>
         </nav>
-        <div className={`hamburger-menu ${menuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-          <div className="bar"></div>
-          <div className="bar"></div>
-          <div className="bar"></div>
+        <div className={`custom-hamburger-menu ${menuOpen ? 'open' : ''}`} onClick={toggleMenu}>
+          <div className="custom-bar"></div>
+          <div className="custom-bar"></div>
+          <div className="custom-bar"></div>
         </div>
       </header>
-      <div className="header-line"></div>
+      <div className="custom-header-line"></div>
     </>
   );
 };

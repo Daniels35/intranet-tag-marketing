@@ -28,14 +28,8 @@ function App() {
             </ProtectedRoute>
           } 
         />
-        <Route 
-          path="/tools" 
-          element={
-            <ProtectedRoute>
-              <QRGenerator />
-            </ProtectedRoute>
-          } 
-        />
+        <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
+        <Route path="/tools/QRGenerator" element={<ProtectedRoute><QRGenerator /></ProtectedRoute>} />
         <Route 
           path="/admin" 
           element={

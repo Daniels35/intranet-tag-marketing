@@ -1,13 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import tools from './toolsList';
 import './Tools.css';
-
-const tools = [
-    "Generador de códigos QR",
-    "Chatbot parrillas redes",
-    "Chatbot pauta",
-    "Chatbot blogs",
-    "Cotización Automatica"
-];
 
 const Tools = () => {
   return (
@@ -16,7 +10,9 @@ const Tools = () => {
       <ul className="tools-list">
         {tools.map((tool, index) => (
           <li key={index} className="tool-item">
-            {tool} <span className="coming-soon">Coming Soon</span>
+            <Link to={`/tools/${tool.component}`}>
+              {tool.name} {tool.component ? '' : <span className="coming-soon">Coming Soon</span>}
+            </Link>
           </li>
         ))}
       </ul>
