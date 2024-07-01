@@ -1,0 +1,140 @@
+.profile-container {
+    padding: 20px;
+    max-width: 500px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-title {
+    text-align: center;
+    color: #f60;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+  }
+  
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-image-container {
+    position: relative;
+  }
+  
+  .profile-image {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+
+  .edit-icon-imagen-profile {
+    top: -20px!Important;
+    right: 20px;
+  }
+  
+  .edit-icon {
+    position: relative;
+    top: 0;
+    font-size: 18px;
+    cursor: pointer;
+    color: #f60;
+  }
+  
+  .profile-form {
+    width: 100%;
+  }
+  
+  .profile-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .profile-field label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .profile-field input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .editable-field {
+    display: flex;
+    align-items: center;
+  }
+  
+  .editable-field span {
+    flex-grow: 1;
+  }
+  
+  .editable-field .edit-icon {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #f60;
+  }
+  
+  .image-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+  }
+  
+  .image-popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .image-popup-content h3 {
+    margin-bottom: 10px;
+  }
+  
+  .image-popup-content input {
+    margin-bottom: 10px;
+  }
+  
+  .profile-image-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+  
+  .profile-submit-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  .profile-submit-button:hover {
+    background-color: #45a049;
+  }
+
+  @media (min-width: 789px) {
+    .profile-container {
+      width: 100%;
+    }
+  }
+  

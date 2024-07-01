@@ -63,7 +63,7 @@ console.log("Datos user: ", userInfo);
         </div>
       </div>
       <div className='container-imagen-position'>
-      <img src={profilePlaceholder} alt="Perfil" className="profile-image" />
+      <img src={profilePlaceholder} alt="Perfil" className="profile-image-home" />
       <span className='position-profile'>{userInfo.position}</span>
       </div>
       <div className='section'>

@@ -53,8 +53,8 @@ const Header = () => {
                 ))}
               </div>
             </li>
-            <li className={location.pathname === '/mi' ? 'active' : ''}>
-              <Link to="/mi">Mi Cuenta</Link>
+            <li className={location.pathname === '/profile' ? 'active' : ''}>
+              <Link to="/profile">Mi Cuenta</Link>
             </li>
           </ul>
           <div className="custom-profile" onClick={toggleProfileMenu}>

@@ -5,8 +5,8 @@ import Admin from './pages/Admin/Admin';
 import Header from '../src/components/Header/Header';
 import Login from '../src/pages/Login/Login';
 import Tools from '../src/pages/Tools/Tools';
+import Profile from '../src/components/Profile/Profile'; // Importamos el componente de perfil
 import ProtectedRoute from '../src/components/ProtectedRoute/ProtectedRoute'; // Asegúrate de importar el componente
-
 import QRGenerator from '../src/components/QRGenerator/QRGenerator';
 
 function App() {
@@ -15,11 +15,12 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" 
-        element={
-          <ProtectedRoute>
-          <Login />
-          </ProtectedRoute>
-          } />
+          element={
+            <ProtectedRoute>
+              <Login />
+            </ProtectedRoute>
+          } 
+        />
         <Route 
           path="/home" 
           element={
@@ -35,6 +36,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Admin />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           } 
         />
