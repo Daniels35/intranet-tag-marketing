@@ -58,7 +58,7 @@ const Header = () => {
             </li>
           </ul>
           <div className="custom-profile" onClick={toggleProfileMenu}>
-            <img src={userInfo?.image || profilePlaceholder} alt="Perfil" />
+            <img src={userInfo?.imageProfile || profilePlaceholder} alt="Perfil" />
             {profileMenuOpen && (
               <div className="custom-profile-menu">
                 <button onClick={handleLogout}>Salir</button>
