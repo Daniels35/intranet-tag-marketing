@@ -1,37 +1,46 @@
 .tools-container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .tools-container h2 {
-    text-align: center;
-    color: #f60;
-    margin-bottom: 20px;
-    font-size: 2.5rem;
-  }
-  
-  .tools-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 2.5rem;
-  }
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-  .tools-list:hover {
-    cursor: pointer;
-  }
-  
-  .tool-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 1.5rem;
-  }
-  
-  .coming-soon {
-    font-style: italic;
-    color: #f60;
-  }
-  
+.tools-container h2 {
+  text-align: center;
+  color: #f60;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+}
+
+.tools-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 2.5rem;
+}
+
+.tools-list:hover {
+  cursor: pointer;
+}
+
+.tool-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 1.5rem;
+}
+
+.tool-link {
+  text-decoration: none;
+  color: black;
+  flex-grow: 1;
+}
+
+.tool-link:hover {
+  color: #f60;
+}
+
+.coming-soon {
+  font-style: italic;
+  color: #f60;
+}

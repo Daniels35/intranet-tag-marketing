@@ -10,7 +10,7 @@ const Tools = () => {
       <ul className="tools-list">
         {tools.map((tool, index) => (
           <li key={index} className="tool-item">
-            <Link to={`/tools/${tool.component}`}>
+            <Link to={`/tools/${tool.component}`} className="tool-link">
               {tool.name} {tool.component ? '' : <span className="coming-soon">Coming Soon</span>}
             </Link>
           </li>
