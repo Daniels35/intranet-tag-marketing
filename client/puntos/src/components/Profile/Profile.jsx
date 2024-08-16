@@ -55,11 +55,11 @@ const Profile = () => {
 
     try {
       if (editingField === 'identificationCard') {
-        await axios.put(`http://localhost:3027/users/${userInfo.id}/identificationCard`, {
+        await axios.put(`${process.env.REACT_APP_API_URL}/users/${userInfo.id}/identificationCard`, {
           identificationCard,
         });
       } else if (editingField === 'dateOfBirth') {
-        await axios.put(`http://localhost:3027/users/${userInfo.id}/dateOfBirth`, {
+        await axios.put(`${process.env.REACT_APP_API_URL}/users/${userInfo.id}/dateOfBirth`, {
           dateOfBirth,
         });
       }

@@ -6,11 +6,11 @@ export const loginUser = createAsyncThunk('user/loginUser', async (_, thunkAPI) 
   const idToken = await signInWithGoogle();
   if (idToken) {
     try {
-      const response = await axios.post('http://localhost:3027/auth/google', { idToken });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/google`, { idToken });
       const { token } = response.data;
       localStorage.setItem('token', token);
 
-      const userResponse = await axios.get('http://localhost:3027/user', {
+      const userResponse = await axios.get(`${process.env.REACT_APP_API_URL}/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,7 +29,7 @@ export const fetchUserInfo = createAsyncThunk('user/fetchUserInfo', async (_, th
   const state = thunkAPI.getState();
   const token = state.user.token;
   try {
-    const response = await axios.get('http://localhost:3027/user', {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -44,7 +44,7 @@ export const fetchRedeemableItems = createAsyncThunk('user/fetchRedeemableItems'
   const state = thunkAPI.getState();
   const token = state.user.token;
   try {
-    const response = await axios.get('http://localhost:3027/redeemableItems', {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/redeemableItems`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -59,7 +59,7 @@ export const fetchPointsItems = createAsyncThunk('user/fetchPointsItems', async 
   const state = thunkAPI.getState();
   const token = state.user.token;
   try {
-    const response = await axios.get('http://localhost:3027/pointsItems', {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/pointsItems`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

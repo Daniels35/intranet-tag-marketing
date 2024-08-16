@@ -14,7 +14,7 @@ const RedeemableItemsAdmin = () => {
 
     const fetchRedeemableItems = async () => {
         try {
-          const response = await fetch('http://localhost:3027/redeemableItems');
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems`);
           const data = await response.json();
           setRedeemableItems(data);
         } catch (error) {
@@ -25,7 +25,7 @@ const RedeemableItemsAdmin = () => {
 
       const addRedeemableItem = async (item) => {
         try {
-          await fetch('http://localhost:3027/redeemableItems', {
+          await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const RedeemableItemsAdmin = () => {
 
       const deleteRedeemableItem = async (id) => {
         try {
-          await fetch(`http://localhost:3027/redeemableItems/${id}`, {
+          await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems/${id}`, {
             method: 'DELETE',
           });
           setRedeemableItems(redeemableItems.filter(item => item.id !== id)); // Actualiza el estado eliminando el item
@@ -53,7 +53,7 @@ const RedeemableItemsAdmin = () => {
 
     const updateRedeemableItem = async (id, updatedItem) => {
         try {
-          await fetch(`http://localhost:3027/redeemableItems/${id}`, {
+          await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

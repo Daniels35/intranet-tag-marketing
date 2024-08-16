@@ -15,7 +15,7 @@ const UsersAdmin = () => {
   
     const fetchUsers = async () => {
       try {
-          const response = await fetch('http://localhost:3027/users');
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/users`);
           const data = await response.json();
           setUsers(data);
         } catch (error) {
@@ -25,7 +25,7 @@ const UsersAdmin = () => {
   
     const addUser = async (user) => {
       try {
-        await fetch('http://localhost:3027/users', {
+        await fetch(`${process.env.REACT_APP_API_URL}/users`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const UsersAdmin = () => {
   
     const deleteUser = async (id) => {
       try {
-        await fetch(`http://localhost:3027/users/${id}`, {
+        await fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, {
           method: 'DELETE',
         });
         setUsers(users.filter(user => user.id !== id));
@@ -52,7 +52,7 @@ const UsersAdmin = () => {
   
     const updateUser = async (id, updatedUser) => {
       try {
-        await fetch(`http://localhost:3027/users/${id}`, {
+        await fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

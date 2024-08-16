@@ -16,7 +16,7 @@ const AddPointsToList = ({ user}) => {
     
       const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:3027/users');
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/users`);
             const data = await response.json();
             setUsers(data);
           } catch (error) {

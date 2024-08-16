@@ -6,6 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
+const API_URL = process.env.REACT_APP_API_URL; // Definida aquí
+
+console.log(API_URL); // Disponible desde el inicio de la aplicación
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
