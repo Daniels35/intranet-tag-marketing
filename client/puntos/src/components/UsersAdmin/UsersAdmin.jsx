@@ -3,6 +3,8 @@ import UsersList from '../UsersList/UsersList';
 import AddUserForm from '../AddUserForm/AddUserForm'; 
 import EditUserForm from '../EditUserForm/EditUserForm'; 
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const UsersAdmin = () => {
 
     const [users, setUsers] = useState([]);
@@ -15,7 +17,7 @@ const UsersAdmin = () => {
   
     const fetchUsers = async () => {
       try {
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/users`);
+          const response = await fetch(`${API_URL}/users`);
           const data = await response.json();
           setUsers(data);
         } catch (error) {
@@ -25,7 +27,7 @@ const UsersAdmin = () => {
   
     const addUser = async (user) => {
       try {
-        await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+        await fetch(`${API_URL}/users`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +43,7 @@ const UsersAdmin = () => {
   
     const deleteUser = async (id) => {
       try {
-        await fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, {
+        await fetch(`${API_URL}/users/${id}`, {
           method: 'DELETE',
         });
         setUsers(users.filter(user => user.id !== id));
@@ -52,7 +54,7 @@ const UsersAdmin = () => {
   
     const updateUser = async (id, updatedUser) => {
       try {
-        await fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, {
+        await fetch(`${API_URL}/users/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

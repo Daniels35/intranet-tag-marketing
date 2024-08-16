@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+
+const API_URL = process.env.REACT_APP_API_URL;
+
 const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
   const [pointsItems, setPointsItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState('');
@@ -7,7 +10,7 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
   useEffect(() => {
     const fetchPointsItems = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/pointsItems`);
+        const response = await fetch(`${API_URL}/pointsItems`);
         const data = await response.json();
         setPointsItems(data);
         if (data.length > 0) {
@@ -32,7 +35,7 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
     console.log(`Enviando ${pointsToAdd} puntos al usuario ${user.name} con ID ${user.id}`);
   
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/addPoints`, {
+      const response = await fetch(`${API_URL}/users/${user.id}/addPoints`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

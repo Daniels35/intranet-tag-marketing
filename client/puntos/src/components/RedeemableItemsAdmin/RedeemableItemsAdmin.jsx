@@ -3,6 +3,8 @@ import RedeemableItemsList from '../RedeemableItemsList/RedeemableItemsList';
 import AddRedeemableItemForm from '../AddRedeemableItemForm/AddRedeemableItemForm';
 import EditRedeemableItemForm from '../EditRedeemableItemForm/EditRedeemableItemForm';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const RedeemableItemsAdmin = () => {
     const [redeemableItems, setRedeemableItems] = useState([]);
     const [editing, setEditing] = useState(false);
@@ -14,7 +16,7 @@ const RedeemableItemsAdmin = () => {
 
     const fetchRedeemableItems = async () => {
         try {
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems`);
+          const response = await fetch(`${API_URL}/redeemableItems`);
           const data = await response.json();
           setRedeemableItems(data);
         } catch (error) {
@@ -25,7 +27,7 @@ const RedeemableItemsAdmin = () => {
 
       const addRedeemableItem = async (item) => {
         try {
-          await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems`, {
+          await fetch(`${API_URL}/redeemableItems`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,7 +43,7 @@ const RedeemableItemsAdmin = () => {
 
       const deleteRedeemableItem = async (id) => {
         try {
-          await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems/${id}`, {
+          await fetch(`${API_URL}/redeemableItems/${id}`, {
             method: 'DELETE',
           });
           setRedeemableItems(redeemableItems.filter(item => item.id !== id)); // Actualiza el estado eliminando el item
@@ -53,7 +55,7 @@ const RedeemableItemsAdmin = () => {
 
     const updateRedeemableItem = async (id, updatedItem) => {
         try {
-          await fetch(`${process.env.REACT_APP_API_URL}/redeemableItems/${id}`, {
+          await fetch(`${API_URL}/redeemableItems/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AddPointsComponent from '../AddPointsModal/AddPointsModal'
 
+const API_URL = process.env.REACT_APP_API_URL;
 
 const AddPointsToList = ({ user}) => {
 
@@ -16,7 +17,7 @@ const AddPointsToList = ({ user}) => {
     
       const fetchUsers = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/users`);
+            const response = await fetch(`${API_URL}/users`);
             const data = await response.json();
             setUsers(data);
           } catch (error) {

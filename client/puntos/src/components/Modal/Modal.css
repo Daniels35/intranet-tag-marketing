@@ -20,6 +20,8 @@
     margin: 0 1.2rem;
     min-width: 500px;
     max-width: 500px;
+    max-height: 75vh;
+    overflow-y: auto;
   }
   
   .close-button {

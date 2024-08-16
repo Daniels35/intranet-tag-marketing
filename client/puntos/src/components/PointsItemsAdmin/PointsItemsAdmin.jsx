@@ -3,6 +3,8 @@ import PointsItemsList from '../PointsItemsList/PointsItemsList';
 import AddPointsItemForm from '../AddPointsItemForm/AddPointsItemForm';
 import EditPointsItemForm from '../EditPointsItemForm/EditPointsItemForm';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const PointsItemsAdmin = () => {
     const [pointsItems, setPointsItems] = useState([]);
     const [editing, setEditing] = useState(false);
@@ -14,7 +16,7 @@ const PointsItemsAdmin = () => {
 
     const fetchPointsItems = async () => {
         try {
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/pointsItems`);
+          const response = await fetch(`${API_URL}/pointsItems`);
           const data = await response.json();
           setPointsItems(data);
         } catch (error) {
@@ -25,7 +27,7 @@ const PointsItemsAdmin = () => {
 
       const addPointsItem = async (item) => {
         try {
-          await fetch(`${process.env.REACT_APP_API_URL}/pointsItems`, {
+          await fetch(`${API_URL}/pointsItems`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,7 +43,7 @@ const PointsItemsAdmin = () => {
 
       const deletePointsItem = async (id) => {
         try {
-          await fetch(`${process.env.REACT_APP_API_URL}/pointsItems/${id}`, {
+          await fetch(`${API_URL}/pointsItems/${id}`, {
             method: 'DELETE',
           });
           setPointsItems(pointsItems.filter(item => item.id !== id)); // Actualiza el estado eliminando el item
@@ -53,7 +55,7 @@ const PointsItemsAdmin = () => {
 
     const updatePointsItem = async (id, updatedItem) => {
         try {
-          await fetch(`${process.env.REACT_APP_API_URL}/pointsItems/${id}`, {
+          await fetch(`${API_URL}/pointsItems/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

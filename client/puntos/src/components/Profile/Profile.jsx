@@ -6,6 +6,8 @@ import axios from 'axios';
 import { fetchUserInfo } from '../../redux/userSlice';
 import './Profile.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Profile = () => {
   const { userInfo } = useSelector((state) => state.user);
   const [dateOfBirth, setDateOfBirth] = useState('');
@@ -55,11 +57,11 @@ const Profile = () => {
 
     try {
       if (editingField === 'identificationCard') {
-        await axios.put(`${process.env.REACT_APP_API_URL}/users/${userInfo.id}/identificationCard`, {
+        await axios.put(`${API_URL}/users/${userInfo.id}/identificationCard`, {
           identificationCard,
         });
       } else if (editingField === 'dateOfBirth') {
-        await axios.put(`${process.env.REACT_APP_API_URL}/users/${userInfo.id}/dateOfBirth`, {
+        await axios.put(`${API_URL}/users/${userInfo.id}/dateOfBirth`, {
           dateOfBirth,
         });
       }

@@ -53,6 +53,11 @@ const Header = () => {
                 ))}
               </div>
             </li>
+            {userInfo?.role === 'admin' && (
+              <li className={location.pathname === '/admin' ? 'active' : ''}>
+                <Link to="/admin">Admin</Link>
+              </li>
+            )}
             <li className={location.pathname === '/profile' ? 'active' : ''}>
               <Link to="/profile">Mi Cuenta</Link>
             </li>
