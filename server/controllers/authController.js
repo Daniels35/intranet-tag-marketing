@@ -20,7 +20,7 @@ const googleAuth = async (req, res) => {
 
     if (email.endsWith('@tagdigital.com.co')) {
       console.log('Iniciando consulta SELECT...');
-      const [rows] = await db.execute('SELECT * FROM users WHERE googleId = ?', [uid]);
+      let [rows] = await db.execute('SELECT * FROM users WHERE googleId = ?', [uid]);
       console.log('Resultado de la consulta SELECT:', rows);
 
       let user;
@@ -37,7 +37,7 @@ const googleAuth = async (req, res) => {
         const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${imageName}`;
 
         console.log('Iniciando consulta INSERT...');
-        const [result] = await db.execute('INSERT INTO users (id, googleId, email, name, image, imageProfile, uploadedProfileImage, updateImageAcrossSite) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
+        await db.execute('INSERT INTO users (id, googleId, email, name, image, imageProfile, uploadedProfileImage, updateImageAcrossSite) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
           uuidv4(),
           uid,
           email,
@@ -47,18 +47,12 @@ const googleAuth = async (req, res) => {
           '',
           false
         ]);
-        console.log('Resultado de la consulta INSERT:', result);
 
-        user = {
-          id: uuidv4(),
-          googleId: uid,
-          email,
-          name,
-          image: picture,
-          imageProfile: imageUrl,
-          uploadedProfileImage: '',
-          updateImageAcrossSite: false
-        };
+        // Realizar una nueva consulta para obtener el usuario recién creado
+        [rows] = await db.execute('SELECT * FROM users WHERE googleId = ?', [uid]);
+        console.log('Resultado de la nueva consulta SELECT:', rows);
+
+        user = rows[0];
       } else {
         user = rows[0];
       }
@@ -76,6 +70,7 @@ const googleAuth = async (req, res) => {
     res.status(500).json({ message: 'Error verificando el token', error });
   }
 };
+
 
 const getUserInfo = async (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
