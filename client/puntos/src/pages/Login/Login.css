@@ -84,3 +84,46 @@
     height: auto;
     opacity: 0.9;
 }
+
+@media (max-width: 700px) {
+
+    .login-container {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-left {
+        position: relative;
+        width: 100%;
+        clip-path: none;
+        justify-content: center;
+        align-items:flex-start;
+    }
+
+    .logo {
+        margin-top: 30%;
+    }
+    .login-right {
+        position:absolute;
+        margin-left: 0;
+        align-items: center;
+        background-color: transparent;
+        justify-content: center;
+    }
+
+    .login-container h2 {
+        color: white;
+        text-align: center;
+    }
+
+    .error-message {
+        color: white;
+    }
+    .rocket-image {
+        filter: invert(100%) brightness(1000%);
+        right: 50%;
+        width: 180px;
+        position: absolute;
+        top: 99%;
+    }
+}

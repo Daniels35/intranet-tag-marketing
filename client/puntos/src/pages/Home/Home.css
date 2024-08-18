@@ -108,7 +108,8 @@
 .items-list {
   list-style-type: none;
   padding: 0;
-  max-height: 160px; /* Ajusta esta altura según tus necesidades */
+  max-height: 160px;
+  min-height: 150px;
   overflow-y: auto;
 }
 
