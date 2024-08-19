@@ -28,15 +28,15 @@ const [selectedUser, setSelectedUser] = useState(null);
   return (
     <>
     <div className="admin-container">
-      <h1>Panel de Administración</h1>
+      <div className='admin-container-users'>
+        <AddPointsToList openAddPoints={openAddPoints} />
+      </div>
 
-    <AddPointsToList openAddPoints={openAddPoints} />
-
-{/* 
-      <h2 onClick={(e) => { e.stopPropagation(); setAddPointsToList(true);}}>Agregar Puntos</h2> */}
-      <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setUser(true);}}>Administración de Usuarios</h2>
-      <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setPoints(true);}}>Administración de Items de Puntos</h2>
-      <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setredeemableItem(true);}}>Administración de Items Canjeables</h2>
+      <div className='admin-container-items-left'>
+       <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setUser(true);}}>Administración de Colaboradores</h2>
+       <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setPoints(true);}}>Administración de Items de Puntos</h2>
+       <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setredeemableItem(true);}}>Administración de Items Canjeables</h2>
+      </div>
 
       {/* Modales */}
       <Modal isVisible={usersOpen} onClose={() => setUser(false)}>

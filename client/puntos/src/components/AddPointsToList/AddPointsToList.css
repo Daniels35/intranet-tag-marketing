@@ -1,0 +1,34 @@
+/* Estilos generales para la tabla */
+.table-users-list {
+    width: 95%;
+    border-collapse: collapse;
+  }
+  
+  .table-users-list th, .table-users-list td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  /* Media query para pantallas pequeñas */
+  @media (max-width: 680px) {
+    .table-users-list, .table-users-list tbody, .table-users-list th, .table-users-list td {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 95%;
+    }
+
+    .table-users-list-header {
+        display: none;
+    }
+
+    .table-users-list tbody {
+        border: 1px solid #ED6306;
+        text-align: center;
+        justify-content: center;
+    }
+  
+
+  }
+  

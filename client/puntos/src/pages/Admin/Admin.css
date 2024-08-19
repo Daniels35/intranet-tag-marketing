@@ -1,7 +1,6 @@
 .admin-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: center;
     text-align: center;
 }
@@ -14,12 +13,28 @@
     text-align: center;
 }
 
+.title-item-admin {
+  color: #ED6306;
+}
 .title-item-admin:hover {
     cursor: pointer;
     opacity: 0.7;
 }
 
+.admin-container-users {
+  flex: 4 1;
+}
 
+.admin-container-items-left {
+  flex: 1 1;
+}
+
+.container-addPoints-list-users {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
 
 /* PARTE PARA AGREGAR USUARIOS */
 
@@ -77,4 +92,11 @@
 
 .muted-button {
     margin-left: 30px;
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    display: flex;
+    flex-direction: column;
+}
 }

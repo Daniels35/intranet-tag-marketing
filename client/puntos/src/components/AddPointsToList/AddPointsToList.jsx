@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AddPointsComponent from '../AddPointsModal/AddPointsModal'
-
+import './AddPointsToList.css'
 const API_URL = process.env.REACT_APP_API_URL;
 
 const AddPointsToList = ({ user}) => {
@@ -37,11 +37,11 @@ const AddPointsToList = ({ user}) => {
 
   return (
     <>
-    <div>
-      <h3>Usuarios</h3>
+    <div className='container-addPoints-list-users'>
+      <h3>Lista de Colaboradores</h3>
       {users.length > 0 ? (
-        <table>
-          <thead>
+        <table className='table-users-list'>
+          <thead className='table-users-list-header'>
             <tr>
               <th>Nombre</th>
               <th>Identificación</th>
@@ -65,7 +65,7 @@ const AddPointsToList = ({ user}) => {
           </tbody>
         </table>
       ) : (
-        <p>No hay usuarios para mostrar.</p>
+        <p>No hay colaboradores para mostrar.</p>
       )}
     </div>
     <Modal isVisible={userOpen} onClose={() => setUserOpen(false)}>
