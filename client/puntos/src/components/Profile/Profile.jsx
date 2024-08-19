@@ -4,6 +4,7 @@ import { FaEdit } from 'react-icons/fa';
 import profilePlaceholder from '../../assets/profilePlaceholder.png';
 import axios from 'axios';
 import { fetchUserInfo } from '../../redux/userSlice';
+import FormattedDate from '../Utils/FormattedDate';
 import './Profile.css';
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -46,11 +47,17 @@ const Profile = () => {
   };
 
   const handleEditClick = (field) => {
-    setEditingField(field);
+    const item = field === 'dateOfBirth' ? 'fecha de nacimiento' : 'cédula de identidad';
+    const confirmMessage = `La ${item} solo se puede cambiar una vez, asegúrate que sean los datos correctos. ¿Deseas continuar?`;
+
+    if (window.confirm(confirmMessage)) {
+      setEditingField(field);
+    }
   };
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
+    
     setEditingField(null);
     setImage(previewImage);
     setShowImagePopup(false);
@@ -134,7 +141,11 @@ const Profile = () => {
               ) : (
                 <>
                   <span>{identificationCard}</span>
-                  <FaEdit className="edit-icon" onClick={() => handleEditClick('identificationCard')} />
+                  { userInfo.identificationCardModified === 0 ? (
+
+                    <FaEdit className="edit-icon" onClick={() => handleEditClick('identificationCard')} />
+                  ) : (null)
+                }
                 </>
               )}
             </div>
@@ -155,8 +166,12 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <span>{dateOfBirth}</span>
-                  <FaEdit className="edit-icon" onClick={() => handleEditClick('dateOfBirth')} />
+                  <FormattedDate date={dateOfBirth} />
+                  { userInfo.dateOfBirthModified === 0 ? (
+
+                    <FaEdit className="edit-icon" onClick={() => handleEditClick('dateOfBirth')} />
+                  ): (null)
+                }
                 </>
               )}
             </div>
@@ -164,7 +179,7 @@ const Profile = () => {
           <div className="profile-field">
             <label htmlFor="entryDate">Fecha de Ingreso:</label>
             <div className="editable-field">
-              <span>{entryDate}</span>
+             <FormattedDate date={entryDate} />
             </div>
           </div>
         </form>
