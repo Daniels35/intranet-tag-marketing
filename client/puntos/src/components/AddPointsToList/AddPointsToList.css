@@ -12,18 +12,20 @@
   
   /* Media query para pantallas pequeñas */
   @media (max-width: 680px) {
-    .table-users-list, .table-users-list tbody, .table-users-list th, .table-users-list td {
+    .table-users-list, .table-users-list tbody, .table-users-list th, .table-users-list td, .table-users-list tr {
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       width: 95%;
+      margin-bottom: 10px;
     }
 
     .table-users-list-header {
         display: none;
     }
 
-    .table-users-list tbody {
+    .table-users-list tr {
         border: 1px solid #ED6306;
         text-align: center;
         justify-content: center;
