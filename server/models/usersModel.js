@@ -63,13 +63,16 @@ UsersModel.createUser = async (newUser) => {
 // Actualizar un usuario por su ID
 UsersModel.updateUser = async (id, updatedUser) => {
   try {
+    console.log('Actualizando usuario con id:', id, 'y datos:', updatedUser);
     await db.query('UPDATE users SET ? WHERE id = ?', [updatedUser, id]);
     updatedUser.id = id;
     return updatedUser;
   } catch (err) {
+    console.error('Error en la consulta SQL:', err); // Log para verificar el error
     throw err;
   }
 };
+
 
 // Eliminar un usuario por su ID
 UsersModel.deleteUser = async (id) => {

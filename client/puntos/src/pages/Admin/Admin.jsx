@@ -33,7 +33,6 @@ const [selectedUser, setSelectedUser] = useState(null);
       </div>
 
       <div className='admin-container-items-left'>
-       <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setUser(true);}}>Administración de Colaboradores</h2>
        <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setPoints(true);}}>Administración de Items de Puntos</h2>
        <h2 className='title-item-admin' onClick={(e) => { e.stopPropagation(); setredeemableItem(true);}}>Administración de Items Canjeables</h2>
       </div>

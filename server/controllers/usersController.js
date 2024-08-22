@@ -39,13 +39,16 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const id = req.params.id;
   const updatedUser = req.body;
+  console.log('Datos recibidos para actualizar:', updatedUser); // Log para verificar los datos
   try {
     const user = await UsersModel.updateUser(id, updatedUser);
     res.json({ message: 'Usuario actualizado con éxito', user });
   } catch (err) {
+    console.error('Error en la actualización:', err); // Log para verificar el error
     res.status(500).json({ error: 'Error al actualizar el usuario' });
   }
 };
+
 
 // Eliminar usuario por ID
 exports.deleteUser = async (req, res) => {
