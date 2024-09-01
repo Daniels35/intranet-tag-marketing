@@ -96,9 +96,7 @@ UsersModel.addPoints = async (initiatorID, recipientID, pointsToAdd, description
       
       if (result.affectedRows > 0) {
         // Definir la descripción según la presencia de itemID
-        const transactionDescription = itemID 
-          ? `Puntos agregados: ${pointsToAdd}`
-          : description || `Puntos agregados: ${pointsToAdd}`;
+        const transactionDescription = description || `Puntos agregados: ${pointsToAdd}`;
 
         // Registrar la transacción en transactionHistory
         const transaction = {
