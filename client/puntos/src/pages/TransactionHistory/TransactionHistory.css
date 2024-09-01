@@ -1,0 +1,26 @@
+.transaction-history-points h2 {
+  text-align: center;
+}
+
+.transaction-history-points-filter-contain {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.transaction-item {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  
+  .transaction-item.grant {
+    background-color: #e0f7e9; /* Verde claro */
+    color: #2e7d32; /* Verde oscuro */
+  }
+  
+  .transaction-item.revoke {
+    background-color: #ffebee; /* Rojo claro */
+    color: #c62828; /* Rojo oscuro */
+  }
+  
