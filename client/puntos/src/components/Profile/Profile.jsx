@@ -23,6 +23,7 @@ const Profile = () => {
   useEffect(() => {
     console.log("link imagen", userInfo.image );
     if (userInfo) {
+      dispatch(fetchUserInfo());
       setDateOfBirth(userInfo.dateOfBirth ? new Date(userInfo.dateOfBirth).toISOString().split('T')[0] : '');
       setEntryDate(userInfo.entryDate ? new Date(userInfo.entryDate).toISOString().split('T')[0] : '');
       setIdentificationCard(userInfo.identificationCard || '');

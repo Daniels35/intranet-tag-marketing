@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRedeemableItems, fetchPointsItems } from '../../redux/userSlice';
+import { fetchRedeemableItems, fetchPointsItems,fetchUserInfo } from '../../redux/userSlice';
+
 import './Home.css';
 import profilePlaceholder from '../../assets/profilePlaceholder.png'; // Ruta a la imagen de perfil placeholder
 import triangleIcon from '../../assets/triangleIcon.png'; // Ruta a la imagen del triángulo
@@ -9,9 +10,11 @@ import itemIcon from '../../assets/itemIcon.png'; // Ruta a la imagen del icono 
 const Home = () => {
   const dispatch = useDispatch();
   const { userInfo, redeemableItems, pointsItems, token } = useSelector((state) => state.user);
+  
 
   useEffect(() => {
     if (token) {
+      dispatch(fetchUserInfo());
       dispatch(fetchRedeemableItems());
       dispatch(fetchPointsItems());
       console.log("User ", userInfo);

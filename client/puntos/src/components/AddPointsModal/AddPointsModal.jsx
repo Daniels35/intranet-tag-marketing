@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserInfo } from '../../redux/userSlice';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -12,6 +13,7 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
 
   // Obtener la información del usuario logueado desde Redux
   const currentUser = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchPointsItems = async () => {
@@ -68,6 +70,7 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
       console.log("Datos enviados al backend: ", )
 
       if (response.ok) {
+        dispatch(fetchUserInfo());
         console.log("Puntos agregados exitosamente");
         refreshUsers(); // Refresca la lista de usuarios después de agregar puntos
         onClose(); // Cierra el modal

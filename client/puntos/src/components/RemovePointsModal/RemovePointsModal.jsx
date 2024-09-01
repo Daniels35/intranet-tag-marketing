@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserInfo } from '../../redux/userSlice';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -11,6 +12,7 @@ const RemovePointsComponent = ({ user, onClose, refreshUsers }) => {
   const [useManualPoints, setUseManualPoints] = useState(false);
 
   const currentUser = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchPointsItems = async () => {
@@ -66,6 +68,7 @@ const RemovePointsComponent = ({ user, onClose, refreshUsers }) => {
       });
 
       if (response.ok) {
+        dispatch(fetchUserInfo());
         console.log("Puntos eliminados exitosamente");
         refreshUsers();
         onClose();
