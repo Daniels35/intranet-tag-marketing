@@ -35,42 +35,103 @@ TransactionHistoryModel.addTransaction = async (newTransaction) => {
 // Función para obtener todas las transacciones (de más recientes a más antiguas)
 TransactionHistoryModel.getAllTransactions = async () => {
   try {
-    const [transactions] = await db.query('SELECT * FROM transactionHistory ORDER BY date DESC');
+    const [transactions] = await db.query(`
+      SELECT 
+        th.*, 
+        u_initiator.name as initiatorName, 
+        u_recipient.name as recipientName
+      FROM 
+        transactionHistory th
+      JOIN 
+        users u_initiator ON th.initiatorID = u_initiator.id
+      JOIN 
+        users u_recipient ON th.recipientID = u_recipient.id
+      ORDER BY 
+        th.date DESC
+    `);
     return transactions;
   } catch (err) {
     throw err;
   }
 };
 
+
 // Función para obtener una transacción por ID
 TransactionHistoryModel.getTransactionById = async (id) => {
   try {
-    const [transaction] = await db.query('SELECT * FROM transactionHistory WHERE id = ?', [id]);
+    const [transaction] = await db.query(`
+      SELECT 
+        th.*, 
+        u_initiator.name as initiatorName, 
+        u_recipient.name as recipientName
+      FROM 
+        transactionHistory th
+      JOIN 
+        users u_initiator ON th.initiatorID = u_initiator.id
+      JOIN 
+        users u_recipient ON th.recipientID = u_recipient.id
+      WHERE 
+        th.id = ?
+    `, [id]);
     return transaction[0];
   } catch (err) {
     throw err;
   }
 };
 
+
 // Función para obtener transacciones por iniciador (de más recientes a más antiguas)
 TransactionHistoryModel.getTransactionsByInitiator = async (initiatorID) => {
   try {
-    const [transactions] = await db.query('SELECT * FROM transactionHistory WHERE initiatorID = ? ORDER BY date DESC', [initiatorID]);
+    const [transactions] = await db.query(`
+      SELECT 
+        th.*, 
+        u_initiator.name as initiatorName, 
+        u_recipient.name as recipientName
+      FROM 
+        transactionHistory th
+      JOIN 
+        users u_initiator ON th.initiatorID = u_initiator.id
+      JOIN 
+        users u_recipient ON th.recipientID = u_recipient.id
+      WHERE 
+        th.initiatorID = ?
+      ORDER BY 
+        th.date DESC
+    `, [initiatorID]);
     return transactions;
   } catch (err) {
     throw err;
   }
 };
 
+
 // Función para obtener transacciones por destinatario (de más recientes a más antiguas) con un límite
 TransactionHistoryModel.getTransactionsByRecipient = async (recipientID, limit = 50) => {
   try {
-    const [transactions] = await db.query('SELECT * FROM transactionHistory WHERE recipientID = ? ORDER BY date DESC LIMIT ?', [recipientID, limit]);
+    const [transactions] = await db.query(`
+      SELECT 
+        th.*, 
+        u_initiator.name as initiatorName, 
+        u_recipient.name as recipientName
+      FROM 
+        transactionHistory th
+      JOIN 
+        users u_initiator ON th.initiatorID = u_initiator.id
+      JOIN 
+        users u_recipient ON th.recipientID = u_recipient.id
+      WHERE 
+        th.recipientID = ?
+      ORDER BY 
+        th.date DESC
+      LIMIT ?
+    `, [recipientID, limit]);
     return transactions;
   } catch (err) {
     throw err;
   }
 };
+
 
 
 module.exports = TransactionHistoryModel;
