@@ -135,9 +135,7 @@ UsersModel.removePoints = async (initiatorID, recipientID, pointsToRemove, descr
 
       if (result.affectedRows > 0) {
         // Definir la descripción según la presencia de itemID
-        const transactionDescription = itemID 
-          ? `Puntos retirados: ${pointsToRemove}`
-          : description || `Points retirados: ${pointsToRemove}`;
+        const transactionDescription = description || `Points retirados: ${pointsToRemove}`;
 
         // Registrar la transacción en transactionHistory
         const transaction = {

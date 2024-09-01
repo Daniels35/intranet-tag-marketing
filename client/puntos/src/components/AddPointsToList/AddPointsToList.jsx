@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AddPointsComponent from '../AddPointsModal/AddPointsModal';
+import RemovePointsComponent from '../RemovePointsModal/RemovePointsModal';
 import UsersAdmin from '../UsersAdmin/UsersAdmin';
 import './AddPointsToList.css';
 
@@ -9,6 +10,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 const AddPointsToList = () => {
   const [users, setUsers] = useState([]);
   const [userOpen, setUserOpen] = useState(false);
+  const [removeUserOpen, setRemoveUserOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false); // Estado para el modal de edición
   const [selectedUser, setSelectedUser] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -88,6 +90,7 @@ const AddPointsToList = () => {
                   <td>{user.accumulatedPoints}</td>
                   <td>
                     <button onClick={() => { setSelectedUser(user); setUserOpen(true); }}>Agregar Puntos</button>
+                    <button onClick={() => { setSelectedUser(user); setRemoveUserOpen(true); }}>Eliminar Puntos</button>
                     <button onClick={() => editUser(user)}>Editar</button>
                   </td>
                 </tr>
@@ -102,6 +105,11 @@ const AddPointsToList = () => {
       {/* Modal para agregar puntos */}
       <Modal isVisible={userOpen} onClose={() => setUserOpen(false)}>
         <AddPointsComponent user={selectedUser} onClose={() => setUserOpen(false)} refreshUsers={refreshUsers} />
+      </Modal>
+
+      {/* Modal para eliminar puntos */}
+      <Modal isVisible={removeUserOpen} onClose={() => setRemoveUserOpen(false)}>
+        <RemovePointsComponent user={selectedUser} onClose={() => setRemoveUserOpen(false)} refreshUsers={refreshUsers} />
       </Modal>
 
       {/* Modal para editar usuario */}
