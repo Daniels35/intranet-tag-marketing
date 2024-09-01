@@ -43,9 +43,11 @@ exports.getTransactionsByInitiator = async (req, res) => {
 exports.getTransactionsByRecipient = async (req, res) => {
   try {
     const recipientID = req.params.recipientID;
-    const transactions = await TransactionHistoryModel.getTransactionsByRecipient(recipientID);
+    const limit = parseInt(req.query.limit, 10) || 50; // Lee el parámetro limit y usa 50 si no está definido
+    const transactions = await TransactionHistoryModel.getTransactionsByRecipient(recipientID, limit);
     res.json(transactions);
   } catch (err) {
     res.status(500).json({ error: 'Error al obtener las transacciones por destinatario', details: err.message });
   }
 };
+
