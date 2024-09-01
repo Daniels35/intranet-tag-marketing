@@ -27,6 +27,9 @@ router.delete('/users/:id', usersController.deleteUser);
 // Ruta para sumar puntos a un usuario
 router.post('/users/:id/addPoints', usersController.addPointsToUser);
 
+// Ruta para restar puntos a un usuario
+router.post('/users/:id/removePoints', usersController.removePointsFromUser);
+
 // Ruta para obtener la información del usuario autenticado
 router.get('/user', authController.getUserInfo);
 

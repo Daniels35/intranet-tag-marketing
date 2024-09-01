@@ -98,7 +98,7 @@ UsersModel.addPoints = async (initiatorID, recipientID, pointsToAdd, description
         // Definir la descripción según la presencia de itemID
         const transactionDescription = itemID 
           ? `Puntos agregados: ${pointsToAdd}`
-          : description;
+          : description || `Puntos agregados: ${pointsToAdd}`;
 
         // Registrar la transacción en transactionHistory
         const transaction = {
@@ -120,5 +120,47 @@ UsersModel.addPoints = async (initiatorID, recipientID, pointsToAdd, description
     throw err;
   }
 };
+
+// Quitar puntos a un usuario y registrar la transacción
+UsersModel.removePoints = async (initiatorID, recipientID, pointsToRemove, description, itemID = null) => {
+  try {
+    const [results] = await db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [recipientID]);
+    if (results.length > 0) {
+      const currentPoints = results[0].accumulatedPoints;
+
+      if (currentPoints < pointsToRemove) {
+        throw new Error('No hay suficientes puntos para retirar.');
+      }
+
+      const newPoints = currentPoints - pointsToRemove;
+      const [result] = await db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, recipientID]);
+
+      if (result.affectedRows > 0) {
+        // Definir la descripción según la presencia de itemID
+        const transactionDescription = itemID 
+          ? `Puntos retirados: ${pointsToRemove}`
+          : description || `Points retirados: ${pointsToRemove}`;
+
+        // Registrar la transacción en transactionHistory
+        const transaction = {
+          initiatorID: initiatorID,  // ID del usuario que inicia la transacción
+          recipientID: recipientID,  // ID del usuario a quien se le quitan los puntos
+          itemID: itemID,            // ID del ítem, si se proporciona
+          transactionType: 'revoke', // Siempre será 'revoke' para quitar puntos
+          points: pointsToRemove,
+          description: transactionDescription  // Descripción basada en la lógica de itemID
+        };
+        await TransactionHistoryModel.addTransaction(transaction);
+      }
+
+      return result.affectedRows;
+    } else {
+      throw new Error('Usuario no encontrado');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 
 module.exports = UsersModel;

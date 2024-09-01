@@ -81,6 +81,25 @@ exports.addPointsToUser = async (req, res) => {
   }
 };
 
+// Quitar puntos a un usuario
+exports.removePointsFromUser = async (req, res) => {
+  const initiatorID = req.body.initiatorID;
+  const recipientID = req.params.id;  // ID del usuario a quien se le quitan los puntos
+  const pointsToRemove = parseInt(req.body.points, 10);
+  const description = req.body.description;
+  const itemID = req.body.itemID || null;  // ID del ítem, si se proporciona
+
+  try {
+    const result = await UsersModel.removePoints(initiatorID, recipientID, pointsToRemove, description, itemID);
+    if (result > 0) {
+      res.json({ message: 'Puntos retirados exitosamente.' });
+    } else {
+      res.status(404).json({ error: 'Usuario no encontrado o puntos insuficientes.' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error al retirar puntos', details: err.message });
+  }
+};
 
 // Actualizar cédula por ID
 exports.updateIdentificationCard = async (req, res) => {
