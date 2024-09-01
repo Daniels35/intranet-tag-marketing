@@ -38,7 +38,7 @@ const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
 
 // ////////PENDIENTE///////
-// app.use('/', require('./routes/transactionHistory'));
+app.use('/', require('./routes/transactionHistory'));
 
 app.listen(port, () => {
   console.log(`El servidor está corriendo en http://localhost:${port}`);
