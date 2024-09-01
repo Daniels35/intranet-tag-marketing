@@ -1,5 +1,6 @@
 const db = require('../config/database');
 const { v4: uuidv4 } = require('uuid');
+const TransactionHistoryModel = require('./transactionHistoryModel');
 
 const UsersModel = {};
 
@@ -84,14 +85,33 @@ UsersModel.deleteUser = async (id) => {
   }
 };
 
-// Agregar puntos a un usuario
-UsersModel.addPoints = async (userId, pointsToAdd) => {
+// Sumar puntos a un usuario y registrar la transacción
+UsersModel.addPoints = async (initiatorID, recipientID, pointsToAdd, description, itemID = null) => {
   try {
-    const [results] = await db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [userId]);
+    const [results] = await db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [recipientID]);
     if (results.length > 0) {
       const currentPoints = results[0].accumulatedPoints;
       const newPoints = currentPoints + pointsToAdd;
-      const [result] = await db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, userId]);
+      const [result] = await db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, recipientID]);
+      
+      if (result.affectedRows > 0) {
+        // Definir la descripción según la presencia de itemID
+        const transactionDescription = itemID 
+          ? `Puntos agregados: ${pointsToAdd}`
+          : description;
+
+        // Registrar la transacción en transactionHistory
+        const transaction = {
+          initiatorID: initiatorID,  // ID del usuario que inicia la transacción
+          recipientID: recipientID,  // ID del usuario que recibe los puntos
+          itemID: itemID,            // ID del ítem, si se proporciona
+          transactionType: 'grant',  // Siempre será 'grant' para agregar puntos
+          points: pointsToAdd,
+          description: transactionDescription  // Descripción basada en la lógica de itemID
+        };
+        await TransactionHistoryModel.addTransaction(transaction);
+      }
+      
       return result.affectedRows;
     } else {
       throw new Error('Usuario no encontrado');

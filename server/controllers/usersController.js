@@ -63,10 +63,14 @@ exports.deleteUser = async (req, res) => {
 
 // Sumar puntos a un usuario
 exports.addPointsToUser = async (req, res) => {
-  const userId = req.params.id;
+  const initiatorID = req.body.initiatorID;
+  const recipientID = req.params.id;  // ID del usuario que recibirá los puntos
   const pointsToAdd = parseInt(req.body.points, 10);
+  const description = req.body.description;
+  const itemID = req.body.itemID || null;  // ID del ítem, si se proporciona
+
   try {
-    const result = await UsersModel.addPoints(userId, pointsToAdd);
+    const result = await UsersModel.addPoints(initiatorID, recipientID, pointsToAdd, description, itemID);
     if (result > 0) {
       res.json({ message: 'Puntos agregados exitosamente.' });
     } else {
@@ -76,6 +80,7 @@ exports.addPointsToUser = async (req, res) => {
     res.status(500).json({ error: 'Error al sumar puntos', details: err.message });
   }
 };
+
 
 // Actualizar cédula por ID
 exports.updateIdentificationCard = async (req, res) => {
