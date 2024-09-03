@@ -124,3 +124,19 @@ exports.updateDateOfBirth = async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar la fecha de nacimiento' });
   }
 };
+
+// Actualizar fecha de entrada por ID
+exports.updateEntryDate = async (req, res) => {
+  const id = req.params.id;
+  const { entryDate } = req.body;
+  try {
+    const updatedRows = await UsersModel.updateEntryDate(id, entryDate);
+    if (updatedRows > 0) {
+      res.json({ message: 'Fecha de entrada actualizada con éxito' });
+    } else {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar la fecha de entrada', details: err.message });
+  }
+};

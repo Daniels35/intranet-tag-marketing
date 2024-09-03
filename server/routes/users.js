@@ -33,4 +33,8 @@ router.post('/users/:id/removePoints', usersController.removePointsFromUser);
 // Ruta para obtener la información del usuario autenticado
 router.get('/user', authController.getUserInfo);
 
+// Ruta para actualizar la fecha de entrada de un usuario por su ID
+router.put('/users/:id/entryDate', usersController.updateEntryDate);
+
+
 module.exports = router;

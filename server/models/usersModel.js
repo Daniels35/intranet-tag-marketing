@@ -4,7 +4,6 @@ const TransactionHistoryModel = require('./transactionHistoryModel');
 
 const UsersModel = {};
 
-// Crear la tabla de usuarios si no existe
 db.query(`
   CREATE TABLE IF NOT EXISTS users (
     id CHAR(36) PRIMARY KEY,
@@ -30,7 +29,6 @@ db.query(`
   console.error('Error creating the users table: ' + err);
 });
 
-// Obtener todos los usuarios
 UsersModel.getAll = async () => {
   try {
     const [users] = await db.query('SELECT * FROM users');
@@ -40,7 +38,6 @@ UsersModel.getAll = async () => {
   }
 };
 
-// Obtener un usuario por su ID
 UsersModel.getUserById = async (id) => {
   try {
     const [user] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
@@ -50,9 +47,8 @@ UsersModel.getUserById = async (id) => {
   }
 };
 
-// Crear un nuevo usuario
 UsersModel.createUser = async (newUser) => {
-  newUser.id = uuidv4(); // Genera un nuevo UUID para el usuario
+  newUser.id = uuidv4();
   try {
     await db.query('INSERT INTO users SET ?', newUser);
     return newUser;
@@ -61,7 +57,6 @@ UsersModel.createUser = async (newUser) => {
   }
 };
 
-// Actualizar un usuario por su ID
 UsersModel.updateUser = async (id, updatedUser) => {
   try {
     console.log('Actualizando usuario con id:', id, 'y datos:', updatedUser);
@@ -69,13 +64,12 @@ UsersModel.updateUser = async (id, updatedUser) => {
     updatedUser.id = id;
     return updatedUser;
   } catch (err) {
-    console.error('Error en la consulta SQL:', err); // Log para verificar el error
+    console.error('Error en la consulta SQL:', err);
     throw err;
   }
 };
 
 
-// Eliminar un usuario por su ID
 UsersModel.deleteUser = async (id) => {
   try {
     const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
@@ -85,7 +79,6 @@ UsersModel.deleteUser = async (id) => {
   }
 };
 
-// Sumar puntos a un usuario y registrar la transacción
 UsersModel.addPoints = async (initiatorID, recipientID, pointsToAdd, description, itemID = null) => {
   try {
     const [results] = await db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [recipientID]);
@@ -95,10 +88,8 @@ UsersModel.addPoints = async (initiatorID, recipientID, pointsToAdd, description
       const [result] = await db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, recipientID]);
       
       if (result.affectedRows > 0) {
-        // Definir la descripción según la presencia de itemID
         const transactionDescription = description || `Puntos agregados: ${pointsToAdd}`;
 
-        // Registrar la transacción en transactionHistory
         const transaction = {
           initiatorID: initiatorID,  // ID del usuario que inicia la transacción
           recipientID: recipientID,  // ID del usuario que recibe los puntos
@@ -119,7 +110,6 @@ UsersModel.addPoints = async (initiatorID, recipientID, pointsToAdd, description
   }
 };
 
-// Quitar puntos a un usuario y registrar la transacción
 UsersModel.removePoints = async (initiatorID, recipientID, pointsToRemove, description, itemID = null) => {
   try {
     const [results] = await db.query('SELECT accumulatedPoints FROM users WHERE id = ?', [recipientID]);
@@ -134,17 +124,15 @@ UsersModel.removePoints = async (initiatorID, recipientID, pointsToRemove, descr
       const [result] = await db.query('UPDATE users SET accumulatedPoints = ? WHERE id = ?', [newPoints, recipientID]);
 
       if (result.affectedRows > 0) {
-        // Definir la descripción según la presencia de itemID
         const transactionDescription = description || `Points retirados: ${pointsToRemove}`;
 
-        // Registrar la transacción en transactionHistory
         const transaction = {
-          initiatorID: initiatorID,  // ID del usuario que inicia la transacción
-          recipientID: recipientID,  // ID del usuario a quien se le quitan los puntos
-          itemID: itemID,            // ID del ítem, si se proporciona
-          transactionType: 'revoke', // Siempre será 'revoke' para quitar puntos
+          initiatorID: initiatorID,  
+          recipientID: recipientID,  
+          itemID: itemID,            
+          transactionType: 'revoke',
           points: pointsToRemove,
-          description: transactionDescription  // Descripción basada en la lógica de itemID
+          description: transactionDescription 
         };
         await TransactionHistoryModel.addTransaction(transaction);
       }
@@ -157,6 +145,17 @@ UsersModel.removePoints = async (initiatorID, recipientID, pointsToRemove, descr
     throw err;
   }
 };
+
+// Actualizar fecha de entrada por ID
+UsersModel.updateEntryDate = async (id, entryDate) => {
+  try {
+    const [result] = await db.query('UPDATE users SET entryDate = ? WHERE id = ?', [entryDate, id]);
+    return result.affectedRows;
+  } catch (err) {
+    throw err;
+  }
+};
+
 
 
 module.exports = UsersModel;

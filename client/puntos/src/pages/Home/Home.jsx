@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRedeemableItems, fetchPointsItems, fetchUserInfo } from '../../redux/userSlice';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Importa los íconos de react-icons
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import triangleIcon from '../../assets/triangleIcon.png';
 import itemIcon from '../../assets/itemIcon.png';
 import './Home.css';
@@ -12,7 +12,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { userInfo, redeemableItems, pointsItems, token } = useSelector((state) => state.user);
   const [transactions, setTransactions] = useState([]);
-  const [showTransactions, setShowTransactions] = useState(false); // Estado para manejar la visibilidad del historial
+  const [showTransactions, setShowTransactions] = useState(false); 
 
   useEffect(() => {
     if (token) {

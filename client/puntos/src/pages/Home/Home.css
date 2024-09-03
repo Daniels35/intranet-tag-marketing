@@ -140,7 +140,7 @@
 }
 
 .transaction-history-section-container-title h2 {
-  margin-bottom: none;
+  margin-bottom: 25px !important;
 }
 
 .toggle-history-btn {
