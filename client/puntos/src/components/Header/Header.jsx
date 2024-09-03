@@ -19,6 +19,10 @@ const Header = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!profileMenuOpen);
   };
@@ -26,6 +30,7 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(logout());
     navigate('/');
+    closeMenu();
   };
 
   if (location.pathname === '/') {
@@ -36,18 +41,18 @@ const Header = () => {
     <>
       <header className="custom-header">
         <div className="custom-logo">
-          <Link to="/home"><img src={logo} alt="Logo" /></Link>
+          <Link to="/home" onClick={closeMenu}><img src={logo} alt="Logo" /></Link>
         </div>
         <nav className={`custom-navigation ${menuOpen ? 'open' : ''}`}>
           <ul>
             <li className={location.pathname === '/home' ? 'active' : ''}>
-              <Link to="/home">Inicio</Link>
+              <Link to="/home" onClick={closeMenu}>Inicio</Link>
             </li>
             <li className={`custom-tools-dropdown ${location.pathname.startsWith('/tools') ? 'active' : ''}`}>
-              <Link to="/tools">Herramientas</Link>
+              <Link to="/tools" onClick={closeMenu}>Herramientas</Link>
               <div className="custom-tools-dropdown-content">
                 {tools.map((tool, index) => (
-                  <Link to={`/tools/${tool.component}`} key={index}>
+                  <Link to={`/tools/${tool.component}`} key={index} onClick={closeMenu}>
                     {tool.name}
                   </Link>
                 ))}
@@ -55,11 +60,11 @@ const Header = () => {
             </li>
             {userInfo?.role === 'admin' && (
               <li className={location.pathname === '/admin' ? 'active' : ''}>
-                <Link to="/admin">Admin</Link>
+                <Link to="/admin" onClick={closeMenu}>Admin</Link>
               </li>
             )}
             <li className={location.pathname === '/profile' ? 'active' : ''}>
-              <Link to="/profile">Mi Cuenta</Link>
+              <Link to="/profile" onClick={closeMenu}>Mi Cuenta</Link>
             </li>
           </ul>
           <div className="custom-profile" onClick={toggleProfileMenu}>
