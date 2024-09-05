@@ -129,7 +129,11 @@ const Home = () => {
             {redeemableItems.map(item => (
               <li key={item.id} className="list-item">
                 <img src={itemIcon} alt="Item Icon" className="item-icon" />
+                <div>
                 <span>{item.name}</span>
+                <br/>
+                <span>{item.costInPoints} Puntos</span>
+                </div>
               </li>
             ))}
           </ul>

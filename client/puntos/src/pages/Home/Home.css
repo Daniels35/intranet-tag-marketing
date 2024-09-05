@@ -116,6 +116,7 @@
   border-radius: 5px;
   text-align: left;
   justify-content: left;
+  gap: 10px;
 }
 
 .item-icon {
@@ -128,7 +129,6 @@
 .list-item span {
   width: 50%;
   text-align: left;
-  margin-left: 20px;
 }
 
 .transaction-history-section-container-title {
