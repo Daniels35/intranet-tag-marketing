@@ -21,16 +21,15 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("link imagen", userInfo.image );
+    // Solo ejecuta esto una vez cuando el componente se renderiza por primera vez
     if (userInfo) {
-      dispatch(fetchUserInfo());
       setDateOfBirth(userInfo.dateOfBirth ? new Date(userInfo.dateOfBirth).toISOString().split('T')[0] : '');
       setEntryDate(userInfo.entryDate ? new Date(userInfo.entryDate).toISOString().split('T')[0] : '');
       setIdentificationCard(userInfo.identificationCard || '');
       setImage(userInfo.imageProfile || profilePlaceholder);
       setPreviewImage(userInfo.imageProfile || profilePlaceholder);
     }
-  }, [userInfo]);
+  }, []); // <- Solo se ejecuta una vez cuando el componente se monta
 
   const handleFieldChange = (field, value) => {
     if (field === 'dateOfBirth') setDateOfBirth(value);
@@ -58,7 +57,7 @@ const Profile = () => {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
-    
+
     setEditingField(null);
     setImage(previewImage);
     setShowImagePopup(false);
@@ -74,18 +73,11 @@ const Profile = () => {
         });
       }
 
-      // Actualiza el estado global después de guardar
+      // Refresca la información del usuario después de guardar
       dispatch(fetchUserInfo());
     } catch (error) {
       console.error('Error al actualizar el perfil:', error);
     }
-
-    // Aquí puedes añadir la lógica para enviar los datos actualizados al backend
-    console.log({
-      dateOfBirth,
-      identificationCard,
-      image: previewImage,
-    });
   };
 
   const handleCancelClick = () => {
@@ -142,11 +134,9 @@ const Profile = () => {
               ) : (
                 <>
                   <span>{identificationCard}</span>
-                  { userInfo.identificationCardModified === 0 ? (
-
+                  {userInfo.identificationCardModified === 0 ? (
                     <FaEdit className="edit-icon" onClick={() => handleEditClick('identificationCard')} />
-                  ) : (null)
-                }
+                  ) : null}
                 </>
               )}
             </div>
@@ -168,11 +158,9 @@ const Profile = () => {
               ) : (
                 <>
                   <FormattedDate date={dateOfBirth} />
-                  { userInfo.dateOfBirthModified === 0 ? (
-
+                  {userInfo.dateOfBirthModified === 0 ? (
                     <FaEdit className="edit-icon" onClick={() => handleEditClick('dateOfBirth')} />
-                  ): (null)
-                }
+                  ) : null}
                 </>
               )}
             </div>
@@ -180,7 +168,7 @@ const Profile = () => {
           <div className="profile-field">
             <label htmlFor="entryDate">Fecha de Ingreso:</label>
             <div className="editable-field">
-             <FormattedDate date={entryDate} />
+              <FormattedDate date={entryDate} />
             </div>
           </div>
         </form>
