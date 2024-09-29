@@ -28,7 +28,7 @@ const AddPointsItemForm = ({ addPointsItem }) => {
       <input type="text" name="description" value={item.description} onChange={handleInputChange} />
       <label>Imagen (URL)</label>
       <input type="text" name="image" value={item.image} onChange={handleInputChange} />
-      <button>Agregar Item</button>
+      <button className='button-user-principal'>Agregar Item</button>
     </form>
   );
 };

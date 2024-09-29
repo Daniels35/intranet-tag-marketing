@@ -30,7 +30,7 @@ const AddRedeemableItemForm = ({ addRedeemableItem }) => {
       <input type="number" name="stock" value={item.stock} onChange={handleInputChange} />
       <label>Imagen (URL)</label>
       <input type="text" name="image" value={item.image} onChange={handleInputChange} />
-      <button>Agregar Item Canjeable</button>
+      <button className='button-user-principal'>Agregar Item Canjeable</button>
     </form>
   );
 };
