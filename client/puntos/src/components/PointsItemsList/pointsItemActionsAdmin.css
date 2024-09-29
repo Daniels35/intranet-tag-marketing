@@ -1,0 +1,18 @@
+.points-item-actions-admin {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+    color: #ED6306;
+}
+
+.points-item-btn {
+    border: none;
+    cursor: pointer;
+    color: #ED6306;
+    border-radius: 5px;
+    background: none;
+    outline: none;
+    padding: 0.5rem;
+}
+
+
