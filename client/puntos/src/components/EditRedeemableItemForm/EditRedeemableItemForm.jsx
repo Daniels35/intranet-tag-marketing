@@ -1,5 +1,6 @@
 // EditRedeemableItemForm.js
 import React, { useState, useEffect } from 'react';
+import './EditItemForm.css'
 
 const EditRedeemableItemForm = ({ currentItem, setEditing, updateRedeemableItem }) => {
   const [item, setItem] = useState(currentItem);
@@ -30,8 +31,10 @@ const EditRedeemableItemForm = ({ currentItem, setEditing, updateRedeemableItem 
       <input type="number" name="stock" value={item.stock} onChange={handleInputChange} />
       <label>Imagen (URL)</label>
       <input type="text" name="image" value={item.image} onChange={handleInputChange} />
-      <button>Actualizar Item Canjeable</button>
-      <button onClick={() => setEditing(false)}>Cancelar</button>
+      <div className='container-button-admin-items'>
+        <button className='button-admin-item-update'>Actualizar Item Canjeable</button>
+        <button className='button-admin-item-cancel' onClick={() => setEditing(false)}>Cancelar</button>
+      </div>
     </form>
   );
 };

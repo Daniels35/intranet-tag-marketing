@@ -28,10 +28,12 @@ const EditPointsItemForm = ({ setEditing, currentItem, updatePointsItem }) => {
       <input type="text" name="description" value={item.description} onChange={handleInputChange} />
       <label>Imagen (URL)</label>
       <input type="text" name="image" value={item.image} onChange={handleInputChange} />
-      <button>Actualizar Item</button>
-      <button onClick={() => setEditing(false)} className="button muted-button">
-        Cancelar
-      </button>
+      <div className='container-button-admin-items'>
+        <button className='button-admin-item-update'>Actualizar Item</button>
+        <button className='button-admin-item-cancel' onClick={() => setEditing(false)} >
+          Cancelar
+        </button>
+      </div>
     </form>
   );
 };
