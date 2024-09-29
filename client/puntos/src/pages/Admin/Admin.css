@@ -15,6 +15,7 @@
 
 .title-item-admin {
   color: #ED6306;
+  user-select: none;
 }
 .title-item-admin:hover {
     cursor: pointer;

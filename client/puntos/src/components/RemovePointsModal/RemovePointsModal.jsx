@@ -151,7 +151,7 @@ const RemovePointsComponent = ({ user, onClose, refreshUsers }) => {
         </label>
       </div>
 
-      <button onClick={handleSubmit}>Confirmar</button>
+      <button className='button-user-principal' onClick={handleSubmit}>Confirmar</button>
     </div>
   );
 };
