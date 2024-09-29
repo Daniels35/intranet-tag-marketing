@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaPlus, FaMinus, FaEdit } from 'react-icons/fa';
 import Modal from '../../components/Modal/Modal';
 import AddPointsComponent from '../AddPointsModal/AddPointsModal';
 import RemovePointsComponent from '../RemovePointsModal/RemovePointsModal';
@@ -11,7 +12,7 @@ const AddPointsToList = () => {
   const [users, setUsers] = useState([]);
   const [userOpen, setUserOpen] = useState(false);
   const [removeUserOpen, setRemoveUserOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false); // Estado para el modal de edición
+  const [editOpen, setEditOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [editing, setEditing] = useState(false);
 
@@ -36,7 +37,7 @@ const AddPointsToList = () => {
   const editUser = (user) => {
     setSelectedUser(user);
     setEditing(true);
-    setEditOpen(true); // Abre el modal de edición
+    setEditOpen(true);
   };
 
   const updateUser = async (id, updatedUser) => {
@@ -70,6 +71,17 @@ const AddPointsToList = () => {
     <>
       <div className='container-addPoints-list-users'>
         <h3>Lista de Colaboradores</h3>
+        <div className='container-addPoints-list-users-information'>
+          <span>
+            <FaPlus /> Agregar Puntos
+          </span>
+          <span>
+            <FaMinus /> Eliminar Puntos
+          </span>
+          <span>
+            <FaEdit /> Editar
+          </span>
+        </div>
         {users.length > 0 ? (
           <table className='table-users-list'>
             <thead className='table-users-list-header'>
@@ -88,10 +100,16 @@ const AddPointsToList = () => {
                   <td>{user.identificationCard}</td>
                   <td>{user.email}</td>
                   <td>{user.accumulatedPoints}</td>
-                  <td>
-                    <button onClick={() => { setSelectedUser(user); setUserOpen(true); }}>Agregar Puntos</button>
-                    <button onClick={() => { setSelectedUser(user); setRemoveUserOpen(true); }}>Eliminar Puntos</button>
-                    <button onClick={() => editUser(user)}>Editar</button>
+                  <td className='container-addPoints-list-users-container-buttons'>
+                  <button className='container-addPoints-list-users-buttons' onClick={() => { setSelectedUser(user); setUserOpen(true); }}>
+                      <FaPlus />
+                    </button>
+                    <button className='container-addPoints-list-users-buttons' onClick={() => { setSelectedUser(user); setRemoveUserOpen(true); }}>
+                      <FaMinus />
+                    </button>
+                    <button className='container-addPoints-list-users-buttons' onClick={() => editUser(user)}>
+                      <FaEdit />
+                    </button>
                   </td>
                 </tr>
               ))}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Importa useNavigate
+import { useNavigate } from 'react-router-dom';
 import UsersAdmin from '../../components/UsersAdmin/UsersAdmin';
 import PointsItemsAdmin from '../../components/PointsItemsAdmin/PointsItemsAdmin';
 import RedeemableItemsAdmin from '../../components/RedeemableItemsAdmin/RedeemableItemsAdmin';
@@ -16,7 +16,7 @@ const Admin = () => {
   const [addPointsModalOpen, setAddPointsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const navigate = useNavigate(); // Instancia useNavigate
+  const navigate = useNavigate();
 
   const openAddPoints = (user) => {
     setSelectedUser(user);
@@ -24,7 +24,7 @@ const Admin = () => {
   };
 
   const goToTransactionHistory = () => {
-    navigate('/transactionHistory'); // Navega a la página de historial de transacciones
+    navigate('/transactionHistory');
   };
 
   return (

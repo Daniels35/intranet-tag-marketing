@@ -48,7 +48,7 @@ const Profile = () => {
 
   const handleEditClick = (field) => {
     const item = field === 'dateOfBirth' ? 'fecha de nacimiento' : 'cédula de identidad';
-    const confirmMessage = `La ${item} solo se puede cambiar una vez, asegúrate que sean los datos correctos. ¿Deseas continuar?`;
+    const confirmMessage = `Hola ${userInfo.name}, la ${item} solo se puede cambiar una vez, asegúrate que sean los datos correctos. ¿Deseas continuar?`;
 
     if (window.confirm(confirmMessage)) {
       setEditingField(field);
