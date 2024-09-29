@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef  } from 'react';
 import PointsItemsList from '../PointsItemsList/PointsItemsList'; 
 import AddPointsItemForm from '../AddPointsItemForm/AddPointsItemForm';
 import EditPointsItemForm from '../EditPointsItemForm/EditPointsItemForm';
@@ -9,6 +9,8 @@ const PointsItemsAdmin = () => {
     const [pointsItems, setPointsItems] = useState([]);
     const [editing, setEditing] = useState(false);
     const [currentItem, setCurrentItem] = useState({ id: null, name: '', points: 0, description: '', image: '' });
+
+    const formContainerRef = useRef(null);
 
     useEffect(() => {
         fetchPointsItems();
@@ -73,10 +75,11 @@ const PointsItemsAdmin = () => {
     const editPointsItem = (item) => {
         setEditing(true);
         setCurrentItem(item);
+        formContainerRef.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
-        <div className="form-container">
+        <div ref={formContainerRef} className="form-container">
             <h2>Administración de Items de Puntos</h2>
             {editing ? (
                 <div>

@@ -4,6 +4,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import './pointsItemActionsAdmin.css'
 
 const PointsItemsList = ({ pointsItems, editPointsItem, deletePointsItem }) => (
+  
   <div>
     <h2>Lista de Items de Puntos</h2>
     <div className='points-item-actions-admin'>

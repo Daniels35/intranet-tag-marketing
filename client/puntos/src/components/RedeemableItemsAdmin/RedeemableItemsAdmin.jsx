@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import RedeemableItemsList from '../RedeemableItemsList/RedeemableItemsList';
 import AddRedeemableItemForm from '../AddRedeemableItemForm/AddRedeemableItemForm';
 import EditRedeemableItemForm from '../EditRedeemableItemForm/EditRedeemableItemForm';
@@ -9,6 +9,8 @@ const RedeemableItemsAdmin = () => {
     const [redeemableItems, setRedeemableItems] = useState([]);
     const [editing, setEditing] = useState(false);
     const [currentItem, setCurrentItem] = useState({ id: null, name: '', costInPoints: 0, description: '', stock: 9999, image: '' });
+
+    const formContainerRef2 = useRef(null);
 
     useEffect(() => {
         fetchRedeemableItems();
@@ -73,10 +75,11 @@ const RedeemableItemsAdmin = () => {
     const editRedeemableItem = (item) => {
         setEditing(true);
         setCurrentItem(item);
+        formContainerRef2.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
-        <div className="form-container">
+        <div ref={formContainerRef2} className="form-container">
             {editing ? (
                 <div>
                     <h2>Editar Item Canjeable</h2>
