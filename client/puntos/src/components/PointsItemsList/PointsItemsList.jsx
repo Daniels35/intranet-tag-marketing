@@ -22,7 +22,7 @@ const PointsItemsList = ({ pointsItems, editPointsItem, deletePointsItem }) => (
             <button className='points-item-btn' onClick={() => editPointsItem(item)}>
               <FaEdit className='points-item-icon' />
             </button>
-            <button className='points-item-btn' onClick={() => deletePointsItem(item.id)}>
+            <button className='points-item-btn' onClick={() => deletePointsItem(item.id, item.name)}>
               <FaTrash className='points-item-icon' />
             </button>
         </li>

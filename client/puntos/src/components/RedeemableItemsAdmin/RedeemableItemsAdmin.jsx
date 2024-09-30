@@ -36,22 +36,27 @@ const RedeemableItemsAdmin = () => {
             },
             body: JSON.stringify(item),
           });
-          fetchRedeemableItems(); // Recarga la lista de items para mostrar el nuevo item
+          fetchRedeemableItems();
+          window.alert(`Nuevo Item "${item.name}" agregado correctamente`)
         } catch (error) {
           console.error('Error al agregar el redeemableItem:', error);
         }
       };
       
 
-      const deleteRedeemableItem = async (id) => {
-        try {
-          await fetch(`${API_URL}/redeemableItems/${id}`, {
-            method: 'DELETE',
-          });
-          setRedeemableItems(redeemableItems.filter(item => item.id !== id)); // Actualiza el estado eliminando el item
-        } catch (error) {
-          console.error('Error al eliminar el redeemableItem:', error);
-        }
+      const deleteRedeemableItem = async (id, name) => {
+        const confirmDelete = window.confirm(`¿Realmente quieres eliminar el item "${name}"?`);
+        if (confirmDelete) {
+          try {
+            await fetch(`${API_URL}/redeemableItems/${id}`, {
+              method: 'DELETE',
+            });
+            setRedeemableItems(redeemableItems.filter(item => item.id !== id));
+          window.alert(`Item "${name}" eliminado correctamente`)
+          } catch (error) {
+            console.error('Error al eliminar el redeemableItem:', error);
+          }
+      }
       };
       
 
@@ -66,6 +71,7 @@ const RedeemableItemsAdmin = () => {
           });
           setEditing(false); // Oculta el formulario de edición
           fetchRedeemableItems(); // Recarga la lista de items para mostrar los cambios
+          window.alert(`Item "${updatedItem.name}" actualizado correctamente`)
         } catch (error) {
           console.error('Error al actualizar el redeemableItem:', error);
         }

@@ -37,22 +37,27 @@ const PointsItemsAdmin = () => {
             body: JSON.stringify(item),
           });
           fetchPointsItems(); // Recarga la lista de items para mostrar el nuevo item
+          window.alert(`Nuevo Item "${item.name}" agregado correctamente`)
         } catch (error) {
           console.error('Error al agregar el pointsItem:', error);
         }
       };
       
 
-      const deletePointsItem = async (id) => {
-        try {
-          await fetch(`${API_URL}/pointsItems/${id}`, {
-            method: 'DELETE',
-          });
-          setPointsItems(pointsItems.filter(item => item.id !== id)); // Actualiza el estado eliminando el item
-        } catch (error) {
-          console.error('Error al eliminar el pointsItem:', error);
+      const deletePointsItem = async (id, name) => {
+        const confirmDelete = window.confirm(`¿Realmente quieres eliminar el item "${name}"?`);
+        if (confirmDelete) {
+            try {
+              await fetch(`${API_URL}/pointsItems/${id}`, {
+                method: 'DELETE',
+              });
+              setPointsItems(pointsItems.filter(item => item.id !== id));
+              window.alert(`Item "${name}" eliminado correctamente`)
+            } catch (error) {
+              console.error('Error al eliminar el pointsItem:', error);
+            }
         }
-      };
+    };
       
 
     const updatePointsItem = async (id, updatedItem) => {
@@ -66,6 +71,7 @@ const PointsItemsAdmin = () => {
           });
           setEditing(false);
           fetchPointsItems(); 
+          window.alert(`Item "${updatedItem.name}" actualizado correctamente`)
         } catch (error) {
           console.error('Error al actualizar el pointsItem:', error);
         }

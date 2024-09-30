@@ -21,7 +21,7 @@ const RedeemableItemsList = ({ redeemableItems, editRedeemableItem, deleteRedeem
           <button className='points-item-btn' onClick={() => editRedeemableItem(item)}>
             <FaEdit className='points-item-icon' />
           </button>
-          <button className='points-item-btn' onClick={() => deleteRedeemableItem(item.id)}>
+          <button className='points-item-btn' onClick={() => deleteRedeemableItem(item.id, item.name)}>
             <FaTrash className='points-item-icon' />
           </button>
         </li>
