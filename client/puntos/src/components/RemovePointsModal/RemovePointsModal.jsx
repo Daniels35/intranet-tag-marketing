@@ -50,8 +50,9 @@ const RemovePointsComponent = ({ user, onClose, refreshUsers }) => {
       alert('Debe ingresar una cantidad válida de puntos.');
       return;
     }
-
+    const confirmDeletePoints = window.confirm(`¿Realmente quieres eliminar ${pointsToRemove} puntos a ${user.name} ?`);
     console.log(`Quitando ${pointsToRemove} puntos al usuario ${user.name} con ID ${user.id} desde el usuario con ID ${currentUser.id}`);
+if (confirmDeletePoints) {
 
     try {
       const response = await fetch(`${API_URL}/users/${user.id}/removePoints`, {
@@ -72,12 +73,14 @@ const RemovePointsComponent = ({ user, onClose, refreshUsers }) => {
         console.log("Puntos eliminados exitosamente");
         refreshUsers();
         onClose();
+        window.alert("Puntos eliminados exitosamente");
       } else {
         console.error("Error al eliminar puntos");
       }
     } catch (error) {
       console.error('Error al eliminar puntos del usuario:', error);
     }
+  }
   };
 
   return (

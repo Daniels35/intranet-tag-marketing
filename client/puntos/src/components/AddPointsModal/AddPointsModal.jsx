@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserInfo } from '../../redux/userSlice';
 import '../AddPointsToList/ModalAddPointsToList.css';
 
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
@@ -54,33 +53,36 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
       return;
     }
 
+  const confirmAddPoints = window.confirm(`¿Realmente quieres agregarle ${pointsToAdd} puntos a ${user.name} ?`);
     console.log(`Enviando ${pointsToAdd} puntos al usuario ${user.name} con ID ${user.id} desde el usuario con ID ${currentUser.id}`);
 
-    try {
-      const response = await fetch(`${API_URL}/users/${user.id}/addPoints`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          initiatorID: currentUser.id, // ID del usuario que concede los puntos
-          points: pointsToAdd,
-          itemID: useManualPoints ? null : selectedItem, // Enviar el ID del ítem si se selecciona, de lo contrario null
-          description: finalDescription // Descripción final
-        }),
-      });
-      console.log("Datos enviados al backend: ", )
+    if (confirmAddPoints) {
+      try {
+        const response = await fetch(`${API_URL}/users/${user.id}/addPoints`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            initiatorID: currentUser.id, // ID del usuario que concede los puntos
+            points: pointsToAdd,
+            itemID: useManualPoints ? null : selectedItem, // Enviar el ID del ítem si se selecciona, de lo contrario null
+            description: finalDescription // Descripción final
+          }),
+        });
+        console.log("Datos enviados al backend: ", )
 
-      if (response.ok) {
-        dispatch(fetchUserInfo());
-        console.log("Puntos agregados exitosamente");
-        refreshUsers(); // Refresca la lista de usuarios después de agregar puntos
-        onClose(); // Cierra el modal
-      } else {
-        console.error("Error al agregar puntos");
+        if (response.ok) {
+          dispatch(fetchUserInfo());
+          refreshUsers(); // Refresca la lista de usuarios después de agregar puntos
+          onClose(); // Cierra el modal
+          window.alert("Puntos agregados exitosamente");
+        } else {
+          console.error("Error al agregar puntos");
+        }
+      } catch (error) {
+        console.error('Error al agregar puntos al usuario:', error);
       }
-    } catch (error) {
-      console.error('Error al agregar puntos al usuario:', error);
     }
   };
 
@@ -88,7 +90,6 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
     <div className='modal-add-points-container'>
     <h2 className='modal-add-points-header'>Agregar Puntos a {user.name}</h2>
     <div className='modal-add-points-user-info'>ID de Usuario: {user.identificationCard}</div>
-    
     <div className='modal-add-points-container-label'>
       <label className='modal-add-points-label'>
         <input 
