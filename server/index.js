@@ -40,6 +40,14 @@ app.use('/auth', authRoutes);
 // ////////PENDIENTE///////
 app.use('/', require('./routes/transactionHistory'));
 
+
+////email test
+const emailTestRoutes = require('./routes/emailTest');
+app.use('/api/emails', emailTestRoutes);
+
+//Tarea cron
+require('./jobs/cronTasks');
+
 app.listen(port, () => {
   console.log(`El servidor está corriendo en http://localhost:${port}`);
 });

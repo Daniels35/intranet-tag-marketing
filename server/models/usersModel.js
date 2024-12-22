@@ -156,6 +156,35 @@ UsersModel.updateEntryDate = async (id, entryDate) => {
   }
 };
 
+// Consultar usuarios que cumplen años hoy
+UsersModel.getUsersByDateOfBirth = async () => {
+  const today = new Date().toISOString().slice(5, 10); // Formato MM-DD
+  const query = `SELECT id, email, name, dateOfBirth FROM users WHERE DATE_FORMAT(dateOfBirth, '%m-%d') = ?`;
+
+  try {
+    const [results] = await db.query(query, [today]);
+    console.log('Usuarios que cumplen años hoy:', results); // Console log para verificar los datos
+    return results;
+  } catch (error) {
+    console.error('Error al consultar cumpleaños:', error);
+    return [];
+  }
+};
+
+// Consultar usuarios que cumplen aniversario de entrada hoy
+UsersModel.getUsersByEntryDate = async () => {
+  const today = new Date().toISOString().slice(5, 10); // Formato MM-DD
+  const query = `SELECT id, email, name, entryDate FROM users WHERE DATE_FORMAT(entryDate, '%m-%d') = ?`;
+
+  try {
+    const [results] = await db.query(query, [today]);
+    console.log('Usuarios que cumplen aniversario hoy:', results); // Console log para verificar los datos
+    return results;
+  } catch (error) {
+    console.error('Error al consultar aniversarios:', error);
+    return [];
+  }
+};
 
 
 module.exports = UsersModel;
