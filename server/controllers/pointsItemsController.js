@@ -106,18 +106,33 @@ exports.updateItem = async (req, res) => {
   }
 };
 
-
-
 exports.deleteItem = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const result = await PointsItemsModel.delete(id);
-    if (result === 0) {
+    // Obtener el ítem actual de la base de datos
+    const currentItem = await PointsItemsModel.getById(id);
+    if (!currentItem) {
       return res.status(404).json({ error: 'Item no encontrado' });
     }
+
+    // Eliminar la imagen del servidor si existe
+    if (currentItem.image) {
+      const imagePath = path.join(__dirname, '../uploads', path.basename(currentItem.image));
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath); // Eliminar la imagen del servidor
+      }
+    }
+
+    // Eliminar el ítem de la base de datos
+    const result = await PointsItemsModel.delete(id);
+    if (result === 0) {
+      return res.status(404).json({ error: 'Error al eliminar el item' });
+    }
+
     res.json({ message: 'Item eliminado con éxito' });
   } catch (err) {
+    console.error('Error al eliminar el item:', err);
     res.status(500).json({ error: 'Error al eliminar el item' });
   }
 };
