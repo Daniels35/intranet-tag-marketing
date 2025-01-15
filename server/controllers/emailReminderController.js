@@ -49,4 +49,55 @@ EmailReminderController.sendEntryAnniversaryEmail = async (reqOrUser) => {
     await sendEmail(email, subject, text);
 };
 
+// Enviar correo global informando sobre cumpleaños
+EmailReminderController.sendGlobalBirthdayEmail = async (users, birthdayUsers) => {
+    if (birthdayUsers.length === 0) {
+        console.log('No hay cumpleaños hoy, no se enviará el correo global.');
+        return;
+    }
+
+    // Excluir a los usuarios que están de cumpleaños
+    const filteredUsers = users.filter(user => !birthdayUsers.some(birthday => birthday.email === user.email));
+
+    if (filteredUsers.length === 0) {
+        console.log('No hay usuarios para enviar el correo global después de excluir a los cumpleañeros.');
+        return;
+    }
+
+    const recipients = filteredUsers.map(user => user.email).join(',');
+    const names = birthdayUsers.map(user => user.name).join(', ');
+
+    const subject = '🎉 Hoy es un día especial 🎂';
+    const text = `Hola equipo,\n\nNuestro(s) compañero(s) ${names} está(n) de cumpleaños hoy. ¡No olvides desearles un feliz día! 🎉`;
+
+    await sendEmail(recipients, subject, text);
+};
+
+// Enviar correo global informando sobre aniversarios
+EmailReminderController.sendGlobalAnniversaryEmail = async (users, anniversaryUsers) => {
+    if (anniversaryUsers.length === 0) {
+        console.log('No hay aniversarios hoy, no se enviará el correo global.');
+        return;
+    }
+
+    // Excluir a los usuarios que están de aniversario
+    const filteredUsers = users.filter(user => !anniversaryUsers.some(anniversary => anniversary.email === user.email));
+
+    if (filteredUsers.length === 0) {
+        console.log('No hay usuarios para enviar el correo global después de excluir a los que están de aniversario.');
+        return;
+    }
+
+    const recipients = filteredUsers.map(user => user.email).join(',');
+    const anniversaryMessages = anniversaryUsers.map(user => {
+        const years = calculateYears(user.entryDate);
+        return `${user.name} celebra su ${years}º aniversario en la empresa.`;
+    }).join('\n');
+
+    const subject = '🎉 Aniversarios en la empresa 🎉';
+    const text = `Hola equipo,\n\nHoy celebramos los logros de nuestros compañeros:\n\n${anniversaryMessages}\n\n¡Agradecemos su dedicación y esfuerzo! 🎉`;
+
+    await sendEmail(recipients, subject, text);
+};
+
 module.exports = EmailReminderController;

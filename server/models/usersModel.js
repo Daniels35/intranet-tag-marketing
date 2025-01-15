@@ -178,7 +178,7 @@ UsersModel.getUsersByEntryDate = async () => {
 
   try {
     const [results] = await db.query(query, [today]);
-    console.log('Usuarios que cumplen aniversario hoy:', results); // Console log para verificar los datos
+    console.log('Usuarios que cumplen aniversario hoy:', results);
     return results;
   } catch (error) {
     console.error('Error al consultar aniversarios:', error);
