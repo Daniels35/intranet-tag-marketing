@@ -27,6 +27,15 @@ const sendEmail = async (email, subject, text) => {
     }
 };
 
+// Enviar correo cuando se suman puntos con el nombre del remitente
+sendPointsAddedEmail = async (recipient, sender, points, description) => {
+    const subject = '🎉 ¡Te han enviado puntos! 🎉';
+    const text = `Hola ${recipient.name},\n\n${sender.name} te ha enviado ${points} puntos.\nDescripción: ${description}\n\nGracias por ser parte de nuestro equipo.\n\nSaludos,\nTag Marketing Digital.`;
+
+    await sendEmail(recipient.email, subject, text);
+};
+
+
 // Enviar correo de cumpleaños
 EmailReminderController.sendBirthdayEmail = async (reqOrUser) => {
     const { email, name, dateOfBirth } = reqOrUser.body || reqOrUser;
@@ -100,4 +109,11 @@ EmailReminderController.sendGlobalAnniversaryEmail = async (users, anniversaryUs
     await sendEmail(recipients, subject, text);
 };
 
-module.exports = EmailReminderController;
+module.exports = {
+    sendPointsAddedEmail,
+    sendBirthdayEmail: EmailReminderController.sendBirthdayEmail,
+    sendEntryAnniversaryEmail: EmailReminderController.sendEntryAnniversaryEmail,
+    sendGlobalBirthdayEmail: EmailReminderController.sendGlobalBirthdayEmail,
+    sendGlobalAnniversaryEmail: EmailReminderController.sendGlobalAnniversaryEmail
+};
+

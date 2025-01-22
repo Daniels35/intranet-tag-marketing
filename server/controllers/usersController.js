@@ -62,24 +62,41 @@ exports.deleteUser = async (req, res) => {
 };
 
 // Sumar puntos a un usuario
-exports.addPointsToUser = async (req, res) => {
-  const initiatorID = req.body.initiatorID;
-  const recipientID = req.params.id;  // ID del usuario que recibirá los puntos
-  const pointsToAdd = parseInt(req.body.points, 10);
-  const description = req.body.description;
-  const itemID = req.body.itemID || null;  // ID del ítem, si se proporciona
+const EmailReminderController = require('./emailReminderController');
 
-  try {
-    const result = await UsersModel.addPoints(initiatorID, recipientID, pointsToAdd, description, itemID);
-    if (result > 0) {
-      res.json({ message: 'Puntos agregados exitosamente.' });
-    } else {
-      res.status(404).json({ error: 'Usuario no encontrado.' });
+// Sumar puntos a un usuario
+exports.addPointsToUser = async (req, res) => {
+    const initiatorID = req.body.initiatorID; // ID del usuario que envía los puntos
+    const recipientID = req.params.id;       // ID del usuario que recibe los puntos
+    const pointsToAdd = parseInt(req.body.points, 10);
+    const description = req.body.description || `Puntos agregados: ${pointsToAdd}`;
+    const itemID = req.body.itemID || null;  // ID del ítem, si se proporciona
+
+    try {
+        // Agregar puntos en la base de datos
+        const result = await UsersModel.addPoints(initiatorID, recipientID, pointsToAdd, description, itemID);
+        if (result > 0) {
+            // Obtener información del remitente y el receptor
+            const sender = await UsersModel.getUserById(initiatorID);
+            const recipient = await UsersModel.getUserById(recipientID);
+
+            if (!sender || !recipient) {
+                throw new Error('Remitente o receptor no encontrados');
+            }
+
+            // Enviar correo al receptor
+            await EmailReminderController.sendPointsAddedEmail(recipient, sender, pointsToAdd, description);
+
+            res.json({ message: 'Puntos agregados exitosamente.' });
+        } else {
+            res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+    } catch (err) {
+        console.error('Error al sumar puntos:', err.message);
+        res.status(500).json({ error: 'Error al sumar puntos', details: err.message });
     }
-  } catch (err) {
-    res.status(500).json({ error: 'Error al sumar puntos', details: err.message });
-  }
 };
+
 
 // Quitar puntos a un usuario
 exports.removePointsFromUser = async (req, res) => {
