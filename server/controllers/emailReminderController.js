@@ -35,6 +35,16 @@ sendPointsAddedEmail = async (recipient, sender, points, description) => {
     await sendEmail(recipient.email, subject, text);
 };
 
+// Enviar correo cuando se remiden puntos con el nombre del remitente
+
+sendPointsRemovedEmail = async (recipient, sender, points, description) => {
+    const subject = '⚠️ Puntos Redimidos ⚠️';
+    const text = `Hola ${recipient.name},\n\n${sender.name} ha redimido ${points} puntos de tu cuenta.\nDescripción: ${description}\n\nSi tienes dudas, por favor contácta a ${sender.name}.\n\nSaludos,\nTag Marketing Digital.`;
+
+    await sendEmail(recipient.email, subject, text);
+};
+
+
 
 // Enviar correo de cumpleaños
 EmailReminderController.sendBirthdayEmail = async (reqOrUser) => {
@@ -111,6 +121,7 @@ EmailReminderController.sendGlobalAnniversaryEmail = async (users, anniversaryUs
 
 module.exports = {
     sendPointsAddedEmail,
+    sendPointsRemovedEmail,
     sendBirthdayEmail: EmailReminderController.sendBirthdayEmail,
     sendEntryAnniversaryEmail: EmailReminderController.sendEntryAnniversaryEmail,
     sendGlobalBirthdayEmail: EmailReminderController.sendGlobalBirthdayEmail,

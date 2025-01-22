@@ -1,4 +1,6 @@
 const UsersModel = require('../models/usersModel');
+const EmailReminderController = require('./emailReminderController');
+
 
 // Obtener todos los usuarios
 exports.getAllUsers = async (req, res) => {
@@ -62,9 +64,6 @@ exports.deleteUser = async (req, res) => {
 };
 
 // Sumar puntos a un usuario
-const EmailReminderController = require('./emailReminderController');
-
-// Sumar puntos a un usuario
 exports.addPointsToUser = async (req, res) => {
     const initiatorID = req.body.initiatorID; // ID del usuario que envía los puntos
     const recipientID = req.params.id;       // ID del usuario que recibe los puntos
@@ -97,24 +96,36 @@ exports.addPointsToUser = async (req, res) => {
     }
 };
 
-
 // Quitar puntos a un usuario
 exports.removePointsFromUser = async (req, res) => {
-  const initiatorID = req.body.initiatorID;
-  const recipientID = req.params.id;  // ID del usuario a quien se le quitan los puntos
+  const initiatorID = req.body.initiatorID; // ID del usuario que quita los puntos
+  const recipientID = req.params.id;       // ID del usuario al que se le quitan los puntos
   const pointsToRemove = parseInt(req.body.points, 10);
-  const description = req.body.description;
+  const description = req.body.description || `Puntos retirados: ${pointsToRemove}`;
   const itemID = req.body.itemID || null;  // ID del ítem, si se proporciona
 
   try {
-    const result = await UsersModel.removePoints(initiatorID, recipientID, pointsToRemove, description, itemID);
-    if (result > 0) {
-      res.json({ message: 'Puntos retirados exitosamente.' });
-    } else {
-      res.status(404).json({ error: 'Usuario no encontrado o puntos insuficientes.' });
-    }
+      // Restar puntos en la base de datos
+      const result = await UsersModel.removePoints(initiatorID, recipientID, pointsToRemove, description, itemID);
+      if (result > 0) {
+          // Obtener información del remitente y el receptor
+          const sender = await UsersModel.getUserById(initiatorID);
+          const recipient = await UsersModel.getUserById(recipientID);
+
+          if (!sender || !recipient) {
+              throw new Error('Remitente o receptor no encontrados');
+          }
+
+          // Enviar correo al receptor notificando sobre la resta
+          await EmailReminderController.sendPointsRemovedEmail(recipient, sender, pointsToRemove, description);
+
+          res.json({ message: 'Puntos retirados exitosamente.' });
+      } else {
+          res.status(404).json({ error: 'Usuario no encontrado o puntos insuficientes.' });
+      }
   } catch (err) {
-    res.status(500).json({ error: 'Error al retirar puntos', details: err.message });
+      console.error('Error al retirar puntos:', err.message);
+      res.status(500).json({ error: 'Error al retirar puntos', details: err.message });
   }
 };
 
