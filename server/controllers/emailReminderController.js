@@ -61,7 +61,7 @@ EmailReminderController.sendBirthdayEmail = async (reqOrUser) => {
 EmailReminderController.sendEntryAnniversaryEmail = async (reqOrUser) => {
     const { email, name, entryDate, id } = reqOrUser.body || reqOrUser;
     const years = calculateYears(entryDate);
-    const initiatorID = 'c071f8a5-e3f6-11ef-8229-b81ea4350f10'; // ID especial para el sistema
+    const initiatorID = '6022e3ef-e3f8-11ef-99b0-0200fd828604'; // ID especial para el sistema
     const pointsToAdd = 20; // Puntos a otorgar
     const description = `Puntos otorgados por aniversario: ${years} años en la empresa.`;
 
