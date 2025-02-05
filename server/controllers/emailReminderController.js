@@ -1,5 +1,5 @@
 const transporter = require('../config/transporter');
-
+const UsersModel = require('../models/usersModel');
 // Calcular años cumplidos
 const calculateYears = (date) => {
     const today = new Date();
@@ -59,9 +59,25 @@ EmailReminderController.sendBirthdayEmail = async (reqOrUser) => {
 
 // Enviar correo de aniversario en la empresa
 EmailReminderController.sendEntryAnniversaryEmail = async (reqOrUser) => {
-    const { email, name, entryDate } = reqOrUser.body || reqOrUser;
+    const { email, name, entryDate, id } = reqOrUser.body || reqOrUser;
     const years = calculateYears(entryDate);
+    const initiatorID = 'c071f8a5-e3f6-11ef-8229-b81ea4350f10'; // ID especial para el sistema
+    const pointsToAdd = 20; // Puntos a otorgar
+    const description = `Puntos otorgados por aniversario: ${years} años en la empresa.`;
 
+    try {
+        // Sumar puntos al colaborador
+        const result = await UsersModel.addPoints(initiatorID, id, pointsToAdd, description);
+        if (result > 0) {
+            console.log(`Se han agregado ${pointsToAdd} puntos a ${name} por su aniversario.`);
+        } else {
+            console.error(`Error al agregar puntos a ${name}.`);
+        }
+    } catch (error) {
+        console.error('Error al otorgar puntos por aniversario:', error.message);
+    }
+
+    // Enviar el correo de aniversario
     const subject = `¡Feliz aniversario en la empresa, ${name}!`;
     const text = `Hola ${name},\n\nHoy cumples ${years} años con nosotros en la empresa. 🎉\n\nGracias por tu dedicación y esfuerzo durante estos ${years} años.\n\n¡Esperamos seguir construyendo grandes logros juntos!\n\n¡Que tengas un excelente día!`;
 

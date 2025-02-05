@@ -1,0 +1,7 @@
+.delete-button-user-admin {
+    margin-top: 20px;
+}
+
+.delete-button-user-admin:hover {
+    cursor: pointer;
+}

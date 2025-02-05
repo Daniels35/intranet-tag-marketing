@@ -29,6 +29,7 @@ const Home = () => {
           const response = await fetch(`${API_URL}/transactionHistory/recipient/${userInfo.id}`);
           const data = await response.json();
           setTransactions(data);
+          console.log('Transacciones obtenidas:', data);
         } catch (error) {
           console.error('Error al obtener las transacciones:', error);
         }

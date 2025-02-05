@@ -24,12 +24,16 @@ const AddPointsToList = () => {
     try {
       const response = await fetch(`${API_URL}/users`);
       const data = await response.json();
-      setUsers(data);
+  
+      // Filtrar al usuario del sistema por su nombre o email
+      const filteredUsers = data.filter(user => user.name !== "Tag Marketing Digital (Sistema)" && user.email !== "notification@intranettag.website");
+  
+      setUsers(filteredUsers);
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
     }
   };
-
+  
   const refreshUsers = () => {
     fetchUsers();
   };
@@ -131,12 +135,14 @@ const AddPointsToList = () => {
       </Modal>
 
       {/* Modal para editar usuario */}
+      {/* Modal para editar usuario */}
       <Modal isVisible={editOpen} onClose={() => setEditOpen(false)}>
         <UsersAdmin
           editing={editing}
           setEditing={setEditing}
           currentUser={selectedUser}
           updateUser={updateUser}
+          refreshUsers={refreshUsers}  // Pasamos la función refreshUsers
         />
       </Modal>
     </>
