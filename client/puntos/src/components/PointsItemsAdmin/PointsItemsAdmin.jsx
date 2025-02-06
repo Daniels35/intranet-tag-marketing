@@ -27,23 +27,20 @@ const PointsItemsAdmin = () => {
       };
       
 
-      const addPointsItem = async (item) => {
+      const addPointsItem = async (formData) => {
         try {
           await fetch(`${API_URL}/pointsItems`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(item),
+            body: formData, // 🔥 Enviar `FormData`, sin `headers`
           });
-          fetchPointsItems(); // Recarga la lista de items para mostrar el nuevo item
-          window.alert(`Nuevo Item "${item.name}" agregado correctamente`)
+          fetchPointsItems(); // Recarga la lista
+          window.alert(`Nuevo Item agregado correctamente`);
         } catch (error) {
           console.error('Error al agregar el pointsItem:', error);
         }
-      };
+    };
+    
       
-
       const deletePointsItem = async (id, name) => {
         const confirmDelete = window.confirm(`¿Realmente quieres eliminar el item "${name}"?`);
         if (confirmDelete) {
@@ -60,22 +57,20 @@ const PointsItemsAdmin = () => {
     };
       
 
-    const updatePointsItem = async (id, updatedItem) => {
-        try {
-          await fetch(`${API_URL}/pointsItems/${id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedItem),
-          });
-          setEditing(false);
-          fetchPointsItems(); 
-          window.alert(`Item "${updatedItem.name}" actualizado correctamente`)
-        } catch (error) {
-          console.error('Error al actualizar el pointsItem:', error);
-        }
-      };
+    const updatePointsItem = async (id, formData) => {
+      try {
+        await fetch(`${API_URL}/pointsItems/${id}`, {
+          method: 'PUT',
+          body: formData, // 🔥 Enviar `FormData`, sin `headers`
+        });
+        setEditing(false);
+        fetchPointsItems(); 
+        window.alert(`Item actualizado correctamente`);
+      } catch (error) {
+        console.error('Error al actualizar el pointsItem:', error);
+      }
+  };
+  
       
 
     const editPointsItem = (item) => {

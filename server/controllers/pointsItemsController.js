@@ -120,7 +120,7 @@ exports.deleteItem = async (req, res) => {
     if (currentItem.image) {
       const imagePath = path.join(__dirname, '../uploads', path.basename(currentItem.image));
       if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath); // Eliminar la imagen del servidor
+        fs.unlinkSync(imagePath);
       }
     }
 
