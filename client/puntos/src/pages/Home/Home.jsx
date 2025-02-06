@@ -111,17 +111,17 @@ const Home = () => {
         <div className="section points-section">
           <h2>¿Qué da puntos?</h2>
           <ul className="items-list">
-            {pointsItems.map(item => (
-              <li key={item.id} className="list-item">
-                <img src={itemIcon} alt="Item Icon" className="item-icon" />
-                <div>
-                  <span>{item.name}</span>
-                  <br />
-                  <span>{item.points} Puntos</span>
-                </div>
-              </li>
-            ))}
-          </ul>
+              {pointsItems.map(item => (
+                <li key={item.id} className="list-item">
+                  <img src={item.image || itemIcon} alt={item.name} className="item-icon" /> {/* ✅ Usa la imagen del item o una predeterminada */}
+                  <div>
+                    <span>{item.name}</span>
+                    <br />
+                    <span>{item.points} Puntos</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
         </div>
 
         <div className="section items-section">
