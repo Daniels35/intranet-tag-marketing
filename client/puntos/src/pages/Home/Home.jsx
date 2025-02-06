@@ -113,7 +113,7 @@ const Home = () => {
           <ul className="items-list">
               {pointsItems.map(item => (
                 <li key={item.id} className="list-item">
-                  <img src={item.image || itemIcon} alt={item.name} className="item-icon" /> {/* ✅ Usa la imagen del item o una predeterminada */}
+                  <img src={item.image || itemIcon} alt={item.name} className="item-icon" /> 
                   <div>
                     <span>{item.name}</span>
                     <br />
@@ -129,11 +129,11 @@ const Home = () => {
           <ul className="items-list">
             {redeemableItems.map(item => (
               <li key={item.id} className="list-item">
-                <img src={itemIcon} alt="Item Icon" className="item-icon" />
+                <img src={item.image || itemIcon} alt={item.name} className="item-icon" />
                 <div>
-                <span>{item.name}</span>
-                <br/>
-                <span>{item.costInPoints} Puntos</span>
+                  <span>{item.name}</span>
+                  <br />
+                  <span>{item.costInPoints} Puntos</span>
                 </div>
               </li>
             ))}
