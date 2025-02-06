@@ -14,10 +14,10 @@ router.get('/redeemableItems', redeemableItemsController.getAllItems);
 router.get('/redeemableItems/:id', redeemableItemsController.getItemById);
 
 // Ruta para crear un nuevo item (incluye subida de archivo)
-router.post('/redeemableItems', upload.single('image'), redeemableItemsController.createItem);
+router.post('/redeemableItems', upload.single('icon'), redeemableItemsController.createItem);
 
 // Ruta para actualizar un item por su ID
-router.put('/redeemableItems/:id', upload.single('image'), redeemableItemsController.updateItem);
+router.put('/redeemableItems/:id', upload.single('icon'), redeemableItemsController.updateItem);
 
 // Ruta para eliminar un item por su ID
 router.delete('/redeemableItems/:id', redeemableItemsController.deleteItem);
