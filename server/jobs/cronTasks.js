@@ -1,10 +1,12 @@
-// Archivo cronTasks.js
-const cron = require('node-cron');
+// cronTasks.js
 const UsersModel = require('../models/usersModel');
 const EmailReminderController = require('../controllers/emailReminderController');
 
-// Tarea programada a las 6:00 AM
-cron.schedule('0 6 * * *', async () => {
+console.log('Ejecutando cronTasks.js a las:', new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" }));
+console.log('Server time:', new Date().toString());
+
+
+(async () => {
     try {
         const birthdayUsers = await UsersModel.getUsersByDateOfBirth();
         const entryAnniversaryUsers = await UsersModel.getUsersByEntryDate();
@@ -20,22 +22,21 @@ cron.schedule('0 6 * * *', async () => {
             await EmailReminderController.sendEntryAnniversaryEmail(user);
         }
 
-        // Enviar correo global informando sobre cumpleaños
+        // Enviar correo global de cumpleaños
         if (birthdayUsers.length > 0) {
             await EmailReminderController.sendGlobalBirthdayEmail(allUsers, birthdayUsers);
         }
 
-        // Enviar correo global informando sobre aniversarios
+        // Enviar correo global de aniversarios
         if (entryAnniversaryUsers.length > 0) {
             await EmailReminderController.sendGlobalAnniversaryEmail(allUsers, entryAnniversaryUsers);
         }
 
-        console.log('Correos de cumpleaños, aniversarios y globales enviados.');
-    } catch (error) {
-        console.error('Error en la tarea cron:', error.message);
-    }
-}, {
-    timezone: 'America/Bogota'
-});
+        // **Aquí llamamos a la función que manda el correo de notificación**
+        await EmailReminderController.sendCronNotificationEmail();
 
-console.log('Cron tasks inicializadas.');
+        console.log('✅ Correos enviados correctamente.');
+    } catch (error) {
+        console.error('❌ Error en la tarea cron:', error.message);
+    }
+})();
