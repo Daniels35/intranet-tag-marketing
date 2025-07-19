@@ -25,6 +25,11 @@ app.use(express.json());
 // Servir archivos estáticos de la carpeta 'uploads'
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
+//nuevo manejo de archivos
+app.use('/uploads/documents', express.static(path.join(__dirname, 'uploads/documents')));
+app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')));
+
 app.get('/', (req, res) => {
   res.send('¡Hola, mundo!');
 });
@@ -40,6 +45,11 @@ app.use('/auth', authRoutes);
 // ////////PENDIENTE///////
 app.use('/', require('./routes/transactionHistory'));
 
+
+
+
+///nuevo codigo 
+app.use('/', require('./routes/documents'));
 
 ////email test
 const emailTestRoutes = require('./routes/emailTest');
