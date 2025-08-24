@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home';
+import DocumentsPage from './pages/Documents/DocumentsPage'; 
 import Admin from './pages/Admin/Admin';
 import Header from '../src/components/Header/Header';
 import Login from '../src/pages/Login/Login';
@@ -30,6 +31,13 @@ function App() {
             </ProtectedRoute>
           } 
         />
+
+
+        <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="/documents/:categoryId" element={<DocumentsPage />} />
+        <Route path="/documents/:categoryId/:subcategoryId" element={<DocumentsPage />} />
+
+
         <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
         <Route path="/tools/QRGenerator" element={<ProtectedRoute><QRGenerator /></ProtectedRoute>} />
         <Route 

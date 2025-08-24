@@ -1,0 +1,141 @@
+/* src/pages/Documents/DocumentsPage.css */
+
+.documents-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.breadcrumbs {
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.breadcrumbs a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.grid-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+    position: relative;
+}
+
+.grid-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.grid-item a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.grid-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.grid-item span {
+    font-weight: bold;
+}
+
+.document-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.document-list li {
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.document-list li a {
+    text-decoration: none;
+    color: #0056b3;
+    font-weight: 500;
+}
+.document-list li a:hover {
+    text-decoration: underline;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #dc3545;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    min-width: 400px;
+    position: relative;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-content form input, .modal-content form select, .modal-content form button {
+    padding: 0.8rem;
+    font-size: 1rem;
+}
+
+.modal-content form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
