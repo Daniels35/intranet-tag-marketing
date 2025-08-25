@@ -44,7 +44,8 @@ export const createSubcategory = async (formData, token) => {
 
 // Subir un nuevo documento (requiere token de admin)
 export const uploadDocument = async (formData, token) => {
-    const response = await fetch(`${API_URL}/documents`, {
+    // La ruta correcta debe ser '/documents/upload' como en Postman
+    const response = await fetch(`${API_URL}/documents/upload`, { // <-- CAMBIO AQUÍ
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
