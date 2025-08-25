@@ -1,5 +1,3 @@
-/* src/pages/Documents/DocumentsPage.css */
-
 .documents-container {
     padding: 2rem;
     max-width: 1200px;
@@ -13,7 +11,7 @@
 }
 
 .breadcrumbs a {
-    color: #007bff;
+    color: #ED6306;
     text-decoration: none;
 }
 
@@ -21,83 +19,127 @@
     text-decoration: underline;
 }
 
+.add-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    background-color: #ED6306;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+}
+
+/* --- ESTILOS DEL GRID (AQUÍ ESTÁ LA MAGIA) --- */
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
+    /* Usamos 250px como tamaño base para los cuadrados */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
     margin-top: 2rem;
 }
 
-.grid-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
-    transition: box-shadow 0.3s ease;
+/* Contenedor para el item y el botón de borrar */
+.grid-item-wrapper {
     position: relative;
 }
 
-.grid-item:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.grid-item a {
-    text-decoration: none;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-}
-
-.grid-item img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-}
-
-.grid-item span {
-    font-weight: bold;
-}
-
-.document-list ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.document-list li {
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
+/* El cuadrado principal (ahora es un <a> o <Link>) */
+.grid-item {
+    display: flex; /* Para centrar el contenido */
+    justify-content: center;
     align-items: center;
-}
-
-.document-list li a {
+    
+    height: 250px; /* Tamaño fijo */
+    width: 100%; /* Ocupa el espacio del grid */
+    
+    border-radius: 12px;
+    overflow: hidden; /* Para que el overlay no se salga */
+    position: relative; /* Clave para posicionar el texto y el overlay */
+    
     text-decoration: none;
-    color: #0056b3;
-    font-weight: 500;
-}
-.document-list li a:hover {
-    text-decoration: underline;
+    padding: 1rem; /* Espaciado interno para el texto */
+    box-sizing: border-box;
+
+    /* Estilos para la imagen de fondo */
+    background-size: cover; /* La imagen cubre todo el espacio */
+    background-position: center; /* La imagen se centra */
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.delete-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
+.grid-item:hover {
+    transform: translateY(-5px); /* Efecto de levantar al pasar el ratón */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* La capa de opacidad oscura */
+.grid-item .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Negro con 50% de opacidad */
+    transition: background-color 0.3s ease;
+}
+
+.grid-item:hover .overlay {
+    background-color: rgba(0, 0, 0, 0.3); /* Menos oscuro al pasar el ratón */
+}
+
+/* El texto del nombre/título */
+.grid-item span {
+    color: white;
     font-size: 1.2rem;
-    color: #dc3545;
+    font-weight: bold;
+    text-align: center;
+    position: relative; /* Para que esté por encima del overlay */
+    z-index: 2;
+
+    /* --- Elipsis para texto largo --- */
+    width: 100%;
+    white-space: normal; /* Permite saltos de línea si es necesario */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Número máximo de líneas */
+    -webkit-box-orient: vertical;
 }
 
-/* Modal Styles */
+/* Botón de eliminar (ajustado para la nueva posición) */
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3; /* Encima de todo */
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #dc3545;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+    background: white;
+}
+
+
+/* --- ESTILOS DE MODALES (SIN CAMBIOS) --- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,7 +150,8 @@
     background: white;
     padding: 2rem;
     border-radius: 8px;
-    min-width: 400px;
+    width: 90%;
+    max-width: 500px;
     position: relative;
 }
 
@@ -131,10 +174,12 @@
 .modal-content form input, .modal-content form select, .modal-content form button {
     padding: 0.8rem;
     font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 .modal-content form button {
-    background-color: #007bff;
+    background-color: #ED6306;
     color: white;
     border: none;
     cursor: pointer;

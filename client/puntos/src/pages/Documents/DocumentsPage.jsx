@@ -1,13 +1,16 @@
 // src/pages/Documents/DocumentsPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import { fetchDocumentStructure } from '../../redux/documentSlice';
 import * as documentService from '../../services/documentService';
 
-import './DocumentsPage.css'; // Crearemos este archivo a continuación
+import './DocumentsPage.css';
+// Asegúrate de tener una imagen en esta ruta para usarla como placeholder
+import defaultImage from '../../assets/defaultDocumentImage.png';
 
-// Un componente simple para los modales (puedes reemplazarlo por tu componente Modal si ya tienes uno)
+// Componente Modal (sin cambios)
 const Modal = ({ children, isOpen, onClose }) => {
     if (!isOpen) return null;
     return (
@@ -51,26 +54,31 @@ const DocumentsPage = () => {
         }
     };
 
-    // Lógica para mostrar contenido
     const selectedCategory = categoryId ? structure.find(c => c.id === categoryId) : null;
     const selectedSubcategory = selectedCategory && subcategoryId ? selectedCategory.subcategories.find(s => s.id === subcategoryId) : null;
     
     // --- Renderizado de Vistas ---
 
     const renderDocuments = (documents) => (
-        <div className="document-list">
-            <h3>Documentos</h3>
+        <div className="items-grid">
             {documents.length === 0 ? <p>No hay documentos en esta sección.</p> : (
-                <ul>
-                    {documents.map(doc => (
-                        <li key={doc.id}>
-                            <a href={doc.path} target="_blank" rel="noopener noreferrer">{doc.title}</a>
-                            {userInfo?.role === 'admin' && (
-                                <button className="delete-btn" onClick={() => handleDelete('document', doc.id, doc.title)}>🗑️</button>
-                            )}
-                        </li>
-                    ))}
-                </ul>
+                documents.map(doc => (
+                    <div key={doc.id} className="grid-item-wrapper">
+                        <a 
+                            href={doc.path} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="grid-item"
+                            style={{ backgroundImage: `url(${doc.image || defaultImage})` }}
+                        >
+                            <div className="overlay"></div>
+                            <span>{doc.title}</span>
+                        </a>
+                        {userInfo?.role === 'admin' && (
+                            <button className="delete-btn" onClick={() => handleDelete('document', doc.id, doc.title)}>🗑️</button>
+                        )}
+                    </div>
+                ))
             )}
         </div>
     );
@@ -80,13 +88,17 @@ const DocumentsPage = () => {
              <h2>{category.name}</h2>
              <p>Selecciona una subcategoría para ver los documentos.</p>
              {userInfo?.role === 'admin' && (
-                <button onClick={() => { setModalContent('addSubcategory'); setModalOpen(true); }}>+ Añadir Subcategoría</button>
+                <button className="add-button" onClick={() => { setModalContent('addSubcategory'); setModalOpen(true); }}>+ Añadir Subcategoría</button>
             )}
              <div className="items-grid">
                 {category.subcategories.map(sub => (
-                    <div key={sub.id} className="grid-item">
-                        <Link to={`/documents/${category.id}/${sub.id}`}>
-                            <img src={sub.image || 'https://via.placeholder.com/150'} alt={sub.name} />
+                    <div key={sub.id} className="grid-item-wrapper">
+                        <Link 
+                            to={`/documents/${category.id}/${sub.id}`} 
+                            className="grid-item"
+                            style={{ backgroundImage: `url(${sub.image || defaultImage})` }}
+                        >
+                            <div className="overlay"></div>
                             <span>{sub.name}</span>
                         </Link>
                          {userInfo?.role === 'admin' && (
@@ -103,13 +115,17 @@ const DocumentsPage = () => {
             <h1>Documentos</h1>
             <p>Navega por las categorías para encontrar los documentos que necesitas.</p>
             {userInfo?.role === 'admin' && (
-                <button onClick={() => { setModalContent('addCategory'); setModalOpen(true); }}>+ Añadir Categoría</button>
+                <button className="add-button" onClick={() => { setModalContent('addCategory'); setModalOpen(true); }}>+ Añadir Categoría</button>
             )}
             <div className="items-grid">
                 {structure.map(cat => (
-                    <div key={cat.id} className="grid-item">
-                        <Link to={`/documents/${cat.id}`}>
-                            <img src={cat.image || 'https://via.placeholder.com/150'} alt={cat.name} />
+                    <div key={cat.id} className="grid-item-wrapper">
+                        <Link 
+                            to={`/documents/${cat.id}`} 
+                            className="grid-item"
+                            style={{ backgroundImage: `url(${cat.image || defaultImage})` }}
+                        >
+                            <div className="overlay"></div>
                             <span>{cat.name}</span>
                         </Link>
                          {userInfo?.role === 'admin' && (
@@ -132,7 +148,7 @@ const DocumentsPage = () => {
             <div>
                 <h2>{selectedSubcategory.name}</h2>
                  {userInfo?.role === 'admin' && (
-                    <button onClick={() => { setModalContent('addDocument'); setModalOpen(true); }}>+ Subir Documento</button>
+                    <button className="add-button" onClick={() => { setModalContent('addDocument'); setModalOpen(true); }}>+ Subir Documento</button>
                 )}
                 {renderDocuments(selectedSubcategory.documents)}
             </div>
@@ -145,7 +161,6 @@ const DocumentsPage = () => {
 
     return (
         <div className="documents-container">
-            {/* Breadcrumbs para navegación */}
             <div className="breadcrumbs">
                 <Link to="/documents">Documentos</Link>
                 {selectedCategory && ` > `}
@@ -156,7 +171,6 @@ const DocumentsPage = () => {
 
             {content}
 
-            {/* --- Modales de Administración --- */}
             <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
                 {modalContent === 'addCategory' && <AddCategoryForm token={token} onFinished={() => { setModalOpen(false); handleRefresh(); }} />}
                 {modalContent === 'addSubcategory' && <AddSubcategoryForm token={token} categoryId={categoryId} categories={structure} onFinished={() => { setModalOpen(false); handleRefresh(); }} />}
@@ -167,7 +181,7 @@ const DocumentsPage = () => {
 };
 
 
-// --- Formularios para los Modales (pueden ir en archivos separados si prefieres) ---
+// --- Formularios para los Modales (sin cambios) ---
 
 const AddCategoryForm = ({ token, onFinished }) => {
     const [name, setName] = useState('');
@@ -241,7 +255,7 @@ const AddDocumentForm = ({ token, subcategoryId, onFinished }) => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('subcategory_id', subcategoryId);
-        formData.append('pdfFile', pdfFile);
+        if (pdfFile) formData.append('pdfFile', pdfFile);
         if (imageFile) formData.append('imageFile', imageFile);
 
         try {
