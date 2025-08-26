@@ -31,13 +31,9 @@ function App() {
             </ProtectedRoute>
           } 
         />
-
-
         <Route path="/documents" element={<DocumentsPage />} />
         <Route path="/documents/:categoryId" element={<DocumentsPage />} />
         <Route path="/documents/:categoryId/:subcategoryId" element={<DocumentsPage />} />
-
-
         <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
         <Route path="/tools/QRGenerator" element={<ProtectedRoute><QRGenerator /></ProtectedRoute>} />
         <Route 

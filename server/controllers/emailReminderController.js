@@ -135,18 +135,7 @@ EmailReminderController.sendGlobalAnniversaryEmail = async (users, anniversaryUs
     await sendEmail(recipients, subject, text);
 };
 
-// Agregar la función sendCronNotificationEmail
-EmailReminderController.sendCronNotificationEmail = async () => {
-    const subject = 'Notificación de ejecución de cron';
-    const text = `Hola Daniel,
 
-Este correo es para notificarte que la tarea cron se ejecutó correctamente a las:
-${new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })}.
-
-¡Buen día!`;
-
-    await sendEmail('danielstiven35@gmail.com', subject, text);
-};
 
 module.exports = {
     sendPointsAddedEmail,
@@ -154,7 +143,6 @@ module.exports = {
     sendBirthdayEmail: EmailReminderController.sendBirthdayEmail,
     sendEntryAnniversaryEmail: EmailReminderController.sendEntryAnniversaryEmail,
     sendGlobalBirthdayEmail: EmailReminderController.sendGlobalBirthdayEmail,
-    sendGlobalAnniversaryEmail: EmailReminderController.sendGlobalAnniversaryEmail,
-    sendCronNotificationEmail: EmailReminderController.sendCronNotificationEmail 
+    sendGlobalAnniversaryEmail: EmailReminderController.sendGlobalAnniversaryEmail
 };
 

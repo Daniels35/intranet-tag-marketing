@@ -32,9 +32,6 @@ console.log('Server time:', new Date().toString());
             await EmailReminderController.sendGlobalAnniversaryEmail(allUsers, entryAnniversaryUsers);
         }
 
-        // **Aquí llamamos a la función que manda el correo de notificación**
-        await EmailReminderController.sendCronNotificationEmail();
-
         console.log('✅ Correos enviados correctamente.');
     } catch (error) {
         console.error('❌ Error en la tarea cron:', error.message);

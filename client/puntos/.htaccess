@@ -3,7 +3,7 @@
     RewriteBase /
 
     # Rutas específicas que serán manejadas por React, incluyendo subrutas
-    RewriteRule ^(home|tools|profile|admin)(/.*)?$ /index.html [L]
+    RewriteRule ^(home|documents|tools|profile|admin)(/.*)?$ /index.html [L]
 
     # Deja que el servidor maneje todas las demás rutas, incluyendo la raíz "/"
     RewriteCond %{REQUEST_FILENAME} !-f
