@@ -24,16 +24,16 @@ function App() {
           } 
         />
         <Route 
-          path="/home" 
+          path="/inicio" 
           element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
           } 
         />
-        <Route path="/documents" element={<DocumentsPage />} />
-        <Route path="/documents/:categoryId" element={<DocumentsPage />} />
-        <Route path="/documents/:categoryId/:subcategoryId" element={<DocumentsPage />} />
+        <Route path="/documentos" element={<DocumentsPage />} />
+        <Route path="/documentos/:categoryId" element={<DocumentsPage />} />
+        <Route path="/documentos/:categoryId/:subcategoryId" element={<DocumentsPage />} />
         <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
         <Route path="/tools/QRGenerator" element={<ProtectedRoute><QRGenerator /></ProtectedRoute>} />
         <Route 

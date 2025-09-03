@@ -50,27 +50,27 @@ const Header = () => {
     <>
       <header className="custom-header">
         <div className="custom-logo">
-          <Link to="/home" onClick={closeMenu}><img src={logo} alt="Logo" /></Link>
+          <Link to="/inicio" onClick={closeMenu}><img src={logo} alt="Logo" /></Link>
         </div>
         <nav className={`custom-navigation ${menuOpen ? 'open' : ''}`}>
           <ul>
-            <li className={location.pathname === '/home' ? 'active' : ''}>
-              <Link to="/home" onClick={closeMenu}>Inicio</Link>
+            <li className={location.pathname === '/inicio' ? 'active' : ''}>
+              <Link to="/inicio" onClick={closeMenu}>Inicio</Link>
             </li>
             
             {/* --- INICIO: NUEVO MENÚ DE DOCUMENTOS --- */}
-            <li className={`custom-tools-dropdown ${location.pathname.startsWith('/documents') ? 'active' : ''}`}>
-              <Link to="/documents" onClick={closeMenu}>Documentos</Link>
+            <li className={`custom-tools-dropdown ${location.pathname.startsWith('/documentos') ? 'active' : ''}`}>
+              <Link to="/documentos" onClick={closeMenu}>Documentos</Link>
               <div className="custom-tools-dropdown-content">
                 {documentStructure && documentStructure.map((category) => (
                   <div key={category.id} className="custom-dropdown-category">
                      {/* El enlace principal de la categoría podría llevar a una vista de esa categoría */}
-                    <Link to={`/documents/${category.id}`} onClick={closeMenu} className="category-link">
+                    <Link to={`/documentos/${category.id}`} onClick={closeMenu} className="category-link">
                       {category.name}
                     </Link>
                     <div className="custom-dropdown-subcategory-content">
                       {category.subcategories.map((subcategory) => (
-                        <Link to={`/documents/${category.id}/${subcategory.id}`} key={subcategory.id} onClick={closeMenu}>
+                        <Link to={`/documentos/${category.id}/${subcategory.id}`} key={subcategory.id} onClick={closeMenu}>
                           {subcategory.name}
                         </Link>
                       ))}

@@ -15,13 +15,13 @@ const ProtectedRoute = ({ children }) => {
 
   // Redirigir a la página principal si hay token y estamos en la ruta de login
   if (token && location.pathname === '/') {
-    return <Navigate to="/home" />;
+    return <Navigate to="/inicio" />;
   }
 
   // Verificar si la ruta es admin o transactionHistory y el usuario no es admin
   const adminRoutes = ['/admin', '/transactionHistory'];
   if (adminRoutes.includes(location.pathname) && userInfo?.role !== 'admin') {
-    return <Navigate to="/home" />;
+    return <Navigate to="/inicio" />;
   }
 
   return children;

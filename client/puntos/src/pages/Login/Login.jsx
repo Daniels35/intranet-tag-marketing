@@ -16,7 +16,7 @@ const Login = () => {
     dispatch(loginUser())
       .unwrap()
       .then(() => {
-        navigate('/home');
+        navigate('/inicio');
       })
       .catch((error) => {
         console.error('Error al iniciar sesión:', error);

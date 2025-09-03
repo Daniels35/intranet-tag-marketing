@@ -94,7 +94,7 @@ const DocumentsPage = () => {
                 {category.subcategories.map(sub => (
                     <div key={sub.id} className="grid-item-wrapper">
                         <Link 
-                            to={`/documents/${category.id}/${sub.id}`} 
+                            to={`/documentos/${category.id}/${sub.id}`} 
                             className="grid-item"
                             style={{ backgroundImage: `url(${sub.image || defaultImage})` }}
                         >
@@ -121,7 +121,7 @@ const DocumentsPage = () => {
                 {structure.map(cat => (
                     <div key={cat.id} className="grid-item-wrapper">
                         <Link 
-                            to={`/documents/${cat.id}`} 
+                            to={`/documentos/${cat.id}`} 
                             className="grid-item"
                             style={{ backgroundImage: `url(${cat.image || defaultImage})` }}
                         >
@@ -162,7 +162,7 @@ const DocumentsPage = () => {
     return (
         <div className="documents-container">
             <div className="breadcrumbs">
-                <Link to="/documents">Documentos</Link>
+                <Link to="/documentos">Documentos</Link>
                 {selectedCategory && ` > `}
                 {selectedCategory && <Link to={`/documents/${categoryId}`}>{selectedCategory.name}</Link>}
                 {selectedSubcategory && ` > `}
