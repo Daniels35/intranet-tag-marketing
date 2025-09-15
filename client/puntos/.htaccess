@@ -1,12 +1,43 @@
+# ----------------------------------------------------------------------
+# --- REGLAS DE REESCRITURA Y CACHÉ PARA TU FRONTEND REACT ---
+# ----------------------------------------------------------------------
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
 
-    # Rutas específicas que serán manejadas por React, incluyendo subrutas
+    # --- SECCIÓN 1: REDIRECCIÓN PERMANENTE ---
+    # Redirige la ruta vieja /home a la nueva /inicio.
+    Redirect 301 /home /inicio
+</IfModule>
+
+<IfModule mod_headers.c>
+    # --- SECCIÓN 2: CONTROL DE CACHÉ ---
+    # Forza al navegador a no usar la caché para el archivo principal de React.
+    <FilesMatch "index\.html$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    # --- SECCIÓN 3: REGLAS PARA REACT ROUTER (LA PARTE CLAVE) ---
+    # Esta sección ahora es muy específica sobre qué rutas pertenecen al frontend.
+    
+    # Regla 1: Maneja la raíz del sitio (tu página de Login).
+    # Si la URL es exactamente el dominio principal (ej: https://intranettag.website/),
+    # sírvele el index.html para que React cargue la página de Login.
+    RewriteRule ^$ /index.html [L]
+
+    # Regla 2: Maneja las rutas específicas del frontend.
+    # Si la URL comienza con 'inicio', 'documentos', 'tools', 'profile' o 'admin',
+    # entonces es una ruta de React, así que sírvele el index.html.
+    # El (/.*)? al final permite que sub-rutas como /documentos/123 también funcionen.
     RewriteRule ^(inicio|documentos|tools|profile|admin)(/.*)?$ /index.html [L]
 
-    # Deja que el servidor maneje todas las demás rutas, incluyendo la raíz "/"
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^.*$ - [L]
+    # IMPORTANTE: No hay una regla "atrapa-todo" al final.
+    # Si una petición como /users llega, NO COINCIDIRÁ con ninguna de las reglas anteriores.
+    # Por lo tanto, Apache no la reescribirá y se la pasará a Passenger,
+    # que es exactamente lo que queremos que haga.
 </IfModule>
