@@ -164,7 +164,7 @@ const DocumentsPage = () => {
             <div className="breadcrumbs">
                 <Link to="/documentos">Documentos</Link>
                 {selectedCategory && ` > `}
-                {selectedCategory && <Link to={`/documents/${categoryId}`}>{selectedCategory.name}</Link>}
+                {selectedCategory && <Link to={`/documentos/${categoryId}`}>{selectedCategory.name}</Link>}
                 {selectedSubcategory && ` > `}
                 {selectedSubcategory && <span>{selectedSubcategory.name}</span>}
             </div>
