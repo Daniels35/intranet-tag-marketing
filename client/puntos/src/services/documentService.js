@@ -80,3 +80,60 @@ export const deleteItem = async (type, id, token) => {
     });
     return handleResponse(response);
 };
+
+
+// --- NUEVAS FUNCIONES DE ACTUALIZACIÓN (PUT) ---
+
+export const updateCategory = async (id, formData, token) => {
+  const response = await fetch(`${API_URL}/documents/categories/${id}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${token}` },
+    body: formData,
+  });
+  return handleResponse(response);
+};
+
+export const updateSubcategory = async (id, formData, token) => {
+  const response = await fetch(`${API_URL}/documents/subcategories/${id}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${token}` },
+    body: formData,
+  });
+  return handleResponse(response);
+};
+
+export const updateDocument = async (id, formData, token) => {
+  const response = await fetch(`${API_URL}/documents/${id}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${token}` },
+    body: formData,
+  });
+  return handleResponse(response);
+};
+
+
+// --- NUEVAS FUNCIONES DE MOVIMIENTO (PATCH) ---
+
+export const moveSubcategory = async (id, newCategoryId, token) => {
+  const response = await fetch(`${API_URL}/documents/subcategories/${id}/move`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ newCategoryId }),
+  });
+  return handleResponse(response);
+};
+
+export const moveDocument = async (id, newSubcategoryId, token) => {
+  const response = await fetch(`${API_URL}/documents/${id}/move`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ newSubcategoryId }),
+  });
+  return handleResponse(response);
+};

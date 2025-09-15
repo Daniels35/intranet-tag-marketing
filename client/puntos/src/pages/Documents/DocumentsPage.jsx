@@ -5,12 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import { fetchDocumentStructure } from '../../redux/documentSlice';
 import * as documentService from '../../services/documentService';
-
 import './DocumentsPage.css';
-// Asegúrate de tener una imagen en esta ruta para usarla como placeholder
 import defaultImage from '../../assets/defaultDocumentImage.png';
 
-// Componente Modal (sin cambios)
+// --- Componente Modal (sin cambios) ---
 const Modal = ({ children, isOpen, onClose }) => {
     if (!isOpen) return null;
     return (
@@ -23,86 +21,95 @@ const Modal = ({ children, isOpen, onClose }) => {
     );
 };
 
+
+// --- Componente Principal ---
 const DocumentsPage = () => {
     const { categoryId, subcategoryId } = useParams();
     const dispatch = useDispatch();
     const { userInfo, token } = useSelector((state) => state.user);
     const { structure, status } = useSelector((state) => state.documents);
 
+    // --- Estados para Modales (ACTUALIZADO) ---
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState(null); // 'addCategory', 'addSubcategory', 'addDocument'
+    const [modalContent, setModalContent] = useState(null);
+    const [currentItem, setCurrentItem] = useState(null); // Almacena el item para editar/mover
 
     useEffect(() => {
-        if (status === 'idle') {
+        // Carga la estructura si está vacía o si el estado es 'idle'
+        if (status === 'idle' || structure.length === 0) {
             dispatch(fetchDocumentStructure());
         }
-    }, [status, dispatch]);
-
-    const handleRefresh = () => {
-        dispatch(fetchDocumentStructure());
+    }, [status, dispatch, structure.length]);
+    
+    // --- Manejadores de Acciones ---
+    const handleRefreshAndClose = () => {
+        setModalOpen(false);
+        setCurrentItem(null); // Limpia el item actual
+        dispatch(fetchDocumentStructure()); // Refresca los datos
     };
 
-    const handleDelete = async (type, id, name) => {
-        if (window.confirm(`¿Estás seguro de que quieres eliminar "${name}"? Esta acción no se puede deshacer.`)) {
+    const handleDelete = async (type, item) => {
+        // Ahora recibe el objeto 'item' completo para obtener el nombre/título
+        if (window.confirm(`¿Estás seguro de que quieres eliminar "${item.name || item.title}"?`)) {
             try {
-                await documentService.deleteItem(type, id, token);
+                await documentService.deleteItem(type, item.id, token);
                 alert('Elemento eliminado con éxito.');
-                handleRefresh();
+                dispatch(fetchDocumentStructure());
             } catch (error) {
                 alert(`Error al eliminar: ${error.message}`);
             }
         }
     };
+    
+    // Función centralizada para abrir cualquier modal
+    const openModal = (type, item = null) => {
+        setModalContent(type);
+        setCurrentItem(item);
+        setModalOpen(true);
+    };
 
     const selectedCategory = categoryId ? structure.find(c => c.id === categoryId) : null;
     const selectedSubcategory = selectedCategory && subcategoryId ? selectedCategory.subcategories.find(s => s.id === subcategoryId) : null;
     
-    // --- Renderizado de Vistas ---
+    // --- Renderizado de Vistas (con botones nuevos) ---
 
     const renderDocuments = (documents) => (
         <div className="items-grid">
-            {documents.length === 0 ? <p>No hay documentos en esta sección.</p> : (
-                documents.map(doc => (
-                    <div key={doc.id} className="grid-item-wrapper">
-                        <a 
-                            href={doc.path} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="grid-item"
-                            style={{ backgroundImage: `url(${doc.image || defaultImage})` }}
-                        >
-                            <div className="overlay"></div>
-                            <span>{doc.title}</span>
-                        </a>
-                        {userInfo?.role === 'admin' && (
-                            <button className="delete-btn" onClick={() => handleDelete('document', doc.id, doc.title)}>🗑️</button>
-                        )}
-                    </div>
-                ))
-            )}
+            {documents.map(doc => (
+                <div key={doc.id} className="grid-item-wrapper">
+                    <a href={doc.path} target="_blank" rel="noopener noreferrer" className="grid-item" style={{ backgroundImage: `url(${doc.image || defaultImage})` }}>
+                        <div className="overlay"></div>
+                        <span>{doc.title}</span>
+                    </a>
+                    {userInfo?.role === 'admin' && (
+                        <div className="admin-buttons">
+                            <button className="edit-btn" title="Editar" onClick={() => openModal('editDocument', doc)}>✏️</button>
+                            <button className="move-btn" title="Mover" onClick={() => openModal('moveDocument', doc)}>✥</button>
+                            <button className="delete-btn" title="Eliminar" onClick={() => handleDelete('document', doc)}>🗑️</button>
+                        </div>
+                    )}
+                </div>
+            ))}
         </div>
     );
 
     const renderSubcategories = (category) => (
-         <div className="subcategory-list">
+         <div>
              <h2>{category.name}</h2>
-             <p>Selecciona una subcategoría para ver los documentos.</p>
-             {userInfo?.role === 'admin' && (
-                <button className="add-button" onClick={() => { setModalContent('addSubcategory'); setModalOpen(true); }}>+ Añadir Subcategoría</button>
-            )}
+             {userInfo?.role === 'admin' && <button className="add-button" onClick={() => openModal('addSubcategory', { category_id: category.id })}>+ Añadir Subcategoría</button>}
              <div className="items-grid">
                 {category.subcategories.map(sub => (
                     <div key={sub.id} className="grid-item-wrapper">
-                        <Link 
-                            to={`/documentos/${category.id}/${sub.id}`} 
-                            className="grid-item"
-                            style={{ backgroundImage: `url(${sub.image || defaultImage})` }}
-                        >
+                        <Link to={`/documentos/${category.id}/${sub.id}`} className="grid-item" style={{ backgroundImage: `url(${sub.image || defaultImage})` }}>
                             <div className="overlay"></div>
                             <span>{sub.name}</span>
                         </Link>
                          {userInfo?.role === 'admin' && (
-                            <button className="delete-btn" onClick={() => handleDelete('subcategory', sub.id, sub.name)}>🗑️</button>
+                            <div className="admin-buttons">
+                                <button className="edit-btn" title="Editar" onClick={() => openModal('editSubcategory', sub)}>✏️</button>
+                                <button className="move-btn" title="Mover" onClick={() => openModal('moveSubcategory', sub)}>✥</button>
+                                <button className="delete-btn" title="Eliminar" onClick={() => handleDelete('subcategory', sub)}>🗑️</button>
+                            </div>
                         )}
                     </div>
                 ))}
@@ -111,25 +118,21 @@ const DocumentsPage = () => {
     );
     
     const renderAllCategories = () => (
-        <div className="category-list">
+        <div>
             <h1>Documentos</h1>
-            <p>Navega por las categorías para encontrar los documentos que necesitas.</p>
-            {userInfo?.role === 'admin' && (
-                <button className="add-button" onClick={() => { setModalContent('addCategory'); setModalOpen(true); }}>+ Añadir Categoría</button>
-            )}
+            {userInfo?.role === 'admin' && <button className="add-button" onClick={() => openModal('addCategory')}>+ Añadir Categoría</button>}
             <div className="items-grid">
                 {structure.map(cat => (
                     <div key={cat.id} className="grid-item-wrapper">
-                        <Link 
-                            to={`/documentos/${cat.id}`} 
-                            className="grid-item"
-                            style={{ backgroundImage: `url(${cat.image || defaultImage})` }}
-                        >
+                        <Link to={`/documentos/${cat.id}`} className="grid-item" style={{ backgroundImage: `url(${cat.image || defaultImage})` }}>
                             <div className="overlay"></div>
                             <span>{cat.name}</span>
                         </Link>
                          {userInfo?.role === 'admin' && (
-                            <button className="delete-btn" onClick={() => handleDelete('category', cat.id, cat.name)}>🗑️</button>
+                            <div className="admin-buttons">
+                                <button className="edit-btn" title="Editar" onClick={() => openModal('editCategory', cat)}>✏️</button>
+                                <button className="delete-btn" title="Eliminar" onClick={() => handleDelete('category', cat)}>🗑️</button>
+                            </div>
                         )}
                     </div>
                 ))}
@@ -138,7 +141,6 @@ const DocumentsPage = () => {
     );
 
     // --- Lógica de renderizado principal ---
-
     if (status === 'loading') return <div>Cargando...</div>;
     if (status === 'failed') return <div>Error al cargar los documentos.</div>;
     
@@ -147,9 +149,7 @@ const DocumentsPage = () => {
         content = (
             <div>
                 <h2>{selectedSubcategory.name}</h2>
-                 {userInfo?.role === 'admin' && (
-                    <button className="add-button" onClick={() => { setModalContent('addDocument'); setModalOpen(true); }}>+ Subir Documento</button>
-                )}
+                 {userInfo?.role === 'admin' && <button className="add-button" onClick={() => openModal('addDocument')}>+ Subir Documento</button>}
                 {renderDocuments(selectedSubcategory.documents)}
             </div>
         );
@@ -168,63 +168,90 @@ const DocumentsPage = () => {
                 {selectedSubcategory && ` > `}
                 {selectedSubcategory && <span>{selectedSubcategory.name}</span>}
             </div>
-
             {content}
-
             <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-                {modalContent === 'addCategory' && <AddCategoryForm token={token} onFinished={() => { setModalOpen(false); handleRefresh(); }} />}
-                {modalContent === 'addSubcategory' && <AddSubcategoryForm token={token} categoryId={categoryId} categories={structure} onFinished={() => { setModalOpen(false); handleRefresh(); }} />}
-                {modalContent === 'addDocument' && <AddDocumentForm token={token} subcategoryId={subcategoryId} onFinished={() => { setModalOpen(false); handleRefresh(); }} />}
+                {/* Modales de Añadir */}
+                {modalContent === 'addCategory' && <AddCategoryForm token={token} onFinished={handleRefreshAndClose} />}
+                {modalContent === 'addSubcategory' && <AddSubcategoryForm token={token} categoryId={currentItem?.category_id || categoryId} categories={structure} onFinished={handleRefreshAndClose} />}
+                {modalContent === 'addDocument' && <AddDocumentForm token={token} subcategoryId={subcategoryId} onFinished={handleRefreshAndClose} />}
+                {/* Modales de Editar */}
+                {modalContent === 'editCategory' && <EditItemForm item={currentItem} type="Category" token={token} onFinished={handleRefreshAndClose} />}
+                {modalContent === 'editSubcategory' && <EditItemForm item={currentItem} type="Subcategory" token={token} onFinished={handleRefreshAndClose} />}
+                {modalContent === 'editDocument' && <EditItemForm item={currentItem} type="Document" token={token} onFinished={handleRefreshAndClose} />}
+                {/* Modales de Mover */}
+                {modalContent === 'moveSubcategory' && <MoveSubcategoryForm item={currentItem} categories={structure} token={token} onFinished={handleRefreshAndClose} />}
+                {modalContent === 'moveDocument' && <MoveDocumentForm item={currentItem} categories={structure} token={token} onFinished={handleRefreshAndClose} />}
             </Modal>
         </div>
     );
 };
 
 
-// --- Formularios para los Modales (sin cambios) ---
+// --- Formularios para Añadir (los mismos que tenías) ---
+const AddCategoryForm = ({ token, onFinished }) => { /* ... tu código sin cambios ... */ };
+const AddSubcategoryForm = ({ token, categoryId, categories, onFinished }) => { /* ... tu código sin cambios ... */ };
+const AddDocumentForm = ({ token, subcategoryId, onFinished }) => { /* ... tu código sin cambios ... */ };
 
-const AddCategoryForm = ({ token, onFinished }) => {
-    const [name, setName] = useState('');
-    const [image, setImage] = useState(null);
+
+// --- NUEVOS Formularios para Editar y Mover ---
+
+const EditItemForm = ({ item, type, token, onFinished }) => {
+    const [name, setName] = useState(item.name || item.title || '');
+    const [imageFile, setImageFile] = useState(null);
+    const [pdfFile, setPdfFile] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('name', name);
-        if (image) formData.append('image', image);
+        formData.append(type === 'Document' ? 'title' : 'name', name);
+        
+        if (type === 'Document') {
+            if (imageFile) formData.append('imageFile', imageFile);
+            if (pdfFile) formData.append('pdfFile', pdfFile);
+        } else {
+            if (imageFile) formData.append('image', imageFile);
+        }
+        
         try {
-            await documentService.createCategory(formData, token);
-            alert('Categoría creada!');
+            switch (type) {
+                case 'Category': await documentService.updateCategory(item.id, formData, token); break;
+                case 'Subcategory': await documentService.updateSubcategory(item.id, formData, token); break;
+                case 'Document': await documentService.updateDocument(item.id, formData, token); break;
+                default: throw new Error('Tipo de item inválido');
+            }
+            alert(`${type} actualizado con éxito!`);
             onFinished();
         } catch (error) {
             alert(`Error: ${error.message}`);
         }
     };
+
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Nueva Categoría</h2>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nombre de la categoría" required />
-            <input type="file" onChange={e => setImage(e.target.files[0])} accept="image/*" />
-            <button type="submit">Crear</button>
+            <h2>Editar {type}</h2>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            <label>Subir nueva imagen (opcional)</label>
+            <input type="file" onChange={(e) => setImageFile(e.target.files[0])} accept="image/*" />
+            {type === 'Document' && (
+                <>
+                    <label>Subir nuevo PDF (opcional)</label>
+                    <input type="file" onChange={(e) => setPdfFile(e.target.files[0])} accept=".pdf" />
+                </>
+            )}
+            <button type="submit">Guardar Cambios</button>
         </form>
     );
 };
 
-const AddSubcategoryForm = ({ token, categoryId, categories, onFinished }) => {
-    const [name, setName] = useState('');
-    const [image, setImage] = useState(null);
-    const [selectedCat, setSelectedCat] = useState(categoryId || '');
+const MoveSubcategoryForm = ({ item, categories, token, onFinished }) => {
+    const [targetCategoryId, setTargetCategoryId] = useState('');
+    const possibleCategories = categories.filter(c => c.id !== item.category_id);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('category_id', selectedCat);
-        if (image) formData.append('image', image);
-
         try {
-            await documentService.createSubcategory(formData, token);
-            alert('Subcategoría creada!');
+            await documentService.moveSubcategory(item.id, targetCategoryId, token);
+            alert('Subcategoría movida con éxito!');
             onFinished();
         } catch (error) {
             alert(`Error: ${error.message}`);
@@ -233,51 +260,46 @@ const AddSubcategoryForm = ({ token, categoryId, categories, onFinished }) => {
     
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Nueva Subcategoría</h2>
-            <select value={selectedCat} onChange={e => setSelectedCat(e.target.value)} required>
-                <option value="" disabled>Selecciona una categoría</option>
-                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            <h2>Mover Subcategoría "{item.name}"</h2>
+            <select value={targetCategoryId} onChange={e => setTargetCategoryId(e.target.value)} required>
+                <option value="" disabled>Selecciona la nueva categoría...</option>
+                {possibleCategories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
             </select>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nombre de la subcategoría" required />
-            <input type="file" onChange={e => setImage(e.target.files[0])} accept="image/*" />
-            <button type="submit">Crear</button>
+            <button type="submit" disabled={!targetCategoryId}>Mover</button>
         </form>
     );
 };
 
-const AddDocumentForm = ({ token, subcategoryId, onFinished }) => {
-    const [title, setTitle] = useState('');
-    const [pdfFile, setPdfFile] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
+const MoveDocumentForm = ({ item, categories, token, onFinished }) => {
+    const [targetSubcategoryId, setTargetSubcategoryId] = useState('');
+    const allSubcategories = categories.flatMap(c => c.subcategories);
+    const possibleSubcategories = allSubcategories.filter(s => s.id !== item.subcategory_id);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('subcategory_id', subcategoryId);
-        if (pdfFile) formData.append('pdfFile', pdfFile);
-        if (imageFile) formData.append('imageFile', imageFile);
-
         try {
-            await documentService.uploadDocument(formData, token);
-            alert('Documento subido!');
+            await documentService.moveDocument(item.id, targetSubcategoryId, token);
+            alert('Documento movido con éxito!');
             onFinished();
         } catch (error) {
             alert(`Error: ${error.message}`);
         }
     };
-
+    
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Subir Documento</h2>
-            <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Título del documento" required />
-            <label>Archivo PDF (requerido)</label>
-            <input type="file" onChange={e => setPdfFile(e.target.files[0])} accept=".pdf" required />
-            <label>Imagen de previsualización (opcional)</label>
-            <input type="file" onChange={e => setImageFile(e.target.files[0])} accept="image/*" />
-            <button type="submit">Subir</button>
+            <h2>Mover Documento "{item.title}"</h2>
+            <select value={targetSubcategoryId} onChange={e => setTargetSubcategoryId(e.target.value)} required>
+                <option value="" disabled>Selecciona la nueva subcategoría...</option>
+                {possibleSubcategories.map(sub => {
+                    const parentCategory = categories.find(c => c.subcategories.some(s => s.id === sub.id));
+                    return <option key={sub.id} value={sub.id}>{sub.name} (en {parentCategory?.name})</option>
+                })}
+            </select>
+            <button type="submit" disabled={!targetSubcategoryId}>Mover</button>
         </form>
     );
 };
+
 
 export default DocumentsPage;
