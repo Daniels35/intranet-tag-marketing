@@ -8,6 +8,12 @@ import * as documentService from '../../services/documentService';
 import './DocumentsPage.css';
 import defaultImage from '../../assets/defaultDocumentImage.png';
 
+// --- NUEVO: Constantes para los límites de tamaño de archivo ---
+const IMAGE_MAX_SIZE_KB = 500;
+const PDF_MAX_SIZE_MB = 5;
+const IMAGE_MAX_SIZE_BYTES = IMAGE_MAX_SIZE_KB * 1024;
+const PDF_MAX_SIZE_BYTES = PDF_MAX_SIZE_MB * 1024 * 1024;
+
 // --- Componente Modal (sin cambios) ---
 const Modal = ({ children, isOpen, onClose }) => {
     if (!isOpen) return null;
@@ -21,6 +27,29 @@ const Modal = ({ children, isOpen, onClose }) => {
     );
 };
 
+// --- NUEVO: Componente Modal específico para la ayuda de imágenes ---
+const ImageHelperModal = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <h2>Imagen Demasiado Grande</h2>
+            <p>La imagen que seleccionaste supera el límite de {IMAGE_MAX_SIZE_KB}KB.</p>
+            <p>Para solucionarlo, puedes usar estas herramientas gratuitas en línea:</p>
+            <div className="helper-links">
+                <a href="https://www.iloveimg.com/es/redimensionar-imagen" target="_blank" rel="noopener noreferrer">
+                    <strong>1. Redimensionar la imagen</strong>
+                    <span>(Recomendado: 500x500 píxeles)</span>
+                </a>
+                <a href="https://www.iloveimg.com/es/comprimir-imagen" target="_blank" rel="noopener noreferrer">
+                    <strong>2. Comprimir la imagen</strong>
+                    <span>(Para reducir el peso sin cambiar el tamaño)</span>
+                </a>
+            </div>
+            <button onClick={onClose} className="close-helper-button">Entendido</button>
+        </Modal>
+    );
+};
+
 
 // --- Componente Principal ---
 const DocumentsPage = () => {
@@ -29,27 +58,23 @@ const DocumentsPage = () => {
     const { userInfo, token } = useSelector((state) => state.user);
     const { structure, status } = useSelector((state) => state.documents);
 
-    // --- Estados para Modales (ACTUALIZADO) ---
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState(null);
-    const [currentItem, setCurrentItem] = useState(null); // Almacena el item para editar/mover
+    const [currentItem, setCurrentItem] = useState(null);
 
     useEffect(() => {
-        // Carga la estructura si está vacía o si el estado es 'idle'
         if (status === 'idle' || structure.length === 0) {
             dispatch(fetchDocumentStructure());
         }
     }, [status, dispatch, structure.length]);
     
-    // --- Manejadores de Acciones ---
     const handleRefreshAndClose = () => {
         setModalOpen(false);
-        setCurrentItem(null); // Limpia el item actual
-        dispatch(fetchDocumentStructure()); // Refresca los datos
+        setCurrentItem(null);
+        dispatch(fetchDocumentStructure());
     };
 
     const handleDelete = async (type, item) => {
-        // Ahora recibe el objeto 'item' completo para obtener el nombre/título
         if (window.confirm(`¿Estás seguro de que quieres eliminar "${item.name || item.title}"?`)) {
             try {
                 await documentService.deleteItem(type, item.id, token);
@@ -61,7 +86,6 @@ const DocumentsPage = () => {
         }
     };
     
-    // Función centralizada para abrir cualquier modal
     const openModal = (type, item = null) => {
         setModalContent(type);
         setCurrentItem(item);
@@ -71,8 +95,6 @@ const DocumentsPage = () => {
     const selectedCategory = categoryId ? structure.find(c => c.id === categoryId) : null;
     const selectedSubcategory = selectedCategory && subcategoryId ? selectedCategory.subcategories.find(s => s.id === subcategoryId) : null;
     
-    // --- Renderizado de Vistas (con botones nuevos) ---
-
     const renderDocuments = (documents) => (
         <div className="items-grid">
             {documents.map(doc => (
@@ -140,7 +162,6 @@ const DocumentsPage = () => {
         </div>
     );
 
-    // --- Lógica de renderizado principal ---
     if (status === 'loading') return <div>Cargando...</div>;
     if (status === 'failed') return <div>Error al cargar los documentos.</div>;
     
@@ -170,15 +191,12 @@ const DocumentsPage = () => {
             </div>
             {content}
             <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-                {/* Modales de Añadir */}
                 {modalContent === 'addCategory' && <AddCategoryForm token={token} onFinished={handleRefreshAndClose} />}
                 {modalContent === 'addSubcategory' && <AddSubcategoryForm token={token} categoryId={currentItem?.category_id || categoryId} categories={structure} onFinished={handleRefreshAndClose} />}
                 {modalContent === 'addDocument' && <AddDocumentForm token={token} subcategoryId={subcategoryId} onFinished={handleRefreshAndClose} />}
-                {/* Modales de Editar */}
                 {modalContent === 'editCategory' && <EditItemForm item={currentItem} type="Category" token={token} onFinished={handleRefreshAndClose} />}
                 {modalContent === 'editSubcategory' && <EditItemForm item={currentItem} type="Subcategory" token={token} onFinished={handleRefreshAndClose} />}
                 {modalContent === 'editDocument' && <EditItemForm item={currentItem} type="Document" token={token} onFinished={handleRefreshAndClose} />}
-                {/* Modales de Mover */}
                 {modalContent === 'moveSubcategory' && <MoveSubcategoryForm item={currentItem} categories={structure} token={token} onFinished={handleRefreshAndClose} />}
                 {modalContent === 'moveDocument' && <MoveDocumentForm item={currentItem} categories={structure} token={token} onFinished={handleRefreshAndClose} />}
             </Modal>
@@ -187,18 +205,193 @@ const DocumentsPage = () => {
 };
 
 
-// --- Formularios para Añadir (los mismos que tenías) ---
-const AddCategoryForm = ({ token, onFinished }) => { /* ... tu código sin cambios ... */ };
-const AddSubcategoryForm = ({ token, categoryId, categories, onFinished }) => { /* ... tu código sin cambios ... */ };
-const AddDocumentForm = ({ token, subcategoryId, onFinished }) => { /* ... tu código sin cambios ... */ };
+// --- Formularios para Añadir ---
+const AddCategoryForm = ({ token, onFinished }) => {
+    const [name, setName] = useState('');
+    const [image, setImage] = useState(null);
+    const [showImageHelper, setShowImageHelper] = useState(false);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > IMAGE_MAX_SIZE_BYTES) {
+            setShowImageHelper(true);
+            e.target.value = null;
+            return;
+        }
+        setImage(file);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', name);
+        if (image) formData.append('image', image);
+        try {
+            await documentService.createCategory(formData, token);
+            alert('Categoría creada!');
+            onFinished();
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    };
+    
+    return (
+        <>
+            <form onSubmit={handleSubmit}>
+                <h2>Nueva Categoría</h2>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nombre de la categoría" required />
+                <label>Imagen (opcional, máx. {IMAGE_MAX_SIZE_KB}KB)</label>
+                <input type="file" onChange={handleImageChange} accept="image/*" />
+                <button type="submit">Crear</button>
+            </form>
+            <ImageHelperModal isOpen={showImageHelper} onClose={() => setShowImageHelper(false)} />
+        </>
+    );
+};
+
+const AddSubcategoryForm = ({ token, categoryId, categories, onFinished }) => {
+    const [name, setName] = useState('');
+    const [image, setImage] = useState(null);
+    const [selectedCat, setSelectedCat] = useState(categoryId || '');
+    const [showImageHelper, setShowImageHelper] = useState(false);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > IMAGE_MAX_SIZE_BYTES) {
+            setShowImageHelper(true);
+            e.target.value = null;
+            return;
+        }
+        setImage(file);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('category_id', selectedCat);
+        if (image) formData.append('image', image);
+
+        try {
+            await documentService.createSubcategory(formData, token);
+            alert('Subcategoría creada!');
+            onFinished();
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    };
+    
+    return (
+        <>
+            <form onSubmit={handleSubmit}>
+                <h2>Nueva Subcategoría</h2>
+                <select value={selectedCat} onChange={e => setSelectedCat(e.target.value)} required>
+                    <option value="" disabled>Selecciona una categoría</option>
+                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </select>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nombre de la subcategoría" required />
+                <label>Imagen (opcional, máx. {IMAGE_MAX_SIZE_KB}KB)</label>
+                <input type="file" onChange={handleImageChange} accept="image/*" />
+                <button type="submit">Crear</button>
+            </form>
+            <ImageHelperModal isOpen={showImageHelper} onClose={() => setShowImageHelper(false)} />
+        </>
+    );
+};
+
+const AddDocumentForm = ({ token, subcategoryId, onFinished }) => {
+    const [title, setTitle] = useState('');
+    const [pdfFile, setPdfFile] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [showImageHelper, setShowImageHelper] = useState(false);
+
+    const handlePdfChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > PDF_MAX_SIZE_BYTES) {
+            alert(`El archivo PDF es demasiado grande. El máximo permitido es ${PDF_MAX_SIZE_MB}MB.`);
+            e.target.value = null;
+            return;
+        }
+        setPdfFile(file);
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > IMAGE_MAX_SIZE_BYTES) {
+            setShowImageHelper(true);
+            e.target.value = null;
+            return;
+        }
+        setImageFile(file);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('subcategory_id', subcategoryId);
+        if (pdfFile) formData.append('pdfFile', pdfFile);
+        if (imageFile) formData.append('imageFile', imageFile);
+
+        try {
+            await documentService.uploadDocument(formData, token);
+            alert('Documento subido!');
+            onFinished();
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    };
+
+    return (
+        <>
+            <form onSubmit={handleSubmit}>
+                <h2>Subir Documento</h2>
+                <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Título del documento" required />
+                <label>Archivo PDF (requerido, máx. {PDF_MAX_SIZE_MB}MB)</label>
+                <input type="file" onChange={handlePdfChange} accept=".pdf" required />
+                <label>Imagen de previsualización (opcional, máx. {IMAGE_MAX_SIZE_KB}KB)</label>
+                <input type="file" onChange={handleImageChange} accept="image/*" />
+                <button type="submit">Subir</button>
+            </form>
+            <ImageHelperModal isOpen={showImageHelper} onClose={() => setShowImageHelper(false)} />
+        </>
+    );
+};
 
 
-// --- NUEVOS Formularios para Editar y Mover ---
+// --- Formularios para Editar y Mover ---
 
 const EditItemForm = ({ item, type, token, onFinished }) => {
     const [name, setName] = useState(item.name || item.title || '');
     const [imageFile, setImageFile] = useState(null);
     const [pdfFile, setPdfFile] = useState(null);
+    const [showImageHelper, setShowImageHelper] = useState(false);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > IMAGE_MAX_SIZE_BYTES) {
+            setShowImageHelper(true);
+            e.target.value = null;
+            return;
+        }
+        setImageFile(file);
+    };
+
+    const handlePdfChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > PDF_MAX_SIZE_BYTES) {
+            alert(`El archivo PDF es demasiado grande. El máximo permitido es ${PDF_MAX_SIZE_MB}MB.`);
+            e.target.value = null;
+            return;
+        }
+        setPdfFile(file);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -227,19 +420,22 @@ const EditItemForm = ({ item, type, token, onFinished }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Editar {type}</h2>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-            <label>Subir nueva imagen (opcional)</label>
-            <input type="file" onChange={(e) => setImageFile(e.target.files[0])} accept="image/*" />
-            {type === 'Document' && (
-                <>
-                    <label>Subir nuevo PDF (opcional)</label>
-                    <input type="file" onChange={(e) => setPdfFile(e.target.files[0])} accept=".pdf" />
-                </>
-            )}
-            <button type="submit">Guardar Cambios</button>
-        </form>
+        <>
+            <form onSubmit={handleSubmit}>
+                <h2>Editar {type}</h2>
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                <label>Subir nueva imagen (opcional, máx. {IMAGE_MAX_SIZE_KB}KB)</label>
+                <input type="file" onChange={handleImageChange} accept="image/*" />
+                {type === 'Document' && (
+                    <>
+                        <label>Subir nuevo PDF (opcional, máx. {PDF_MAX_SIZE_MB}MB)</label>
+                        <input type="file" onChange={handlePdfChange} accept=".pdf" />
+                    </>
+                )}
+                <button type="submit">Guardar Cambios</button>
+            </form>
+            <ImageHelperModal isOpen={showImageHelper} onClose={() => setShowImageHelper(false)} />
+        </>
     );
 };
 
@@ -300,6 +496,5 @@ const MoveDocumentForm = ({ item, categories, token, onFinished }) => {
         </form>
     );
 };
-
 
 export default DocumentsPage;

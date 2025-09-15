@@ -239,3 +239,49 @@
     height: auto;
     font-size: 1.2rem;
 }
+
+.helper-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.helper-links a {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.helper-links a:hover {
+    background-color: #f7f7f7;
+    border-color: #007bff;
+}
+
+.helper-links a strong {
+    font-size: 1.1rem;
+    color: #007bff;
+    margin-bottom: 0.25rem;
+}
+
+.helper-links a span {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.close-helper-button {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
