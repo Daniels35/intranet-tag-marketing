@@ -66,6 +66,38 @@ exports.deleteCategory = async (req, res) => {
     }
 };
 
+// NUEVO: Actualizar Categoría
+exports.updateCategory = async (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+    const updateData = {};
+
+    if (name) updateData.name = name;
+
+    try {
+        const category = await DocumentsModel.findCategoryById(id);
+        if (!category) return res.status(404).json({ error: 'Categoría no encontrada' });
+
+        if (req.file) {
+            deleteFileFromServer(category.image_url); // Borra la imagen vieja si existe
+            updateData.image_url = `${getBaseUrl(req)}/uploads/images/${req.file.filename}`;
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: 'No se proporcionaron datos para actualizar' });
+        }
+
+        await DocumentsModel.updateCategory(id, updateData);
+        res.json({ message: 'Categoría actualizada con éxito' });
+    } catch (err) {
+        if (req.file) deleteFileFromServer(updateData.image_url); // Rollback del archivo nuevo
+        res.status(500).json({ error: 'Error al actualizar la categoría' });
+    }
+};
+
+
+
+
 // --- SUBCATEGORIES ---
 exports.createSubcategory = async (req, res) => {
   const { name, category_id } = req.body;
@@ -101,6 +133,61 @@ exports.deleteSubcategory = async (req, res) => {
         res.status(500).json({ error: 'Error al eliminar la subcategoría' });
     }
 };
+
+
+// NUEVO: Actualizar Subcategoría
+exports.updateSubcategory = async (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+    const updateData = {};
+
+    if (name) updateData.name = name;
+
+    try {
+        const subcategory = await DocumentsModel.findSubcategoryById(id);
+        if (!subcategory) return res.status(404).json({ error: 'Subcategoría no encontrada' });
+        
+        if (req.file) {
+            deleteFileFromServer(subcategory.image_url);
+            updateData.image_url = `${getBaseUrl(req)}/uploads/images/${req.file.filename}`;
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: 'No se proporcionaron datos para actualizar' });
+        }
+        
+        await DocumentsModel.updateSubcategory(id, updateData);
+        res.json({ message: 'Subcategoría actualizada con éxito' });
+    } catch (err) {
+        if (req.file) deleteFileFromServer(updateData.image_url);
+        res.status(500).json({ error: 'Error al actualizar la subcategoría' });
+    }
+};
+
+
+
+// NUEVO: Mover Subcategoría
+exports.moveSubcategory = async (req, res) => {
+    const { id } = req.params; // ID de la subcategoría a mover
+    const { newCategoryId } = req.body;
+
+    if (!newCategoryId) {
+        return res.status(400).json({ error: 'El ID de la nueva categoría es requerido' });
+    }
+
+    try {
+        const affectedRows = await DocumentsModel.moveSubcategory(id, newCategoryId);
+        if (affectedRows === 0) {
+            return res.status(404).json({ error: 'Subcategoría no encontrada' });
+        }
+        res.json({ message: 'Subcategoría movida con éxito' });
+    } catch (err) {
+        // Puede fallar si newCategoryId no existe (error de foreign key)
+        res.status(500).json({ error: 'Error al mover la subcategoría' });
+    }
+};
+
+
 
 // --- DOCUMENTS ---
 exports.uploadDocument = async (req, res) => {
@@ -167,5 +254,45 @@ exports.moveDocument = async (req, res) => {
         res.json({ message: "Documento movido con éxito" });
     } catch (err) {
         res.status(500).json({ error: "Error al mover el documento" });
+    }
+};
+
+
+// NUEVO: Actualizar Documento
+exports.updateDocument = async (req, res) => {
+    const { id } = req.params;
+    const { title } = req.body;
+    const updateData = {};
+    const files = req.files;
+
+    if (title) updateData.title = title;
+
+    try {
+        const document = await DocumentsModel.findDocumentById(id);
+        if (!document) return res.status(404).json({ error: 'Documento no encontrado' });
+
+        if (files && files.pdfFile) {
+            deleteFileFromServer(document.file_path);
+            updateData.file_path = `${getBaseUrl(req)}/uploads/documents/${files.pdfFile[0].filename}`;
+            updateData.original_filename = files.pdfFile[0].originalname;
+            updateData.mime_type = files.pdfFile[0].mimetype;
+        }
+
+        if (files && files.imageFile) {
+            deleteFileFromServer(document.image_url);
+            updateData.image_url = `${getBaseUrl(req)}/uploads/images/${files.imageFile[0].filename}`;
+        }
+
+        if (Object.keys(updateData).length === 0) {
+             return res.status(400).json({ error: 'No se proporcionaron datos para actualizar' });
+        }
+
+        await DocumentsModel.updateDocument(id, updateData);
+        res.json({ message: 'Documento actualizado con éxito' });
+
+    } catch (err) {
+        if (updateData.file_path) deleteFileFromServer(updateData.file_path);
+        if (updateData.image_url) deleteFileFromServer(updateData.image_url);
+        res.status(500).json({ error: 'Error al actualizar el documento' });
     }
 };

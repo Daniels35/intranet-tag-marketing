@@ -46,6 +46,12 @@ DocumentsModel.deleteCategory = async (id) => {
     return result.affectedRows;
 };
 
+// NUEVO: Actualizar una categoría
+DocumentsModel.updateCategory = async (id, categoryData) => {
+  const [result] = await db.query('UPDATE document_categories SET ? WHERE id = ?', [categoryData, id]);
+  return result.affectedRows;
+};
+
 // --- SUBCATEGORIES ---
 DocumentsModel.createSubcategory = async (subcategoryData) => {
   subcategoryData.id = uuidv4();
@@ -63,6 +69,18 @@ DocumentsModel.deleteSubcategory = async (id) => {
     return result.affectedRows;
 };
 
+// NUEVO: Actualizar una subcategoría
+DocumentsModel.updateSubcategory = async (id, subcategoryData) => {
+    const [result] = await db.query('UPDATE document_subcategories SET ? WHERE id = ?', [subcategoryData, id]);
+    return result.affectedRows;
+};
+
+
+// NUEVO: Mover una subcategoría a otra categoría
+DocumentsModel.moveSubcategory = async (subcategoryId, newCategoryId) => {
+    const [result] = await db.query('UPDATE document_subcategories SET category_id = ? WHERE id = ?', [newCategoryId, subcategoryId]);
+    return result.affectedRows;
+};
 
 // --- DOCUMENTS ---
 DocumentsModel.createDocument = async (documentData) => {
@@ -87,6 +105,12 @@ DocumentsModel.moveDocument = async (documentId, newSubcategoryId) => {
     return result.affectedRows;
 };
 
+
+// NUEVO: Actualizar un documento
+DocumentsModel.updateDocument = async (id, documentData) => {
+    const [result] = await db.query('UPDATE documents SET ? WHERE id = ?', [documentData, id]);
+    return result.affectedRows;
+};
 
 // --- OBTENER ESTRUCTURA COMPLETA ---
 DocumentsModel.getStructure = async () => {
