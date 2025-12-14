@@ -3,7 +3,7 @@ const mysql = require('mysql2/promise');
 
 const db = mysql.createPool({
   host: 'localhost',
-  port: 3307, // Descomenta y ajusta si es necesario
+  port: 3306, // Descomenta y ajusta si es necesario
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE
