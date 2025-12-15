@@ -32,20 +32,33 @@ El proyecto utiliza una arquitectura **MERN** separada en cliente y servidor:
 
 ## ⚙️ Configuración de Variables de Entorno
 
-Para ejecutar el proyecto, es necesario configurar las variables de entorno en ambos directorios (`server` y `client`).
+Es necesario crear un archivo `.env` tanto en el directorio del servidor como en el del cliente.
 
-### 1. Backend (`/server/.env`)
-Crea un archivo `.env` en la raíz de la carpeta `server` con las siguientes credenciales:
+### 🖥️ Server (`/server/.env`)
 
 ```env
-# Base de Datos (MongoDB)
-DB_USER=tu_usuario_mongo
-DB_PASSWORD=tu_contraseña_mongo
-DB_DATABASE=nombre_base_de_datos
-JWT_SECRET=tu_secreto_jwt_seguro
+# Base de Datos y Seguridad
+DB_USER=
+DB_PASSWORD=
+DB_DATABASE=
+JWT_SECRET=
 
 # Configuración SMTP (Correos)
-SMTP_HOST=smtp.ejemplo.com
-SMTP_PORT=465
-SMTP_USER=tu_correo@dominio.com
-SMTP_PASS=tu_contraseña_smtp
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASS=
+
+### 🖥️ Client (/client/.env)
+
+
+# Firebase Configuration
+REACT_APP_FIREBASE_API_KEY=
+REACT_APP_FIREBASE_AUTH_DOMAIN=
+REACT_APP_FIREBASE_PROJECT_ID=
+REACT_APP_FIREBASE_STORAGE_BUCKET=
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=
+REACT_APP_FIREBASE_APP_ID=
+
+# API Connection
+REACT_APP_API_URL=
