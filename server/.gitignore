@@ -13,3 +13,14 @@ Thumbs.db
 !/uploads/.gitignore
 # Ignorar archivos de entorno (.env)
 .env
+
+# --- Seguridad / Credenciales ---
+# Bloquear cualquier archivo JSON de Firebase Admin SDK en cualquier carpeta
+**/*firebase-adminsdk-*.json
+
+# Bloquear archivos JSON específicos en la carpeta server (por si acaso cambia el nombre)
+server/*.json
+
+# Excepciones: Permitir package.json y package-lock.json en server (¡IMPORTANTE!)
+!server/package.json
+!server/package-lock.json
