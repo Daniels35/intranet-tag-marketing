@@ -1,3 +1,33 @@
+# 🚀 Intranet Tag Marketing
+
+Plataforma integral de gestión interna para **Tag Marketing**. Este sistema centraliza la administración de usuarios, un sistema de puntos gamificado, gestión documental y herramientas de productividad para el equipo.
+
+## 📋 Características Principales
+
+* **Sistema de Puntos y Canje:** Gestión de items canjeables, historial de transacciones y asignación de puntos.
+* **Gestión de Usuarios:** Administración de perfiles, roles y autenticación segura.
+* **Repositorio Documental:** Carga y visualización centralizada de documentos internos.
+* **Herramientas y Utilidades:** Acceso rápido a herramientas de uso frecuente y generación de códigos QR.
+* **Automatización:** Tareas programadas (Cron Jobs) para recordatorios y mantenimiento.
+* **Notificaciones:** Sistema de envío de correos electrónicos automatizados.
+
+## 🛠️ Stack Tecnológico
+
+**Frontend** (`/client/puntos`)
+* React.js
+* Redux Toolkit (Manejo de estado)
+* Firebase Authentication (Login)
+* CSS Modules
+
+**Backend** (`/server`)
+* Node.js & Express
+* MongoDB & Mongoose
+* Firebase Admin SDK
+* Nodemailer (Servidor SMTP)
+* Node-Cron
+
+## ⚙️ Variables de Entorno
+
 Tanto en el server y en el client necesitamos el archivo .env 
 
 .env en el server tiene 
