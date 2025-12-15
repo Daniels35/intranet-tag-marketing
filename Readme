@@ -1,55 +1,51 @@
 # 🚀 Intranet Tag Marketing
 
-Plataforma integral de gestión interna para **Tag Marketing**. Este sistema centraliza la administración de usuarios, un sistema de puntos gamificado, gestión documental y herramientas de productividad para el equipo.
+**Plataforma integral de gestión interna para Tag Marketing.**
+
+Este sistema centraliza la administración operativa de la empresa, combinando un sistema de gamificación para empleados, gestión documental segura y herramientas de productividad automatizadas. Diseñado para optimizar el flujo de trabajo y fomentar la cultura organizacional.
 
 ## 📋 Características Principales
 
-* **Sistema de Puntos y Canje:** Gestión de items canjeables, historial de transacciones y asignación de puntos.
-* **Gestión de Usuarios:** Administración de perfiles, roles y autenticación segura.
-* **Repositorio Documental:** Carga y visualización centralizada de documentos internos.
-* **Herramientas y Utilidades:** Acceso rápido a herramientas de uso frecuente y generación de códigos QR.
-* **Automatización:** Tareas programadas (Cron Jobs) para recordatorios y mantenimiento.
-* **Notificaciones:** Sistema de envío de correos electrónicos automatizados.
+* **🏆 Sistema de Puntos Gamificado:** Gestión completa de economía interna con asignación de puntos, catálogo de ítems canjeables e historial transaccional por usuario.
+* **👥 Gestión de Usuarios Avanzada:** Administración centralizada de perfiles, roles y permisos con autenticación segura.
+* **📂 Repositorio Documental:** Sistema de carga, almacenamiento y visualización de documentos internos corporativos.
+* **🛠️ Herramientas y Utilidades:** Acceso rápido a recursos de uso frecuente y generador de códigos QR integrado.
+* **🤖 Automatización (Cron Jobs):** Tareas programadas en el servidor para mantenimiento de base de datos y recordatorios automáticos.
+* **📧 Sistema de Notificaciones:** Envío automatizado de correos electrónicos transaccionales y alertas mediante SMTP.
 
 ## 🛠️ Stack Tecnológico
 
-**Frontend** (`/client/puntos`)
-* React.js
-* Redux Toolkit (Manejo de estado)
-* Firebase Authentication (Login)
-* CSS Modules
+El proyecto utiliza una arquitectura **MERN** separada en cliente y servidor:
 
-**Backend** (`/server`)
-* Node.js & Express
-* MongoDB & Mongoose
-* Firebase Admin SDK
-* Nodemailer (Servidor SMTP)
-* Node-Cron
+### Frontend (`/client/puntos`)
+* **Core:** React.js
+* **Estado:** Redux Toolkit
+* **Auth:** Firebase Authentication
+* **Estilos:** CSS Modules
 
-## ⚙️ Variables de Entorno
+### Backend (`/server`)
+* **Runtime:** Node.js & Express
+* **Base de Datos:** MongoDB & Mongoose
+* **Auth & Admin:** Firebase Admin SDK
+* **Email:** Nodemailer (SMTP)
+* **Tareas:** Node-Cron
 
-Tanto en el server y en el client necesitamos el archivo .env 
+## ⚙️ Configuración de Variables de Entorno
 
-.env en el server tiene 
+Para ejecutar el proyecto, es necesario configurar las variables de entorno en ambos directorios (`server` y `client`).
 
-DB_USER=
-DB_PASSWORD=
-DB_DATABASE=
-JWT_SECRET=
+### 1. Backend (`/server/.env`)
+Crea un archivo `.env` en la raíz de la carpeta `server` con las siguientes credenciales:
 
-para los correos tiene
+```env
+# Base de Datos (MongoDB)
+DB_USER=tu_usuario_mongo
+DB_PASSWORD=tu_contraseña_mongo
+DB_DATABASE=nombre_base_de_datos
+JWT_SECRET=tu_secreto_jwt_seguro
 
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASS=
-
-.env en el client tiene
-
-REACT_APP_FIREBASE_API_KEY=
-REACT_APP_FIREBASE_AUTH_DOMAIN=
-REACT_APP_FIREBASE_PROJECT_ID=
-REACT_APP_FIREBASE_STORAGE_BUCKET=
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=
-REACT_APP_FIREBASE_APP_ID=
-REACT_APP_API_URL=
+# Configuración SMTP (Correos)
+SMTP_HOST=smtp.ejemplo.com
+SMTP_PORT=465
+SMTP_USER=tu_correo@dominio.com
+SMTP_PASS=tu_contraseña_smtp
