@@ -38,7 +38,6 @@
     cursor: pointer;
   }
   
-
 /* Contenedor principal modal add points to list */
 .modal-add-points-container {
     background-color: #f9f9f9;
@@ -101,8 +100,6 @@
     text-align: center;
   }
   
-
-
   @media (max-width: 680px) {
     .table-users-list, .table-users-list tbody, .table-users-list th, .table-users-list td, .table-users-list tr {
       display: flex;

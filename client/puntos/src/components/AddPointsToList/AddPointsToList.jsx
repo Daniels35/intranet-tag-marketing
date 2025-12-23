@@ -69,8 +69,6 @@ const AddPointsToList = () => {
     }
   };
   
-  
-
   return (
     <>
       <div className='container-addPoints-list-users'>
