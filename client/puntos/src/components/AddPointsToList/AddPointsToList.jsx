@@ -135,14 +135,13 @@ const AddPointsToList = () => {
       </Modal>
 
       {/* Modal para editar usuario */}
-      {/* Modal para editar usuario */}
       <Modal isVisible={editOpen} onClose={() => setEditOpen(false)}>
         <UsersAdmin
           editing={editing}
           setEditing={setEditing}
           currentUser={selectedUser}
           updateUser={updateUser}
-          refreshUsers={refreshUsers}  // Pasamos la función refreshUsers
+          refreshUsers={refreshUsers}
         />
       </Modal>
     </>
