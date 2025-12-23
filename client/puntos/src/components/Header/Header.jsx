@@ -17,7 +17,6 @@ const Header = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const location = useLocation();
 
-    // Cargar la estructura de documentos al montar el componente
   useEffect(() => {
     if (userInfo) {
       dispatch(fetchDocumentStructure());
@@ -79,7 +78,6 @@ const Header = () => {
                 ))}
               </div>
             </li>
-            {/* --- FIN: NUEVO MENÚ DE DOCUMENTOS --- */}
 
             <li className={`custom-tools-dropdown ${location.pathname.startsWith('/tools') ? 'active' : ''}`}>
               <Link to="/tools" onClick={closeMenu}>Herramientas</Link>
