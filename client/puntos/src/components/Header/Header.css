@@ -139,11 +139,11 @@
 }
 
 .custom-tools-dropdown a {
-  text-decoration: none; /* Evitar subrayado */
+  text-decoration: none; 
 }
 
 .custom-tools-dropdown-content a {
-  text-decoration: none!Important; /* Evitar subrayado */
+  text-decoration: none !Important; 
 }
 
 /* CSS DOCUMENTOS */
@@ -153,7 +153,7 @@
 }
 
 .custom-dropdown-category .category-link {
-  font-weight: bold; /* Opcional: para destacar categorías */
+  font-weight: bold;
 }
 
 .custom-dropdown-subcategory-content {
