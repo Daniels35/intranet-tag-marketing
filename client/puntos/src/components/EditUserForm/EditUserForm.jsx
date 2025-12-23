@@ -60,17 +60,15 @@ const EditUserForm = ({ setEditing, currentUser, updateUser }) => {
         updateMessage += response.data.message + '\n';
       }
 
-      // Refresca la información del usuario después de actualizar
       dispatch(fetchUserInfo());
 
-      // Muestra una alerta con el mensaje de actualización
       if (updateMessage) {
         alert(updateMessage);
       } else {
         alert('No se realizaron cambios.');
       }
 
-      setEditing(false); // Cierra el formulario de edición
+      setEditing(false);
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
       alert('Hubo un error al actualizar el usuario.');
