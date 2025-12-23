@@ -8,11 +8,9 @@ const API_URL = process.env.REACT_APP_API_URL;
 const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
   const [pointsItems, setPointsItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState('');
-  const [manualPoints, setManualPoints] = useState(''); // Para ingresar puntos manualmente
-  const [description, setDescription] = useState(''); // Para ingresar la descripción manualmente
-  const [useManualPoints, setUseManualPoints] = useState(false); // Para manejar la opción seleccionada
-
-  // Obtener la información del usuario logueado desde Redux
+  const [manualPoints, setManualPoints] = useState('');
+  const [description, setDescription] = useState('');
+  const [useManualPoints, setUseManualPoints] = useState(false);
   const currentUser = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
 
@@ -38,7 +36,7 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
       const selectedPointItem = pointsItems.find(item => item.id === selectedItem);
       pointsToAdd = selectedPointItem ? selectedPointItem.points : 0;
       if (!description) {
-        finalDescription = `Puntos agregados: ${pointsToAdd}`; // Descripción por defecto si se selecciona un ítem
+        finalDescription = `Puntos agregados: ${pointsToAdd}`;
       }
     } else {
       pointsToAdd = parseInt(manualPoints, 10) || 0;
@@ -64,18 +62,18 @@ const AddPointsComponent = ({ user, onClose, refreshUsers }) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ 
-            initiatorID: currentUser.id, // ID del usuario que concede los puntos
+            initiatorID: currentUser.id,
             points: pointsToAdd,
-            itemID: useManualPoints ? null : selectedItem, // Enviar el ID del ítem si se selecciona, de lo contrario null
-            description: finalDescription // Descripción final
+            itemID: useManualPoints ? null : selectedItem,
+            description: finalDescription
           }),
         });
         console.log("Datos enviados al backend: ", )
 
         if (response.ok) {
           dispatch(fetchUserInfo());
-          refreshUsers(); // Refresca la lista de usuarios después de agregar puntos
-          onClose(); // Cierra el modal
+          refreshUsers();
+          onClose();
           window.alert("Puntos agregados exitosamente");
         } else {
           console.error("Error al agregar puntos");
