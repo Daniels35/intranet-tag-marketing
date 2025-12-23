@@ -19,7 +19,7 @@ const EditRedeemableItemForm = ({ currentItem, setEditing, updateRedeemableItem 
     const file = event.target.files[0];
     if (file) {
       setItem({ ...item, image: file });
-      setPreview(URL.createObjectURL(file)); // Genera una vista previa
+      setPreview(URL.createObjectURL(file));
     }
   };
 
@@ -32,7 +32,7 @@ const EditRedeemableItemForm = ({ currentItem, setEditing, updateRedeemableItem 
     formData.append('description', item.description);
     formData.append('stock', item.stock);
     if (item.image instanceof File) {
-      formData.append('icon', item.image); // ✅ Usa "icon" porque el backend lo espera
+      formData.append('icon', item.image);
     }
 
     updateRedeemableItem(item.id, formData);
