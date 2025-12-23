@@ -19,20 +19,19 @@ const LegacyRouteGuard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Si la ruta actual es exactamente '/home'
+    
     if (location.pathname === '/home') {
-      // Navega a la nueva ruta '/inicio' y reemplaza la entrada en el historial.
+      
       navigate('/inicio', { replace: true });
     }
-  }, [location, navigate]); // Se ejecuta cada vez que cambia la URL
+  }, [location, navigate]);
 
-  return null; // Este componente no renderiza nada visualmente
+  return null; 
 };
 
 function App() {
   return (
     <Router>
-      {/* --- NUEVO: Añadimos el componente guardia aquí --- */}
       <LegacyRouteGuard /> 
       
       <Header />

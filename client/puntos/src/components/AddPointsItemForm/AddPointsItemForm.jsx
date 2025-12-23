@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const AddPointsItemForm = ({ addPointsItem }) => {
   const initialFormState = { name: '', points: 0, description: '', image: null };
   const [item, setItem] = useState(initialFormState);
-  const [preview, setPreview] = useState(null); // Para previsualizar la imagen
+  const [preview, setPreview] = useState(null);
 
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -13,8 +13,8 @@ const AddPointsItemForm = ({ addPointsItem }) => {
   const handleFileChange = event => {
     const file = event.target.files[0];
     if (file) {
-      setItem({ ...item, image: file }); // Guarda el archivo en el estado
-      setPreview(URL.createObjectURL(file)); // Previsualiza la imagen
+      setItem({ ...item, image: file });
+      setPreview(URL.createObjectURL(file));
     }
   };
 
