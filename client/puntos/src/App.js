@@ -1,6 +1,6 @@
 // src/App.js
 
-import React, { useEffect } from 'react'; // <-- IMPORTADO useEffect
+import React, { useEffect } from 'react'; 
 import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom'; // <-- IMPORTADOS useLocation y useNavigate
 import Home from './pages/Home/Home';
 import DocumentsPage from './pages/Documents/DocumentsPage'; 
@@ -13,7 +13,6 @@ import Profile from '../src/components/Profile/Profile';
 import ProtectedRoute from '../src/components/ProtectedRoute/ProtectedRoute';
 import QRGenerator from '../src/components/QRGenerator/QRGenerator';
 
-// --- NUEVO: Componente "Guardia" para corregir la ruta vieja /home ---
 const LegacyRouteGuard = () => {
   const location = useLocation();
   const navigate = useNavigate();
