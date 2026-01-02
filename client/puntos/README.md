@@ -2,7 +2,7 @@
 
 > **Plataforma de gamificación y gestión interna para el equipo de Tag Marketing.**
 
-## ✨ Características Principales
+## ✨ Características Principales.
 
 Esta aplicación no es solo un panel administrativo, es el corazón de la cultura de la empresa:
 
