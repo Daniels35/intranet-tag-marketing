@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserInfo } from '../../redux/userSlice';
-import '../AddPointsToList/ModalAddPointsToList.css';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
